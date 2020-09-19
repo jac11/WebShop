@@ -12,7 +12,7 @@ import urlparse
 import re
 import readline
 import time
-import urllib2
+
 
 class Shopping:
    
@@ -139,7 +139,14 @@ class Shopping:
                       sys.stdout.write('\x1b[2K')
                   else:
                      print"[+]Sub-Domain ...........| ",sub_domain_url_join
-                                
+                     list_domain = []
+                     if sub_domain_url_join not in list_domain :
+                        list_domain.append(sub_domain_url_join)
+                        string_list= ''.join(list_domain)
+                        with open ('.domain','a')as append_list :
+                             append_list = append_list.write(string_list+'\n')
+                          
+
       except KeyboardInterrupt: 
                print self.panner
                exit()                                      
@@ -160,7 +167,10 @@ class Shopping:
                  if email not in email_list:
                       email_list.append(email)
                       email_final = ''.join(email)
-                      print"[+]Email ...........| ",email_final
+                      if '.png' or'.jpg' or '.jpeg' or '.gif' in email_final:
+                      	  pass
+                      else:	  
+                          print"[+]Email ...........| ",email_final
               else:
                 print"[+]Email ...........| ",replace_spaces
                 sys.stdout.write('\x1b[1A')
@@ -169,11 +179,47 @@ class Shopping:
 
       except KeyboardInterrupt: 
                print self.panner
-               exit()                  
+               exit()           
+  def robotstxt_read(self) :
+   
+      try:
+      	 with open('.domain','r') as read_line_sub:
+              self.line_domain = read_line_sub.readlines()
+              print "\n###-Discover Robots.txt"
+              print("="*25)
+         for robots in self.line_domain :
+              self.link_robot  = urlparse.urljoin(robots ,'/robots.txt')
+              response_robots  =  requests.get(self.link_robot,data =None)
+              Beautiful_robots = str(BeautifulSoup(response_robots.content,'lxml'))
+              Beautiful_robots = Beautifulrobots.replace('<html>','')
+              Beautiful_robots = Beautifulrobots.replace('<body>','')
+              Beautiful_robots = Beautifulrobots.replace('<p>','')
+              Beautiful_robots = Beautifulrobots.replace('</p>','')
+              Beautiful_robots = Beautifulrobots.replace('</body>','')
+              Beautiful_robots = Beautifulrobots.replace('</html>','')
+              time.sleep(0.25)
+              print "\n###-Discover Robots.txt"
+              print("="*25)
+              print
+              print "[*]link ..........|" ,link_robot
+              print
+              print ('*'*30)
+              print Beautiful_robots 
+              print ('*'*30)
+              
+       
+
+      except KeyboardInterrupt: 
+               print self.panner
+               exit()         
+        
+
+
   def control(self):
     
-      parser = argparse.ArgumentParser( description="Usage: [OPtion] [arguments]  [length]  [arguments] Example: -c a -l 300")
-      parser.add_argument( '-u ',"--URL" , metavar='' , action=None  ,help ="url target vactim") 
+      parser = argparse.ArgumentParser( description="Usage: [OPtion] [arguments]  [length]  [arguments] Example: ./webshop.py --URL https://www.site.com/ -o outbut ")
+      parser.add_argument("--URL" , metavar='' , action=None  ,help ="url target website ") 
+      parser.add_argument("-o","--outbut" , metavar='' , action=None  ,help ="save the outbut into file ") 
       self.args = parser.parse_args()
       if len(sys.argv)!=1 :
            pass
