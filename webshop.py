@@ -38,12 +38,16 @@ class Shopping:
          self.session = requests.Session()  
          self.target_url =self.args.URL
          self.target_links = []
-         response = self.session.get(self.target_url) 
-         if response.ok == True:  
-            return re.findall('(?:href=")(.*?)"',response.content)
-         else:          	
-           output_A = self.output.writelines('\n\n' + self.panner +" [-]link ..........| No links Discover " + '\n'+"="*25)	
-           print '[-]link ..........| No links Discover '
+         try:
+            response = self.session.get(self.target_url) 
+            if response.ok == True:  
+               return re.findall('(?:href=")(.*?)"',response.content)
+            else:          	
+               output_A = self.output.writelines('\n\n' + self.panner +" [-]link ..........| No links Discover " + '\n'+"="*25)	
+               print '[-]link ..........| No links Discover '
+         except requests.exceptions.ConnectionError :
+                print "[-]Error..........| No status line received - the server has closed the connection"
+                exit()      
       except KeyboardInterrupt :
              print self.panner
              exit()     
@@ -55,24 +59,18 @@ class Shopping:
            print("="*25)
            print
            herf_links = self.extract_links_form()
- 
            for self.link in herf_links:
-             self.link = urlparse.urljoin(self.target_url ,self.link)
-          
+             self.link = urlparse.urljoin(self.target_url ,self.link)         
              if "#" in self.link :
-               self.link = self.link.split('#')[0]
-           
+               self.link = self.link.split('#')[0]           
              if  self.target_url in self.link and self.link not in self.target_links:
                  self.target_links.append(self.link)
                  time.sleep(0.40)
                  if self.link[-10:]==['logout.php']:
                      pass
-                 else:
-                                     
-                     print  "[+]link ...........| ",self.link 
-                    
+                 else:                                     
+                     print  "[+]link ...........| ",self.link                    
                      output_1 = self.output.writelines("[+]link ...........| "+self.link+'\n')  
-
            with open(".data.txt", "w") as file_links :
              file_links.writelines("%s\n" % i for i in self.target_links)
         except KeyboardInterrupt: 
@@ -173,10 +171,10 @@ class Shopping:
                      list_domain = []
                      if sub_domain_url_join not in list_domain :
                         list_domain.append(sub_domain_url_join)
-                        string_list= ''.join(list_domain)
-                        append_list = append_list.write(string_list+'\n')
-                          
-
+                        string_list= ''.join(list_domain)                      
+                     with open ('.domain','a')as append_list :
+                          ppend_list = append_list.write(string_list+'\n')
+                    
       except KeyboardInterrupt: 
                print self.panner
                exit()                                      
@@ -203,27 +201,35 @@ class Shopping:
                       if slice_email in  list_out :
                          pass
                       else:	  
-                          print"[+]Email ...........| ",email_final
-                          output_13 = self.output.writelines( "[+]Email ...........| "+ email_final+'\n')
+                          print"[+]Email ...........| ",email
+                          output_13 = self.output.writelines( "[+]Email ...........| "+ email+'\n')
+                 else:
+                     pass         
               else:
                 print"[+]Email ...........| ",replace_spaces
                 sys.stdout.write('\x1b[1A')
                 sys.stdout.write('\x1b[2K')        
           else:
-            print "[-]Email ...........| No Email Discover"
-            output_20 = self.output.write("[-]Email ...........| No Email Discover"+'\n')
+            print "[-]Email ...........| Email Scan Finsh"
+            output_20 = self.output.write("[-]Email ...........| Email Scan Finsh"+'\n')
       except KeyboardInterrupt: 
                print self.panner
                exit()           
   def robotstxt_read(self) :
    
       try:
-      	 with open('.domain','r') as read_line_sub:
-              self.line_domain = read_line_sub.readlines()
-              print "\n###-Discover Robots.txt"
-              print("="*25)
-         output_15 = self.output.write('\n'+"###-Discover Robots.txt" +'\n'+'='*25 +'\n')     
-         for robots in self.line_domain :
+          try: 
+      	     with open('.domain','r') as read_line_sub:
+                self.line_domain = read_line_sub.readlines()
+                print "\n###-Discover Robots.txt"
+                print("="*25)
+          except IOError :
+                print "\n###-Discover Robots.txt"
+	        print("="*25)
+	        print "[-]Robots.txt ..........| NO Robots.txt Discover "    
+	        exit() 
+          output_15 = self.output.write('\n'+"###-Discover Robots.txt" +'\n'+'='*25 +'\n')     
+          for robots in self.line_domain :
               if not robots : 
                  break
               else:      
@@ -249,15 +255,15 @@ class Shopping:
 	              print ('*'*30) 
 	              output_16 = self.output.write("[*]link ..........|" +self.link_robot+'\n')
 	              output_17 = self.output.writelines(Beautiful_robots1+'*'*25 +'\n') 
-         else:
-            print "[*]Robots.txt ..........| NO Robots.txt Discover "        
-            output_21 = self.output.write("[*]Robots.txt ..........| NO Robots.txt Discover "+'\n')           
-         try:
+          else:
+            print "[*]Robots.txt ..........| Robots.txt Scan finsh "        
+            output_21 = self.output.write("[*]Robots.txt ..........| Robots.txt Scan finsh  "+'\n')           
+          try:
              if os.path.isfile(".domain"):         
                 os.remove(".domain")        
              if os.path.isfile('.data.txt'):
                 os.remove('.data.txt')
-         except IOError :
+          except IOError :
             pass      
       except KeyboardInterrupt: 
                print self.panner
@@ -269,7 +275,7 @@ class Shopping:
     
       parser = argparse.ArgumentParser( description="Usage: [OPtion] [arguments]  [length]  [arguments] Example: ./webshop.py --URL https://www.site.com/ -o outbut ")
       parser.add_argument("--URL" , metavar='' , action=None  ,help ="url target website ") 
-      parser.add_argument("-o","--output" , metavar='' , action=None  ,help ="save the outbut into file ") 
+      parser.add_argument("-o","--output" , metavar='' , action=None ,required=True,help ="save the outbut into file ") 
       self.args = parser.parse_args()
       if len(sys.argv)!=1 :
            pass
@@ -280,9 +286,7 @@ class Shopping:
   def main(self):
      if self.args.output:   
         self.output = open(self.args.output,'a')
-     if self.args.URL:
-     	with open ('.domain','a')as append_list :
-     		pass     		
+     if self.args.URL:   		
         self.extract_links_form()
         self.discover_link()
         self.form_Check()
@@ -293,7 +297,3 @@ class Shopping:
 if __name__ == "__main__":      
     Shopping()
         
-    
-    
-    
-    
