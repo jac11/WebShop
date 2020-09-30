@@ -28,55 +28,64 @@ class Shopping:
                                              by:jacstory                                                                                                                     
  """
       print self.panner
-
-     
+          
       self.control()
-      self.main()
-     
-  def extract_links_form(self):
-      try:     
-         self.session = requests.Session()  
-         self.target_url =self.args.URL
-         self.target_links = []
-         try:
-            response = self.session.get(self.target_url) 
-            if response.ok == True:  
-               return re.findall('(?:href=")(.*?)"',response.content)
-            else:          	
-               output_A = self.output.writelines('\n\n' + self.panner +" [-]link ..........| No links Discover " + '\n'+"="*25)	
-               print '[-]link ..........| No links Discover '
-         except requests.exceptions.ConnectionError :
-                print "[-]Error..........| No status line received - the server has closed the connection"
-                exit()      
-      except KeyboardInterrupt :
-             print self.panner
-             exit()     
-  def discover_link(self):
+      self.main()  
         
-        try:
-           output_0 = self.output.writelines('\n\n'+self.panner+'\n'+"###-Discover links"+'\n'+"="*25+'\n')	
-           print "\n###-Discover links"
-           print("="*25)
-           print
-           herf_links = self.extract_links_form()
-           for self.link in herf_links:
-             self.link = urlparse.urljoin(self.target_url ,self.link)         
-             if "#" in self.link :
-               self.link = self.link.split('#')[0]           
-             if  self.target_url in self.link and self.link not in self.target_links:
-                 self.target_links.append(self.link)
-                 time.sleep(0.40)
-                 if self.link[-10:]==['logout.php']:
-                     pass
-                 else:                                     
-                     print  "[+]link ...........| ",self.link                    
-                     output_1 = self.output.writelines("[+]link ...........| "+self.link+'\n')  
-           with open(".data.txt", "w") as file_links :
-             file_links.writelines("%s\n" % i for i in self.target_links)
-        except KeyboardInterrupt: 
-               print self.panner
-               exit()        
+  def extract_links_form(self):
+       try:     
+            self.session = requests.Session()  
+            self.target_url =self.args.URL
+            if '/' not in self.target_url[-1]:
+                self.target_url =  self.target_url +'/'              
+            else:
+               pass
+            self.target_links = []
+            try:
+               print"[*]URL ..........| ", self.target_url
+               output_25 = self.output.writelines("[*]input  ...........| "+ self.target_url +'\n')
+               response = self.session.get(self.target_url) 
+               if response.ok == True:  
+                  return re.findall('(?:href=")(.*?)"',response.content)
+               else:          	
+                  output_A = self.output.writelines('\n\n' + self.panner +" [-]link ..........| No links Discover " + '\n'+"="*25)	
+                  print '[-]link ..........| No links Discover '
+            except requests.exceptions.ConnectionError :
+                  print "[-]Error..........| No status line received - the server has closed the connection"
+                  exit()      
+       except KeyboardInterrupt :
+                  print self.panner
+                  exit()     
+  def discover_link(self):
+      try:   
+           try:
+              output_0 = self.output.writelines('\n\n'+self.panner+'\n'+"###-Discover links"+'\n'+"="*25+'\n')	
+              print "\n###-Discover links"
+              print("="*25)
+              print
+              herf_links = self.extract_links_form()
+              for self.link in herf_links:
+                  self.link = urlparse.urljoin(self.target_url ,self.link)         
+                  if "#" in self.link :
+                     self.link = self.link.split('#')[0]           
+                  if  self.target_url in self.link and self.link not in self.target_links:
+                      self.target_links.append(self.link)
+                      time.sleep(0.40)
+                      if self.link[-10:]==['logout.php']:
+                          pass
+                      else:                                     
+                          print  "[+]link ...........| ",self.link                    
+                          output_1 = self.output.writelines("[+]link ...........| "+self.link+'\n')  
+              with open(".data.txt", "w") as file_links :
+                   file_links.writelines("%s\n" % i for i in self.target_links)
+           except KeyboardInterrupt: 
+                 print self.panner
+                 exit() 
+      except requests.exceptions.ConnectionError :
+                print "[-]Error..........| No status line received - the server has closed the connection"
+                exit()                       
   def form_Check(self):
+     try: 
          outbut_01 = self.output.write("\n###-Discover links"+'\n'+'='*25+'\n')
          try: 
               with open('.data.txt','r') as read_line:
@@ -110,9 +119,9 @@ class Shopping:
                          self.input_get = input.get('name')  
                          self.type = input.get('type')                      
                          self.value= input.get('value')        
-                         print "[*]input ...........| ",self.input_get
-                         print "[*]type  ...........| ",self.type
-                         print "[*]value ...........| ", self.value 
+                         print "[*]input  ...........| ",self.input_get
+                         print "[*]type   ...........| ",self.type
+                         print "[*]value  ...........| ", self.value 
                          output_4 = self.output.writelines("[*]input  ...........| "+str(self.input_get)+'\n')
                          output_5 = self.output.writelines("[*]type   ...........| "+str(self.type)+'\n')
                          reload(sys)  
@@ -134,9 +143,12 @@ class Shopping:
          except KeyboardInterrupt: 
                print self.panner
                exit()
-                                  
+     except requests.exceptions.ConnectionError :
+                print "[-]Error..........| No status line received - the server has closed the connection"
+                pass                                  
   def sub_domain(self):
-      try : 
+    try:
+       try : 
            print "\n###-Discover sub-Domain"
            print "this scan will take a while please patience"
            print ('='*25)
@@ -150,7 +162,8 @@ class Shopping:
                url_replase =  url_replase.replace('www.','')
            print '[*]MainDomain ...........|',url_replase
            output_12 = self.output.write( '[*]MainDomain ...........|'+ url_replase+'\n')
-           with open('subdomains.txt','r') as sub_read :
+           wordlist = self.args.wordlist
+           with open(wordlist,'r') as sub_read :
                content = sub_read.read()
                subdomain = content.splitlines()    
            for sub in subdomain :
@@ -175,12 +188,14 @@ class Shopping:
                      with open ('.domain','a')as append_list :
                           ppend_list = append_list.write(string_list+'\n')
                     
-      except KeyboardInterrupt: 
+       except KeyboardInterrupt: 
                print self.panner
-               exit()                                      
+               exit()
+    except requests.exceptions.ConnectionError :
+                print "[-]Error..........| No status line received - the server has closed the connection"
+                exit()                                                      
   def Email_Scan(self):
-      try:
-       
+      try:       
           with open('.data.txt','r') as read_line:
                    self.line_read = read_line.readlines() 
           print "\n###-Discover Emails "
@@ -196,33 +211,37 @@ class Shopping:
                  if email not in email_list:
                       email_list.append(email)
                       email_final = ''.join(email)
-                      slice_email = email_final[-4:]
+                      slice_email = email_final[-4:]                     
                       list_out = ['.png','.jpg','.jpeg','.gif','.zip']
                       if slice_email in  list_out :
-                         pass
+                           pass
                       else:	  
-                          print"[+]Email ...........| ",email
-                          output_13 = self.output.writelines( "[+]Email ...........| "+ email+'\n')
+                           print"[+]Email ...........| ",email
+                           output_13 = self.output.writelines( "[+]Email ...........| "+ email+'\n')
                  else:
                      pass         
               else:
-                print"[+]Email ...........| ",replace_spaces
-                sys.stdout.write('\x1b[1A')
-                sys.stdout.write('\x1b[2K')        
+                if '%' in replace_spaces :
+                    pass
+                else:    
+                  print"[+]Email ...........| ",replace_spaces
+                  sys.stdout.write('\x1b[1A')
+                  sys.stdout.write('\x1b[2K')        
           else:
             print "[-]Email ...........| Email Scan Finsh"
             output_20 = self.output.write("[-]Email ...........| Email Scan Finsh"+'\n')
       except KeyboardInterrupt: 
                print self.panner
-               exit()           
+               exit()
+      except requests.exceptions.ConnectionError :
+                print "[-]Error..........| No status line received - the server has closed the connection"
+                pass                          
   def robotstxt_read(self) :
    
       try:
           try: 
       	     with open('.domain','r') as read_line_sub:
                 self.line_domain = read_line_sub.readlines()
-                print "\n###-Discover Robots.txt"
-                print("="*25)
           except IOError :
                 print "\n###-Discover Robots.txt"
 	        print("="*25)
@@ -253,29 +272,35 @@ class Shopping:
 	              print ('*'*30)
 	              print Beautiful_robots1 
 	              print ('*'*30) 
-	              output_16 = self.output.write("[*]link ..........|" +self.link_robot+'\n')
-	              output_17 = self.output.writelines(Beautiful_robots1+'*'*25 +'\n') 
+	              output_16 = self.output.write("[*]link ..........|" + self.link_robot +'\n'+'*'*25+'\n')
+	              output_17 = self.output.writelines(Beautiful_robots1+'\n'+'*'*25 +'\n') 
           else:
-            print "[*]Robots.txt ..........| Robots.txt Scan finsh "        
-            output_21 = self.output.write("[*]Robots.txt ..........| Robots.txt Scan finsh  "+'\n')           
+            print "\n[*]Robots.txt ..........| Robots.txt Scan finsh "        
+            output_21 = self.output.write('\n'+"[*]Robots.txt ..........| Robots.txt Scan finsh  "+'\n')           
           try:
              if os.path.isfile(".domain"):         
                 os.remove(".domain")        
              if os.path.isfile('.data.txt'):
                 os.remove('.data.txt')
+                print self.panner
+                output_A = self.output.writelines('\n\n' + self.panner +" [-]SCAN ..........| Webshop Finsh sacn " + '\n'+"="*25)
+                exit()       
           except IOError :
             pass      
       except KeyboardInterrupt: 
                print self.panner
                exit()         
-        
-
+      except requests.exceptions.ConnectionError :
+                print "[-]Error..........| No status line received - the server has closed the connection"
+                pass      
 
   def control(self):
     
       parser = argparse.ArgumentParser( description="Usage: [OPtion] [arguments]  [length]  [arguments] Example: ./webshop.py --URL https://www.site.com/ -o outbut ")
       parser.add_argument("--URL" , metavar='' , action=None  ,help ="url target website ") 
-      parser.add_argument("-o","--output" , metavar='' , action=None ,required=True,help ="save the outbut into file ") 
+      parser.add_argument("-o","--output" , metavar='' , action=None ,required=True,help ="save the output into file ") 
+      parser.add_argument("-w","--wordlist" , metavar='' , action=None ,required=True,help ="select wordlist of subdomin  ") 
+      self.args = parser.parse_args()
       self.args = parser.parse_args()
       if len(sys.argv)!=1 :
            pass
@@ -285,7 +310,7 @@ class Shopping:
   
   def main(self):
      if self.args.output:   
-        self.output = open(self.args.output,'a')
+        self.output = open(self.args.output,'w')
      if self.args.URL:   		
         self.extract_links_form()
         self.discover_link()
@@ -297,3 +322,4 @@ class Shopping:
 if __name__ == "__main__":      
     Shopping()
         
+    
