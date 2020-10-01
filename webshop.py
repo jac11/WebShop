@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+!/usr/bin/env python
 # -*- coding: iso-8859-15 -*-
 
 
@@ -12,7 +12,7 @@ import urlparse
 import re
 import readline
 import time
-
+import random
 
 class Shopping:
    
@@ -37,12 +37,13 @@ class Shopping:
             self.session = requests.Session()  
             self.target_url =self.args.URL
             if '/' not in self.target_url[-1]:
-                self.target_url =  self.target_url +'/'              
+                self.target_url =  self.target_url +'/'
+                print"[*]URL ..........| ", self.target_url              
             else:
                pass
             self.target_links = []
             try:
-               print"[*]URL ..........| ", self.target_url
+              
                output_25 = self.output.writelines("[*]input  ...........| "+ self.target_url +'\n')
                response = self.session.get(self.target_url) 
                if response.ok == True:  
@@ -51,7 +52,7 @@ class Shopping:
                   output_A = self.output.writelines('\n\n' + self.panner +" [-]link ..........| No links Discover " + '\n'+"="*25)	
                   print '[-]link ..........| No links Discover '
             except requests.exceptions.ConnectionError :
-                  print "[-]Error..........| No status line received - the server has closed the connection"
+                  print "[-]Error  ..........| No status line received - the server has closed the connection"
                   exit()      
        except KeyboardInterrupt :
                   print self.panner
@@ -82,8 +83,8 @@ class Shopping:
                  print self.panner
                  exit() 
       except requests.exceptions.ConnectionError :
-                print "[-]Error..........| No status line received - the server has closed the connection"
-                exit()                       
+                print "[-]Error  ..........| No status line received - the server has closed the connection"
+                pass                      
   def form_Check(self):
      try: 
          outbut_01 = self.output.write("\n###-Discover links"+'\n'+'='*25+'\n')
@@ -144,7 +145,7 @@ class Shopping:
                print self.panner
                exit()
      except requests.exceptions.ConnectionError :
-                print "[-]Error..........| No status line received - the server has closed the connection"
+                print "[-]Error  ..........| No status line received - the server has closed the connection"
                 pass                                  
   def sub_domain(self):
     try:
@@ -162,10 +163,14 @@ class Shopping:
                url_replase =  url_replase.replace('www.','')
            print '[*]MainDomain ...........|',url_replase
            output_12 = self.output.write( '[*]MainDomain ...........|'+ url_replase+'\n')
-           wordlist = self.args.wordlist
-           with open(wordlist,'r') as sub_read :
+           try:          
+             wordlist = self.args.wordlist
+             with open(wordlist,'r') as sub_read :
                content = sub_read.read()
-               subdomain = content.splitlines()    
+               subdomain = content.splitlines()
+           except IOError:
+                  print "[*]wordlist ...........| File Not Exist"
+                  exit()    
            for sub in subdomain :
                sub_domain_url ='http://',sub,'.', url_replase
                sub_domain_url_join = ''.join(sub_domain_url)
@@ -190,9 +195,9 @@ class Shopping:
                     
        except KeyboardInterrupt: 
                print self.panner
-               exit()
+               pass
     except requests.exceptions.ConnectionError :
-                print "[-]Error..........| No status line received - the server has closed the connection"
+                print "[-]Error  ..........| No status line received - the server has closed the connection"
                 exit()                                                      
   def Email_Scan(self):
       try:       
@@ -214,27 +219,25 @@ class Shopping:
                       slice_email = email_final[-4:]                     
                       list_out = ['.png','.jpg','.jpeg','.gif','.zip']
                       if slice_email in  list_out :
-                           pass
+                         if  email_out in replace_spaces :
+                             pass
                       else:	  
                            print"[+]Email ...........| ",email
-                           output_13 = self.output.writelines( "[+]Email ...........| "+ email+'\n')
-                 else:
-                     pass         
+                           output_13 = self.output.writelines( "[+]Email ...........| "+ email+'\n')                      
               else:
-                if '%' in replace_spaces :
-                    pass
-                else:    
-                  print"[+]Email ...........| ",replace_spaces
-                  sys.stdout.write('\x1b[1A')
-                  sys.stdout.write('\x1b[2K')        
-          else:
+                 list =['.....patience.....','....wait.......','.....Email-Scan.....']
+                 random1 = random.choice(list)
+                 print"[+]Email ...........| ",random1
+                 sys.stdout.write('\x1b[1A')
+                   
+          else:       
             print "[-]Email ...........| Email Scan Finsh"
             output_20 = self.output.write("[-]Email ...........| Email Scan Finsh"+'\n')
       except KeyboardInterrupt: 
                print self.panner
                exit()
       except requests.exceptions.ConnectionError :
-                print "[-]Error..........| No status line received - the server has closed the connection"
+                print "[-]Error  ..........| No status line received - the server has closed the connection"
                 pass                          
   def robotstxt_read(self) :
    
@@ -291,7 +294,7 @@ class Shopping:
                print self.panner
                exit()         
       except requests.exceptions.ConnectionError :
-                print "[-]Error..........| No status line received - the server has closed the connection"
+                print "[-]Error  ..........| No status line received - the server has closed the connection"
                 pass      
 
   def control(self):
