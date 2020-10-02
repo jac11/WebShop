@@ -51,6 +51,8 @@ class Shopping:
                else:          	
                   output_A = self.output.writelines('\n\n' + self.panner +" [-]link ..........| No links Discover " + '\n'+"="*25)	
                   print '[-]link ..........| No links Discover '
+                  print "[&]web  ..........| This Website login required to grep informaion "
+                  exit()
             except requests.exceptions.ConnectionError :
                   print "[-]Error  ..........| No status line received - the server has closed the connection"
                   exit()      
@@ -98,8 +100,7 @@ class Shopping:
               for self.line in self.line_read:  
                  time.sleep(0.25)        
                  response =  self.session.get(self.line)
-                 header_html= BeautifulSoup(response.content,'lxml')
-                
+                 header_html= BeautifulSoup(response.content,'lxml')                
                  if response.ok == True:
                      form_list=  header_html.findAll('form')
                      self.list_input = header_html.findAll('input')
@@ -137,7 +138,10 @@ class Shopping:
                         print "[*]Form ...........| No Form Discover" 
                         output_7 = self.output.writelines('\n'+'='*25+'\n'+"[*]link  ...........|"+self.replace +'\n')
                         output_8 = self.output.writelines("[*]Form  ...........| No Form Discover" +'\n'+'='*25+'\n')                                 
-                        print('='*25)                                       
+                        print('='*25)
+                   
+                  
+                      
          except KeyboardInterrupt: 
                print self.panner
                exit()
@@ -146,7 +150,7 @@ class Shopping:
                 pass                                  
   def sub_domain(self):
     try:
-       try : 
+        
            print "\n###-Discover sub-Domain"
            print "this scan will take a while please patience"
            print ('='*25)
@@ -161,8 +165,8 @@ class Shopping:
            print '[*]MainDomain ...........|',url_replase
            output_12 = self.output.write( '[*]MainDomain ...........|'+ url_replase+'\n')
            try:          
-               wordlist = self.args.wordlist
-               with open(wordlist,'r') as sub_read :
+                wordlist = self.args.wordlist
+                with open(wordlist,'r') as sub_read :
                    content = sub_read.read()
                    subdomain = content.splitlines()
            except IOError:
@@ -171,33 +175,23 @@ class Shopping:
            for sub in subdomain :
                sub_domain_url ='http://',sub,'.', url_replase
                sub_domain_url_join = ''.join(sub_domain_url)
-               if not sub:
-                  break
-               else:  
-                  try:
-                      requests.get(sub_domain_url_join) 
-                  except requests.ConnectionError:
-                      print"[+]Sub-Domain ...........| ",sub_domain_url_join
-                      sys.stdout.write('\x1b[1A')
-                      sys.stdout.write('\x1b[2K')
-                  else:
+               try:
+                  requests.get(sub_domain_url_join) 
+               except requests.ConnectionError:
+                   print"[+]Sub-Domain ...........| ",sub_domain_url_join
+                   sys.stdout.write('\x1b[1A')
+                   sys.stdout.write('\x1b[2K')
+               else:
                      print"[+]Sub-Domain ...........| ",sub_domain_url_join
                      output_13 = self.output.writelines( '\n'+"[+]Sub-Domain ...........| "+ sub_domain_url_join +'\n')
                      list_domain = []
                      if sub_domain_url_join not in list_domain :
                         list_domain.append(sub_domain_url_join)
-                        string_list= ''.join(list_domain) 
-                     try:
-                        if os.path.isfile(".domain"):         
-                           os.remove(".domain")
-                           with open ('.domain','a')as append_list :                         
-                              append_list = append_list.write(string_list+'\n')
-                        else:
-                           with open ('.domain','a')as append_list :                         
-                              append_list = append_list.write(string_list+'\n')                             
-                     except IOError:
-                         pass
-       except KeyboardInterrupt: 
+                        string_list= ''.join(list_domain)                    
+                     with open ('.domain','a')as append_list :
+                          ppend_list = append_list.write(string_list+'\n')
+                    
+    except KeyboardInterrupt: 
                print self.panner
                pass
     except requests.exceptions.ConnectionError :
@@ -223,17 +217,16 @@ class Shopping:
                       slice_email = email_final[-4:]                     
                       list_out = ['.png','.jpg','.jpeg','.gif','.zip']
                       if slice_email in  list_out :
-                         if  email_out in replace_spaces :
                              pass
                       else:	  
                            print"[+]Email ...........| ",email
                            output_13 = self.output.writelines( "[+]Email ...........| "+ email+'\n')                      
               else:
-                 list =['.....patience.....','....wait.......','.....Email-Scan.....']
+                 list =['.....patience.....','......wait.....','.....Email-Scan.....']
                  random1 = random.choice(list)
                  print"[+]Email ...........| ",random1
                  sys.stdout.write('\x1b[1A')
-                   
+                 sys.stdout.write('\x1b[2K') 
           else:       
             print "[-]Email ...........| Email Scan Finsh"
             output_20 = self.output.write("[-]Email ...........| Email Scan Finsh"+'\n')
@@ -243,60 +236,55 @@ class Shopping:
       except requests.exceptions.ConnectionError :
                 print "[-]Error  ..........| No status line received - the server has closed the connection"
                 pass                          
-  def robotstxt_read(self) :
-   
-      try:
-          try: 
-      	     with open('.domain','r') as read_line_sub:
+  def robotstxt_read(self) :  
+      try: 
+      	  with open('.domain','r') as read_line_sub:
                  self.line_domain = read_line_sub.readlines()
-          except IOError :
-                print "\n###-Discover Robots.txt"
-	        print("="*25)
-	        print "[-]Robots.txt ..........| NO Robots.txt Discover "    
-	        exit() 
-          output_15 = self.output.write('\n'+"###-Discover Robots.txt" +'\n'+'='*25 +'\n')     
-          for robots in self.line_domain :
-              if not robots : 
-                 break
-              else:      
-	              self.link_robot  = urlparse.urljoin(robots ,'/robots.txt')
-	              self.link_robot_str = str( self.link_robot)
-	              response_robots  =  requests.get(self.link_robot,data =None)
-	              Beautiful_robots = str(BeautifulSoup(response_robots.content,'lxml'))
-	              Beautiful_robots = Beautiful_robots.replace('<html>','')
-	              Beautiful_robots = Beautiful_robots.replace('<body>','')
-	              Beautiful_robots = Beautiful_robots.replace('<p>','')
-	              Beautiful_robots = Beautiful_robots.replace('</p>','')
-	              Beautiful_robots = Beautiful_robots.replace('</body>','')
-	              Beautiful_robots1 = Beautiful_robots.replace('</html>','')
-	              time.sleep(0.25)
-	              print "\n###-Discover Robots.txt"
-	              print("="*25)
-	              output_15 = self.output.write('\n'+"###-Discover Robots.txt" +'\n'+'='*25 +'\n')
-	              print
-	              print "[*]link ..........|" ,self.link_robot
-	              print
-	              print ('*'*30)
-	              print Beautiful_robots1 
-	              print ('*'*30) 
-	              output_16 = self.output.write("[*]link ..........|" + self.link_robot +'\n'+'*'*25+'\n')
-	              output_17 = self.output.writelines(Beautiful_robots1+'\n'+'*'*25 +'\n') 
+                 output_15 = self.output.write('\n'+"###-Discover Robots.txt" +'\n'+'='*25 +'\n')     
+          for robots in self.line_domain :     
+              self.link_robot  = urlparse.urljoin(robots ,'/robots.txt')
+              self.link_robot_str = str( self.link_robot)
+              response_robots  =  requests.get(self.link_robot,data =None)
+              Beautiful_robots = str(BeautifulSoup(response_robots.content,'lxml'))
+              Beautiful_robots = Beautiful_robots.replace('<html>','')
+              Beautiful_robots = Beautiful_robots.replace('<body>','')
+              Beautiful_robots = Beautiful_robots.replace('<p>','')
+              Beautiful_robots = Beautiful_robots.replace('</p>','')
+              Beautiful_robots = Beautiful_robots.replace('</body>','')
+              Beautiful_robots1 = Beautiful_robots.replace('</html>','')
+              time.sleep(0.25)
+              print "\n###-Discover Robots.txt"
+              print("="*25)
+              output_15 = self.output.write('\n'+"###-Discover Robots.txt" +'\n'+'='*25 +'\n')
+              print
+              print "[*]link ..........|" ,self.link_robot
+              print
+              print ('*'*30)
+              print Beautiful_robots1 
+              print ('*'*30) 
+              output_16 = self.output.write("[*]link ..........|" + self.link_robot +'\n'+'*'*25+'\n')
+              output_17 = self.output.writelines(Beautiful_robots1+'\n'+'*'*25 +'\n') 
           else:
             print "\n[*]Robots.txt ..........| Robots.txt Scan finsh "        
             output_21 = self.output.write('\n'+"[*]Robots.txt ..........| Robots.txt Scan finsh  "+'\n')           
-          try:
-             if os.path.isfile(".domain"):         
-                os.remove(".domain")        
-             if os.path.isfile('.data.txt'):
-                os.remove('.data.txt')
-                print self.panner
-                output_A = self.output.writelines('\n\n' + self.panner +" [-]SCAN ..........| Webshop Finsh sacn " + '\n'+"="*25)
-                exit()       
-          except IOError :
-            pass      
+            try:
+               if os.path.isfile(".domain"):         
+                  os.remove(".domain")        
+               if os.path.isfile('.data.txt'):
+                  os.remove('.data.txt')
+                  print self.panner
+                  output_A = self.output.writelines('\n\n' + self.panner +" [-]SCAN ..........| Webshop Finsh sacn " + '\n'+"="*25)
+                  exit()       
+            except IOError :
+                pass      
       except KeyboardInterrupt: 
                print self.panner
-               exit()         
+               exit()  
+      except IOError :
+                print "\n###-Discover Robots.txt"
+	        print("="*25)
+	        print "[-]Robots.txt ..........| NO Robots.txt Discover "    
+	        exit()                 
       except requests.exceptions.ConnectionError :
                 print "[-]Error  ..........| No status line received - the server has closed the connection"
                 pass      
@@ -318,6 +306,8 @@ class Shopping:
   def main(self):
      if self.args.output:   
         self.output = open(self.args.output,'w')
+        if os.path.isfile(".domain"):
+           os.remove(".domain")
      if self.args.URL:   		
         self.extract_links_form()
         self.discover_link()
@@ -329,6 +319,4 @@ class Shopping:
 if __name__ == "__main__":      
     Shopping()
         
-    
-
     
