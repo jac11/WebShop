@@ -1,4 +1,4 @@
-!/usr/bin/env python
+#!/usr/bin/env python
 # -*- coding: iso-8859-15 -*-
 
 
@@ -169,7 +169,7 @@ class Shopping:
                content = sub_read.read()
                subdomain = content.splitlines()
            except IOError:
-                  print "[*]wordlist ...........| File Not Exist"
+                  print "[*]wordlist  ...........| File Not Exist"
                   exit()    
            for sub in subdomain :
                sub_domain_url ='http://',sub,'.', url_replase
@@ -189,10 +189,17 @@ class Shopping:
                      list_domain = []
                      if sub_domain_url_join not in list_domain :
                         list_domain.append(sub_domain_url_join)
-                        string_list= ''.join(list_domain)                      
-                     with open ('.domain','a')as append_list :
-                          ppend_list = append_list.write(string_list+'\n')
-                    
+                        string_list= ''.join(list_domain) 
+                     try:
+                        if os.path.isfile(".domain"):         
+                           os.remove(".domain")
+                           with open ('.domain','a')as append_list :                         
+                              append_list = append_list.write(string_list+'\n')
+                        else:
+                           with open ('.domain','a')as append_list :                         
+                              append_list = append_list.write(string_list+'\n')                             
+                     except IOError:
+                         pass
        except KeyboardInterrupt: 
                print self.panner
                pass
@@ -244,7 +251,7 @@ class Shopping:
       try:
           try: 
       	     with open('.domain','r') as read_line_sub:
-                self.line_domain = read_line_sub.readlines()
+                 self.line_domain = read_line_sub.readlines()
           except IOError :
                 print "\n###-Discover Robots.txt"
 	        print("="*25)
@@ -325,4 +332,6 @@ class Shopping:
 if __name__ == "__main__":      
     Shopping()
         
+    
+
     
