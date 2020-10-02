@@ -137,10 +137,7 @@ class Shopping:
                         print "[*]Form ...........| No Form Discover" 
                         output_7 = self.output.writelines('\n'+'='*25+'\n'+"[*]link  ...........|"+self.replace +'\n')
                         output_8 = self.output.writelines("[*]Form  ...........| No Form Discover" +'\n'+'='*25+'\n')                                 
-                        print('='*25)
-                   
-                  
-                      
+                        print('='*25)                                       
          except KeyboardInterrupt: 
                print self.panner
                exit()
@@ -164,10 +161,10 @@ class Shopping:
            print '[*]MainDomain ...........|',url_replase
            output_12 = self.output.write( '[*]MainDomain ...........|'+ url_replase+'\n')
            try:          
-             wordlist = self.args.wordlist
-             with open(wordlist,'r') as sub_read :
-               content = sub_read.read()
-               subdomain = content.splitlines()
+               wordlist = self.args.wordlist
+               with open(wordlist,'r') as sub_read :
+                   content = sub_read.read()
+                   subdomain = content.splitlines()
            except IOError:
                   print "[*]wordlist  ...........| File Not Exist"
                   exit()    
