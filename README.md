@@ -12,7 +12,7 @@ so we going to shopping  "links , forms , emails ,subdomains and robots.txt "
 * apt-get install python-bs4
 * pip install requests
 * pip install beautifulsoup4
-* link down blow  have some Solutions if you get any problme with beautifulsoup4
+* link down below  have some Solutions if you get any problme with beautifulsoup4
 * https://www.pythonforbeginners.com/beautifulsoup/beautifulsoup-4-python/
 
 ## how to use 
@@ -37,7 +37,7 @@ so we going to shopping  "links , forms , emails ,subdomains and robots.txt "
  <img src = "images/1.png" width=350> <img src = "images/2.png" width=350> <img src = "images/3.png" width=350> <img src = "images/4.png" width=350>
  
  
- 
+ *sorry for using facebook , this for teacging purposes
 
 ### [for Connect]
 * administrator@jacstory.tech
