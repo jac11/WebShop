@@ -54,13 +54,13 @@ optional arguments:
   -w , --wordlist   select wordlist of subdomin
 ```
 
-### screenshoot
+### ScreenShot
  <img src = "images/1.png" width=200><img src = "images/2.png" width=200><img src = "images/3.png" width=200><img src = "images/4.png" width=200>
  
  
  
 
-### [for connect]
+### [for Connect]
 * administrator@jacstory.tech
 * thank you 
 
