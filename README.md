@@ -31,31 +31,10 @@ so we going to shopping  "links , forms , emails ,subdomains and robots.txt "
 * also you can use specific list just pass the wordlist path 
 
 ##  [ help menu overview ]
-```
-./webshop.py --help
-
-      
-  ██     ██ ███████ ██████  ███████ ██   ██  ██████  ██████  
-  ██     ██ ██      ██   ██ ██      ██   ██ ██    ██ ██   ██ 
-  ██  █  ██ █████   ██████  ███████ ███████ ██    ██ ██████  
-  ██ ███ ██ ██      ██   ██      ██ ██   ██ ██    ██ ██      
-   ███ ███  ███████ ██████  ███████ ██   ██  ██████  ██      
-                                             by:jacstory                                                                                                                     
- 
-usage: webshop.py [-h] [--URL] -o  -w
-
-Usage: [OPtion] [arguments] [OPtion] [arguments] Example: ./webshop.py --URL
-https://www.site.com/ -o outbut -w smail_list.txt
-
-optional arguments:
-  -h, --help        show this help message and exit
-  --URL             url target website
-  -o , --output     save the output into file
-  -w , --wordlist   select wordlist of subdomin
-```
+ <img src = "images/5.png">
 
 ### ScreenShot
- <img src = "images/1.png" width=200><img src = "images/2.png" width=200><img src = "images/3.png" width=200><img src = "images/4.png" width=200>
+ <img src = "images/1.png" width=350><img src = "images/2.png" width=350><img src = "images/3.png" width=350><img src = "images/4.png" width=350>
  
  
  
