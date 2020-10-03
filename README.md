@@ -21,7 +21,7 @@ so we going to shopping  "links , forms , emails ,subdomains and robots.txt "
 * cd WebShop/
 * chmod +x webshop.py
 * to check all  option open help menu by typing ./webshop.py -h or --help
-* all OPtions is required "--URL https://.....etc/"," - o file output " , "-w wordlist subdomains " 
+* all OPtions are required "--URL https://.....etc/"," - o file output " , "-w wordlist subdomains " 
 * the webshop  have 4 wordlist subdomains 
 * 1- small_list.txt it have  100 subdomains names
 * 2- medium_list.txt it have 1000 subdomins names
