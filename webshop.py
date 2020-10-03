@@ -51,7 +51,7 @@ class Shopping:
                else:          	
                   output_A = self.output.writelines('\n\n' + self.panner +" [-]link ..........| No links Discover " + '\n'+"="*25)	
                   print '[-]link ..........| No links Discover '
-                  print "[&]web  ..........| This Website login required to grep informaion "
+                  print "[&]web  ..........| This Website login required to grep information "
                   exit()
             except requests.exceptions.ConnectionError :
                   print "[-]Error  ..........| No status line received - the server has closed the connection"
@@ -229,7 +229,7 @@ class Shopping:
                  sys.stdout.write('\x1b[2K') 
           else:       
             print "[-]Email ...........| Email Scan Finsh"
-            output_20 = self.output.write("[-]Email ...........| Email Scan Finsh"+'\n')
+            output_20 = self.output.write("[-]Email ...........| Email Scan finish"+'\n')
       except KeyboardInterrupt: 
                print self.panner
                exit()
@@ -265,15 +265,15 @@ class Shopping:
               output_16 = self.output.write("[*]link ..........|" + self.link_robot +'\n'+'*'*25+'\n')
               output_17 = self.output.writelines(Beautiful_robots1+'\n'+'*'*25 +'\n') 
           else:
-            print "\n[*]Robots.txt ..........| Robots.txt Scan finsh "        
-            output_21 = self.output.write('\n'+"[*]Robots.txt ..........| Robots.txt Scan finsh  "+'\n')           
+            print "\n[*]Robots.txt ..........| Robots.txt Scan finish "        
+            output_21 = self.output.write('\n'+"[*]Robots.txt ..........| Robots.txt Scan finish  "+'\n')           
             try:
                if os.path.isfile(".domain"):         
                   os.remove(".domain")        
                if os.path.isfile('.data.txt'):
                   os.remove('.data.txt')
                   print self.panner
-                  output_A = self.output.writelines('\n\n' + self.panner +" [-]SCAN ..........| Webshop Finsh sacn " + '\n'+"="*25)
+                  output_A = self.output.writelines('\n\n' + self.panner +" [-]SCAN ..........| Webshop finish sacn " + '\n'+"="*25)
                   exit()       
             except IOError :
                 pass      
