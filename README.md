@@ -1,5 +1,11 @@
-# WebShop
-* webshop python 2.7 
+# WebShop & why this name 
+
+* webshop python 2.7
+* be sure using python2 to make the code function wall
+* this name come from the shopping idea so if you go to hybermarket to buy so many items from one place so web  same like the  
+hybermarket and the information same like items 
+so we going to shopping  "links , forms , emails ,subdomains and robots.txt "
+
 ## required
 * If you run Debian or Ubuntu, you can install Beautiful Soup with the system package manager
 * apt-get install python-bs4
@@ -14,7 +20,7 @@
 * cd WebShop/
 * chmod +x webshop.py
 * to check all  option open help menu by typing ./webshop.py -h or --help
-* all opthions is required " - o file output " , "-w wordlist subdomains " 
+* all OPtions is required "--URL https://.....etc/"," - o file output " , "-w wordlist subdomains " 
 * the webshop  have 4 wordlist subdomains 
 * 1- small_list.txt it have  100 subdomains names
 * 2- medium_list.txt it have 1000 subdomins names
