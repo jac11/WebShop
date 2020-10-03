@@ -38,7 +38,8 @@ so we going to shopping  "links , forms , emails ,subdomains and robots.txt "
  
  
  * *sorry for using facebook , this for teacging purposes*
-
+## Note 
+* some of website login required to grep information 
 ### [for Connect]
 * administrator@jacstory.tech
 * thank you 
