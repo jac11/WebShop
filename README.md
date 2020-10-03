@@ -34,7 +34,7 @@ so we going to shopping  "links , forms , emails ,subdomains and robots.txt "
  <img src = "images/6.png">
 
 ### ScreenShot
- <img src = "images/1.png" width=350><img src = "images/2.png" width=350><img src = "images/3.png" width=350><img src = "images/4.png" width=350>
+ <img src = "images/1.png" width=350> <img src = "images/2.png" width=350> <img src = "images/3.png" width=350> <img src = "images/4.png" width=350>
  
  
  
