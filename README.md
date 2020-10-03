@@ -1,7 +1,8 @@
-# WebShop & why this name 
+# WebShop 
 
 * webshop python 2.7
 * be sure using python2 to make the code function wall
+### why this name 
 * this name come from the shopping idea so if you go to hybermarket to buy so many items from one place so web  same like the  
 hybermarket and the information same like items 
 so we going to shopping  "links , forms , emails ,subdomains and robots.txt "
