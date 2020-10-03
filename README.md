@@ -24,10 +24,10 @@ so we going to shopping  "links , forms , emails ,subdomains and robots.txt "
 * all OPtions are required "--URL https://.....etc/"," - o file output " , "-w wordlist subdomains " 
 * the webshop  have 4 wordlist subdomains 
 * 1- small_list.txt it have  100 subdomains names
-* 2- medium_list.txt it have 1000 subdomins names
-* -3 large_list.txt it have 5000 subdomins names
-* -4 big_large.txt it have almos 10000 subdomins names
-* so you can selcet  list to sacn subdomin  
+* 2- medium_list.txt it have 1000 subdomains names
+* -3 large_list.txt it have 5000 subdomains names
+* -4 big_large.txt it have almos 10000 subdomains names
+* so you can selcet  list to sacn subdomains  
 * also you can use specific list just pass the wordlist path 
 
 ##  [ help menu overview ]
