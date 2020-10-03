@@ -26,7 +26,7 @@ so we going to shopping  "links , forms , emails ,subdomains and robots.txt "
 * 1- small_list.txt it have  100 subdomains names
 * 2- medium_list.txt it have 1000 subdomains names
 * -3 large_list.txt it have 5000 subdomains names
-* -4 big_large.txt it have almos 10000 subdomains names
+* -4 big_large.txt it have almost 10000 subdomains names
 * so you can selcet  list to sacn subdomains  
 * also you can use specific list just pass the wordlist path 
 
