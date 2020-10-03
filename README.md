@@ -55,8 +55,8 @@ optional arguments:
 ```
 
 ### screenshoot
-```
-```
+
+ <img scr = "images/1.png">
 
 ### [for connect]
 * administrator@jacstory.tech
