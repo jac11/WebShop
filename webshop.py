@@ -291,7 +291,7 @@ class Shopping:
 
   def control(self):
     
-      parser = argparse.ArgumentParser( description="Usage: [OPtion] [arguments]  [length]  [arguments] Example: ./webshop.py --URL https://www.site.com/ -o outbut ")
+      parser = argparse.ArgumentParser( description="Usage: [OPtion] [arguments] [OPtion] [arguments]  Example: ./webshop.py --URL https://www.site.com/ -o outbut ")
       parser.add_argument("--URL" , metavar='' , action=None  ,help ="url target website ") 
       parser.add_argument("-o","--output" , metavar='' , action=None ,required=True,help ="save the output into file ") 
       parser.add_argument("-w","--wordlist" , metavar='' , action=None ,required=True,help ="select wordlist of subdomin  ") 
