@@ -12,6 +12,7 @@ so we going to shopping  "links , forms , emails ,subdomains and robots.txt "
 * apt-get install python-bs4
 * pip install requests
 * pip install beautifulsoup4
+* pip install lxml
 * link down below  have some Solutions if you get any problme with beautifulsoup4
 * https://www.pythonforbeginners.com/beautifulsoup/beautifulsoup-4-python/
 
