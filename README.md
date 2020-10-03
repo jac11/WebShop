@@ -27,7 +27,7 @@ so we going to shopping  "links , forms , emails ,subdomains and robots.txt "
 * 2- medium_list.txt it have 1000 subdomains names
 * -3 large_list.txt it have 5000 subdomains names
 * -4 big_large.txt it have almost 10000 subdomains names
-* so you can selcet  list to sacn subdomains  
+* so you can selcet  list to scan subdomains  
 * also you can use specific list just pass the wordlist path 
 
 ##  [ help menu overview ]
@@ -37,7 +37,7 @@ so we going to shopping  "links , forms , emails ,subdomains and robots.txt "
  <img src = "images/1.png" width=350> <img src = "images/2.png" width=350> <img src = "images/3.png" width=350> <img src = "images/4.png" width=350>
  
  
- *sorry for using facebook , this for teacging purposes
+ * *sorry for using facebook , this for teacging purposes*
 
 ### [for Connect]
 * administrator@jacstory.tech
