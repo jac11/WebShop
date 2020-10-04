@@ -13,6 +13,7 @@ so we going to shopping  "links , forms , emails ,subdomains and robots.txt "
 * pip install requests
 * pip install beautifulsoup4
 * pip install lxml
+* pip install chardet 
 * link down below  have some Solutions if you get any problme with beautifulsoup4
 * https://www.pythonforbeginners.com/beautifulsoup/beautifulsoup-4-python/
 
