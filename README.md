@@ -2,7 +2,7 @@
 
 * webshop python 2.7
 * webshop_P3 python 3.7.1
-* be sure using python2 to make the code function well
+
 ### why this name 
 * this name come from the shopping idea so if you go to hybermarket to buy so many items from one place so web  same like the  
 hybermarket and the information same like items 
