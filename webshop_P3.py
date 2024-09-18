@@ -32,7 +32,7 @@ class Shopping:
             self.target_url = self.args.URL
             if '/' not in self.target_url[-1]:
                 self.target_url = self.target_url + '/'
-                print("[*]URL ..........| ", self.target_url)              
+                print("[*]URL ............| ", self.target_url)              
             else:
                 pass
             self.target_links = []
@@ -93,8 +93,11 @@ class Shopping:
                     print()
 
                 for self.line in self.line_read:
-                    time.sleep(0.25)        
-                    response = self.session.get(self.line)
+                    time.sleep(0.25)  
+                    try:      
+                        response = self.session.get(self.line,timeout=(0.2, 5))
+                    except Exception :
+                        response = self.session.get(self.line,allow_redirects=False,timeout=(0.2, 5))   
                     header_html = BeautifulSoup(response.content, 'lxml')
                     if response.ok:
                         form_list = header_html.findAll('form')
@@ -104,34 +107,35 @@ class Shopping:
                             self.action = form.get('action')
                             self.url_path = urllib.parse.urljoin(self.line, self.action)
                             self.method = form.get('method')
-                            print("\n###-Discover Form ")
-                            print('='*25)
-                            print()
-                            print("[*]action ...........| ", self.url_path)
-                            print("[*]method ...........| ", self.method)
                             output_2 = self.output.write('\n' + "###-Discover Form " + '\n' + '='*25 + '\n')
                             output_2 = self.output.writelines("[*]action ...........| " + self.url_path + '\n')
                             output_3 = self.output.writelines("[*]method ...........| " + str(self.method) + '\n')
                         for input in self.list_input:
                             self.input_get = input.get('name')  
                             self.type = input.get('type')                      
-                            self.value = input.get('value')        
+                            self.value = input.get('value')   
+                            print("[*]action ...........| ", self.url_path)
+                            print("[*]method ...........| ", self.method)     
                             print("[*]input  ...........| ", self.input_get)
                             print("[*]type   ...........| ", self.type)
                             print("[*]value  ...........| ", self.value) 
                             output_4 = self.output.writelines("[*]input  ...........| " + str(self.input_get) + '\n')
                             output_5 = self.output.writelines("[*]type   ...........| " + str(self.type) + '\n')
                             output_6 = self.output.writelines("[*]value  ...........| " + str(self.value) + '\n')
-                        print()     
-                        print('='*25)   
+                            print()     
+                            print('='*25)   
                     else:
                         print()
                         self.replace = self.line.replace('\n', '')
                         print("[*]link ...........|", self.replace)  
                         print("[*]Form ...........| No Form Discover")
-                        output_7 = self.output.writelines('\n' + '='*25 + '\n' + "[*]link  ...........|" + self.replace + '\n')
-                        output_8 = self.output.writelines("[*]Form  ...........| No Form Discover" + '\n' + '='*25 + '\n')                                 
-                        print('='*25)
+                        sys.stdout.write('\x1b[1A')
+                        sys.stdout.write('\x1b[2K')
+                        sys.stdout.write('\x1b[1A')
+                        sys.stdout.write('\x1b[2K')
+                        sys.stdout.write('\x1b[1A')
+                        sys.stdout.write('\x1b[2K')
+                        
             except KeyboardInterrupt:
                 print(self.banner)
                 exit()
@@ -258,8 +262,8 @@ class Shopping:
                 print("\n[*]Robots.txt ..........| Robots.txt Scan finish ")
                 output_21 = self.output.write('\n' + "[*]Robots.txt ..........| Robots.txt Scan finish  " + '\n')
                 try:
-                    if os.path.isfile(".domain"):
-                        os.remove(".domain")
+                   # if os.path.isfile(".domain"):
+                    #    os.remove(".domain")
                     if os.path.isfile('.data.txt'):
                         os.remove('.data.txt')
                         print(self.banner)
@@ -309,17 +313,11 @@ class Shopping:
             self.sub_domain() 
             self.robotstxt_read() 
         else:
-            if self.args.robots:
-                self.extract_links_form()
-                self.discover_link()
-                self.robotstxt_read()
-            elif self.args.email:
+            if self.args.email:
                 self.extract_links_form()
                 self.discover_link()
                 self.Email_Scan()
             elif self.args.subdomain:
-             #   self.extract_links_form()
-               # self.discover_link()
                 self.sub_domain()
 
 if __name__ == "__main__":
