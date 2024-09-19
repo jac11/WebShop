@@ -1,7 +1,3 @@
-Here's a README file for the provided Python script, which appears to be a web scraping and security auditing tool. Save this as `README.md`.
-
----
-
 # Webshop Security Scanner
 
 ## Description
