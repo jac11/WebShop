@@ -61,9 +61,3 @@ Install dependencies using:
 pip install requests beautifulsoup4 lxml
 ```
 
-## License
-This tool was created by jacstory and is intended for educational purposes or authorized security testing. Misuse of this tool is prohibited.
-
----
-
-This file provides an overview, usage examples, and dependencies needed to use the script.
