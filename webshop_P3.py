@@ -83,6 +83,7 @@ class Shopping:
             pass
 
     def form_Check(self):
+        countform = 0
         try:
             outbut_01 = self.output.write("\n###-Discover links" + '\n' + '='*25 + '\n')
             try:
@@ -98,34 +99,43 @@ class Shopping:
                         response = self.session.get(self.line,timeout=(0.2, 5))
                     except Exception :
                         response = self.session.get(self.line,allow_redirects=False,timeout=(0.2, 5))   
+
                     header_html = BeautifulSoup(response.content, 'lxml')
                     if response.ok:
+                        
                         form_list = header_html.findAll('form')
+
                         self.list_input = header_html.findAll('input')
                         post_data = {}
                         for form in form_list:
                             self.action = form.get('action')
-                            self.url_path = urllib.parse.urljoin(self.line, self.action)
-                            self.method = form.get('method')
-                            output_2 = self.output.write('\n' + "###-Discover Form " + '\n' + '='*25 + '\n')
-                            output_2 = self.output.writelines("[*]action ...........| " + self.url_path + '\n')
-                            output_3 = self.output.writelines("[*]method ...........| " + str(self.method) + '\n')
-                        for input in self.list_input:
-                            self.input_get = input.get('name')  
-                            self.type = input.get('type')                      
-                            self.value = input.get('value')   
-                            print("[*]action ...........| ", self.url_path)
-                            print("[*]method ...........| ", self.method)     
-                            print("[*]input  ...........| ", self.input_get)
-                            print("[*]type   ...........| ", self.type)
-                            print("[*]value  ...........| ", self.value) 
-                            output_4 = self.output.writelines("[*]input  ...........| " + str(self.input_get) + '\n')
-                            output_5 = self.output.writelines("[*]type   ...........| " + str(self.type) + '\n')
-                            output_6 = self.output.writelines("[*]value  ...........| " + str(self.value) + '\n')
-                            print()     
-                            print('='*25)   
+                            if self.action:                                       
+                                self.url_path = urllib.parse.urljoin(self.line, self.action)
+                                self.method = form.get('method')
+                                output_2 = self.output.write('\n' + "###-Discover Form " + '\n' + '='*25 + '\n')
+                                output_2 = self.output.writelines("[*]action ...........| " + self.url_path + '\n')
+                                output_3 = self.output.writelines("[*]method ...........| " + str(self.method) + '\n')
+                                for input in self.list_input:
+                                    self.input_get = input.get('name')  
+                                    self.type = input.get('type')                      
+                                    self.value = input.get('value') 
+                                    countform +=1 
+                                    try: 
+                                       print("[+]link   ...........| ", self.link)
+                                       print("[*]action ...........| ", self.url_path)
+                                       print("[*]method ...........| ", self.method)   
+                                       print("[*]input  ...........| ", self.input_get)
+                                       print("[*]type   ...........| ", self.type)
+                                       print("[*]value  ...........| ", self.value) 
+                                       output_4 = self.output.writelines("[*]input  ...........| " + str(self.input_get) + '\n')
+                                       output_5 = self.output.writelines("[*]type   ...........| " + str(self.type) + '\n')
+                                       output_6 = self.output.writelines("[*]value  ...........| " + str(self.value) + '\n')
+                                       print()     
+                                       print('='*25)
+                                    except :
+                                       pass   
+                                       
                     else:
-                        print()
                         self.replace = self.line.replace('\n', '')
                         print("[*]link ...........|", self.replace)  
                         print("[*]Form ...........| No Form Discover")
@@ -133,9 +143,10 @@ class Shopping:
                         sys.stdout.write('\x1b[2K')
                         sys.stdout.write('\x1b[1A')
                         sys.stdout.write('\x1b[2K')
-                        sys.stdout.write('\x1b[1A')
-                        sys.stdout.write('\x1b[2K')
-                        
+                if countform == 0 :
+                    print("[*] Status  ...........| No Form Discovered")   
+                else:
+                   print("[*] Status  ...........| Form Discovered Scan Finsh")                   
             except KeyboardInterrupt:
                 print(self.banner)
                 exit()
@@ -181,6 +192,7 @@ class Shopping:
                     sys.stdout.write('\x1b[1A')
                     sys.stdout.write('\x1b[2K')
                 else:
+
                     print("[+]Sub-Domain ...........| ", sub_domain_url_join)
                     output_13 = self.output.writelines("[+]Sub-Domain ...........| " + sub_domain_url_join + '\n')
                     list_domain = []
@@ -239,31 +251,32 @@ class Shopping:
                 self.link_robot = urllib.parse.urljoin(robots, '/robots.txt')
                 self.link_robot_str = str(self.link_robot)
                 response_robots = requests.get(self.link_robot, data=None)
-                Beautiful_robots = str(BeautifulSoup(response_robots.content, 'lxml'))
-                Beautiful_robots = Beautiful_robots.replace('<html>', '')
-                Beautiful_robots = Beautiful_robots.replace('<body>', '')
-                Beautiful_robots = Beautiful_robots.replace('<p>', '')
-                Beautiful_robots = Beautiful_robots.replace('</p>', '')
-                Beautiful_robots = Beautiful_robots.replace('</body>', '')
-                Beautiful_robots1 = Beautiful_robots.replace('</html>', '')
-                time.sleep(0.25)
-                print("\n###-Discover Robots.txt")
-                print("="*25)
-                output_15 = self.output.write('\n' + "###-Discover Robots.txt" + '\n' + '=' * 25 + '\n')
-                print()
-                print("[*]link ..........|", self.link_robot)
-                print()
-                print(('*' * 30))
-                print(Beautiful_robots1)
-                print(('*' * 30))
-                output_16 = self.output.write("[*]link ..........| " + self.link_robot + '\n' + '*' * 25 + '\n')
-                output_17 = self.output.writelines(Beautiful_robots1 + '\n' + '*' * 25 + '\n')
+                Beautiful_robots = str(BeautifulSoup(open(response_robots.content), 'lxml'))
+                if "Disallow:" in Beautiful_robots:
+                    Beautiful_robots = Beautiful_robots.replace('<html>', '')
+                    Beautiful_robots = Beautiful_robots.replace('<body>', '')
+                    Beautiful_robots = Beautiful_robots.replace('<p>', '')
+                    Beautiful_robots = Beautiful_robots.replace('</p>', '')
+                    Beautiful_robots = Beautiful_robots.replace('</body>', '')
+                    Beautiful_robots1 = Beautiful_robots.replace('</html>', '')
+                    time.sleep(0.25)
+                    print("\n###-Discover Robots.txt")
+                    print("="*25)
+                    output_15 = self.output.write('\n' + "###-Discover Robots.txt" + '\n' + '=' * 25 + '\n')
+                    print()
+                    print("[*]link ..........|", self.link_robot)
+                    print()
+                    print(('*' * 30))
+                    print(Beautiful_robots1)
+                    print(('*' * 30))
+                    output_16 = self.output.write("[*]link ..........| " + self.link_robot + '\n' + '*' * 25 + '\n')
+                    output_17 = self.output.writelines(Beautiful_robots1 + '\n' + '*' * 25 + '\n')
             else:
                 print("\n[*]Robots.txt ..........| Robots.txt Scan finish ")
                 output_21 = self.output.write('\n' + "[*]Robots.txt ..........| Robots.txt Scan finish  " + '\n')
                 try:
-                   # if os.path.isfile(".domain"):
-                    #    os.remove(".domain")
+                    if os.path.isfile(".domain"):
+                        os.remove(".domain")
                     if os.path.isfile('.data.txt'):
                         os.remove('.data.txt')
                         print(self.banner)
@@ -288,7 +301,6 @@ class Shopping:
         parser.add_argument("--URL", action=None, help="url target website") 
         parser.add_argument("-o", "--output", action=None, required=True, help="save the output into file") 
         parser.add_argument("-w", "--wordlist", action=None, required=False, help="select wordlist of subdomain") 
-        parser.add_argument("-R", "--robots", action="store_true", required=False, help="Check robots file") 
         parser.add_argument("-E", "--email", action="store_true", required=False, help="Discover Email address") 
         parser.add_argument("-S", "--subdomain", action="store_true", required=False, help="Discover subdomains")  
         parser.add_argument("-A", "--all", action="store_true", required=False, help="Discover all Options")
@@ -315,7 +327,6 @@ class Shopping:
         else:
             if self.args.email:
                 self.extract_links_form()
-                self.discover_link()
                 self.Email_Scan()
             elif self.args.subdomain:
                 self.sub_domain()
