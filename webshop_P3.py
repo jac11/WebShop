@@ -11,6 +11,7 @@ import readline
 import time
 import json
 import random
+import socket
 
 class Shopping:
     def __init__(self):
@@ -74,7 +75,7 @@ class Shopping:
                     time.sleep(0.25)
                     print('   [+]Router       ............| ',data['ipinfo'][data['dns']['a'][0]]['asn']['route'])
                     time.sleep(0.25)
-                    print('   [+]Router       ............| ',data['ipinfo'][data['dns']['a'][0]]['asn']['type'])
+                    print('   [+]Type         ............| ',data['ipinfo'][data['dns']['a'][0]]['asn']['type'])
                     print("\nDNS-info") 
                     print("_"*15+'\n')
                     for  dns in data['dns']['mx']:
@@ -255,12 +256,17 @@ class Shopping:
                 try:
                     requests.get(sub_domain_url_join) 
                 except requests.ConnectionError:
-                    print("[+]Sub-Domain ...........| ", sub_domain_url_join)
+                    print("[+]Sub-Domain ...........|", sub_domain_url_join)
                     sys.stdout.write('\x1b[1A')
                     sys.stdout.write('\x1b[2K')
                 else:
-                    print("[+]Sub-Domain ...........| ", sub_domain_url_join)
-                    output_13 = self.output.writelines("[+]Sub-Domain ...........| " + sub_domain_url_join + '\n')
+                    try:
+                        socket.setdefaulttimeout(1)
+                        SubIp = socket.gethostbyname(sub_domain_url_join.replace("https://",""))
+                    except Exception as a:
+                        SubIp = "None" + str(a)
+                    print(f"[+]Sub-Domain ...........| {sub_domain_url_join:<25} {'---------|':>15} {SubIp}")
+                    output_13 = self.output.writelines("[+]Sub-Domain ...........| " + sub_domain_url_join +"......| " +SubIp+ '\n')
                     list_domain = []
                     if sub_domain_url_join not in list_domain:
                         list_domain.append(sub_domain_url_join)
