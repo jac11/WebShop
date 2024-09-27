@@ -36,6 +36,10 @@ class Shopping:
                 print('[+]APIKEY     ............| ',self.args.APIKEY)
                 print('[+]API-File   ............| ',"file///.APIKEY.KEY") 
                 print("="*30)
+                self.output.writelines("\n###-API_INFO\n")  
+                self.output.writelines('[+]APIKEY     ............| '+self.args.APIKEY)
+                self.output.writelines('[+]API-File   ............| '+"file///.APIKEY.KEY") 
+                self.output.writelines("="*30)
             def APIKEYCALL(self) :       
                 with open('.APIKEY.KEY', 'r') as key_file:
                     key = key_file.read().strip()
@@ -48,50 +52,74 @@ class Shopping:
                     else:
                         header_html = BeautifulSoup(response.content, 'lxml')
                         data = header_html.prettify()
-                time.sleep(.30)        
-                try:        
+                    time.sleep(.30)        
+               try:        
                     print("\n###-WHOIS INFO\n")
                     print("="*30)
                     print("\nDomain-info")
                     print("_"*15+'\n')
+                    self.output.writelines("\n###-WHOIS INFO")
+                    self.output.writelines("\n"+"="*30+"\n")
+                    self.output.writelines("\nDomain-info"+"\n")
+                    self.output.writelines("_"*15+'\n\n')
                     time.sleep(0.25)
                     print('   [+]MainDomain   ............| ',data['domain'])
+                    self.output.writelines('   [+]MainDomain   ............| '+ data['domain']+'\n')
                     time.sleep(0.25)
                     print('   [+]URL          ............| ', self.args.URL)
+                    self.output.writelines('   [+]URL          ............| '+  self.args.URL+'\n')
                     time.sleep(0.25)
                     print('   [+]Rank         ............| ', data['web']['rank'])
+                    self.output.writelines('   [+]Rank         ............| '+ str(data['web']['rank'])+'\n')
                     time.sleep(0.25)
-                    print('   [+]GTM          ............| ', data['web']['gtm'])        
+                    print('   [+]GTM          ............| ', data['web']['gtm']) 
+                    self.output.writelines('   [+]GTM          ............| '+ data['web']['gtm']+'\n')       
                     print("\nIp-info") 
+                    self.output.writelines("\nIp-info\n")
                     print("_"*15+'\n')  
+                    self.output.writelines("_"*15+'\n\n')
                     time.sleep(0.25)
                     print('   [+]Ip-address   ............| ',data['dns']['a'][0])
+                    self.output.writelines('   [+]Ip-address   ............| '+data['dns']['a'][0]+'\n')
                     time.sleep(0.25)
                     print('   [+]City         ............| ',data['ipinfo'][data['dns']['a'][0]]['city'])
+                    self.output.writelines('   [+]City         ............| '+data['ipinfo'][data['dns']['a'][0]]['city']+'\n')
                     time.sleep(0.25)
                     print('   [+]Country      ............| ',data['ipinfo'][data['dns']['a'][0]]['country'])
+                    self.output.writelines('   [+]Country      ............| '+data['ipinfo'][data['dns']['a'][0]]['country']+'\n')
                     time.sleep(0.25)
                     print('   [+]Server       ............| ',data['ipinfo'][data['dns']['a'][0]]['asn']['domain'])
+                    self.output.writelines('   [+]Server       ............| '+data['ipinfo'][data['dns']['a'][0]]['asn']['domain']+'\n')
                     time.sleep(0.25)
                     print('   [+]Router       ............| ',data['ipinfo'][data['dns']['a'][0]]['asn']['route'])
+                    self.output.writelines('   [+]Router       ............| '+data['ipinfo'][data['dns']['a'][0]]['asn']['route']+'\n')
                     time.sleep(0.25)
                     print('   [+]Type         ............| ',data['ipinfo'][data['dns']['a'][0]]['asn']['type'])
+                    self.output.writelines('   [+]Type         ............| '+data['ipinfo'][data['dns']['a'][0]]['asn']['type']+'\n')
                     print("\nDNS-info") 
-                    print("_"*15+'\n')
+                    self.output.writelines("\nDNS-info\n")
+                    print("_"*15+'\n\n')
+                    self.output.writelines("_"*15+'\n\n')
                     for  dns in data['dns']['mx']:
                         time.sleep(0.25)
                         print('   [+]MX           ............| ', dns[0:-1])
+                        self.output.writelines('   [+]MX           ............| '+ dns[0:-1]+'\n')
                     for  dns in data['dns']['ns']:
                         print('   [+]NS           ............| ', dns[0:-1]) 
+                        self.output.writelines('   [+]NS           ............| '+ dns[0:-1]+'\n')
                         time.sleep(0.25)   
                     print("\nSocailMeddia-info")
-                    print("_"*15+'\n')   
+                    self.output.writelines("\nSocailMeddia-info\n")
+                    print("_"*15+'\n') 
+                    self.output.writelines("_"*15+'\n\n')   
                     for  web in data['web']['links']:
                         time.sleep(.25)
-                        print('   [+]Meddia       ............| ', web)  
-                    print("_"*15+'\n')  
-                except :
-                     pass
+                        print('   [+]Meddia       ............| '+ web) 
+                        self.output.writelines('   [+]Meddia       ............| '+ web+'\n') 
+                    print("_"*15+'\n')
+                    self.output.writelines("_"*15+'\n')  
+              except Exception :
+                    pass
             if self.args.APIKEY:         
                 APIKEYCALL(self)
             elif self.args.callapi:
@@ -110,7 +138,7 @@ class Shopping:
                 if response.ok:
                     return re.findall('(?:href=")(.*?)"', str(response.content))                           
                 else:
-                    output_A = self.output.writelines('\n\n' + self.banner + "[-]link ..........| No links Discover " + '\n' + "="*25)
+                    output_A = self.output.writelines("[-]link ..........| No links Discover " + '\n' + "="*25)
                     output_25 = self.output.writelines("[*]input  ...........| " + self.target_url + '\n')  
                     print('[-]link ..........| No links Discover ')
                     print("[&]web  ..........| This Website login required to grep information ")
@@ -124,7 +152,7 @@ class Shopping:
     def discover_link(self):
         try:
             try:
-                output_0 = self.output.writelines('\n\n' + self.banner + '\n' + "###-Discover links" + '\n' + "="*25 + '\n')    
+                output_0 = self.output.writelines('\n' + "###-Discover links" + '\n' + "="*25 + '\n')    
                 print("\n###-Discover links")
                 print("="*25)
                 print()
@@ -391,6 +419,7 @@ class Shopping:
         pattern = r"https?://(?:www\.)?(?:[a-zA-Z0-9-]+\.)?([a-zA-Z0-9-]+)\."
         resreach = re.search(pattern , self.args.URL)
         self.output = open(str("Webshop_"+resreach.group(1))+".txt", 'w')
+        self.output.writelines('\n' + self.banner + '\n')
         if os.path.isfile(".domain"):
             os.remove(".domain")
         if os.path.isfile(".2"):      
