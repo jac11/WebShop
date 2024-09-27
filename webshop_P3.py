@@ -424,8 +424,11 @@ class Shopping:
         self.output.writelines('\n' + self.banner + '\n')
         if os.path.isfile(".domain"):
             os.remove(".domain")
-        if os.path.isfile(".2"):      
+        if os.path.isfile(".2"):     
            os.remove(".2")
+        with open(".data.txt",'w') as data:
+            with open('.domain','w') as domain:
+                pass 
         if self.args.APIKEY or self.args.callapi:
             self.APIKEY()
         if self.args.all:           
