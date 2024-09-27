@@ -152,7 +152,7 @@ class Shopping:
     def form_Check(self):
         countform = 0
         try:
-            self.output.write("\n###-Discover links" + '\n' + '='*25 + '\n')
+            self.output.write("\n###-Discover Forms" + '\n' + '='*25 + '\n')
             try:
                 with open('.data.txt', 'r') as read_line:
                     self.line_read = read_line.readlines()
@@ -163,78 +163,64 @@ class Shopping:
                     for self.line in self.line_read:
                         time.sleep(0.25)
                         try:
-                            response = self.session.get(self.line,timeout=(0.2, 5))
+                            response = self.session.get(self.line, timeout=(0.2, 5))
                             header_html = BeautifulSoup(response.content, 'lxml')
-                        except Exception :
+                        except Exception:
                             try:
-                                response = self.session.get(self.line,allow_redirects=False,timeout=(0.2, 5))
+                                response = self.session.get(self.line, allow_redirects=False, timeout=(0.2, 5))
                                 header_html = BeautifulSoup(response.content, 'lxml')
-                            except Exception :
-                                    pass
-                        try:            
-                            if response.ok:
-                                form_list = header_html.findAll('form')
-                                self.list_input = header_html.findAll('input')
-                                for form in form_list:
-                                    self.action = form.get('action')
-                                    if self.action not in unique_actions:
-                                        unique_actions.add(self.action)
-                                        self.url_path = urllib.parse.urljoin(self.line, self.action)
-                                        self.method = form.get('method')
-                                        output_2 = self.output.write('\n' + "###-Discover Form " + '\n' + '='*25 + '\n')
-                                        output_2 = self.output.writelines("[*]action ...........| " + self.url_path + '\n')
-                                        output_3 = self.output.writelines("[*]method ...........| " + str(self.method) + '\n')
-                                        for input in self.list_input:
-                                            self.input_get = input.get('name')
-                                            self.type = input.get('type')
-                                            self.value = input.get('value')
-                                            countform +=1
-                                            try:
-                                                print("[+]link   ...........| ", self.link)
-                                                print("[*]action ...........| ", self.url_path)
-                                                print("[*]method ...........| ", self.method)
-                                                print("[*]input  ...........| ", self.input_get)
-                                                print("[*]type   ...........| ", self.type)
-                                                print("[*]value  ...........| ", self.value)
-                                                output_4 = self.output.writelines("[*]input  ...........| " + str(self.input_get) + '\n')
-                                                output_5 = self.output.writelines("[*]type   ...........| " + str(self.type) + '\n')
-                                                output_6 = self.output.writelines("[*]value  ...........| " + str(self.value) + '\n')
-                                                print()
-                                                print('='*25)
-                                            except :
-                                                pass
-                                    else:
-                                        countform +=1
-                                        self.replace = self.line.replace('\n', '')
-                                        print("[*]link ...........|", self.replace)
-                                        print("[*]Form ...........| No Form Discover")
-                                        sys.stdout.write('\x1b[1A')
-                                        sys.stdout.write('\x1b[2K')
-                                        sys.stdout.write('\x1b[1A')
-                                        sys.stdout.write('\x1b[2K')
+                            except Exception:
+                                pass
+                        if not response.ok:
+                            self.replace = self.line.replace('\n', '')
+                            print(f"[*]link ...........| {self.replace}")
+                            print("[*]Form ...........| No Form Discover")
+                            sys.stdout.write('\x1b[1A'); sys.stdout.write('\x1b[2K')
+                            sys.stdout.write('\x1b[1A'); sys.stdout.write('\x1b[2K')
+                            continue
+                        form_list = header_html.findAll('form')
+                        self.list_input = header_html.findAll('input')
+                        for form in form_list:
+                            self.action = form.get('action')
+                            if self.action and self.action not in unique_actions:
+                                unique_actions.add(self.action)
+                                self.url_path = urllib.parse.urljoin(self.line, self.action)
+                                self.method = form.get('method')
+                                self.output.writelines('\n' + "###-Discover Form " + '\n' + '='*25 + '\n')
+                                self.output.writelines(f"[+]link   ...........| {self.line}")
+                                self.output.writelines(f"[*]action ...........| {self.url_path}\n")
+                                self.output.writelines(f"[*]method ...........| {str(self.method)}\n")
+                                print(f"[+]link   ...........| {self.line}".replace('\n',''))
+                                print(f"[*]action ...........| {self.url_path}")
+                                print(f"[*]method ...........| {self.method}")
+                                print("\nForm_Detalis"+'\n'+'_'*12+'\n')
+                                self.output.writelines("\nForm_Detalis"+'\n'+'_'*12+'\n')
+                                for input in self.list_input:
+                                    self.input_get = input.get('name')
+                                    self.type = input.get('type')
+                                    self.value = input.get('value')
+                                    countform += 1
+                                    self.output.writelines(f"    [*]input  ...........| {str(self.input_get)}\n")
+                                    self.output.writelines(f"    [*]type   ...........| {str(self.type)}\n")
+                                    self.output.writelines(f"    [*]value  ...........| {str(self.value)}\n")
+                                    print(f"    [*]input  ...........| {self.input_get}")
+                                    print(f"    [*]type   ...........| {self.type}")
+                                    print(f"    [*]value  ...........| {self.value}")
+                                print('\n'+'='*25+'\n')    
                             else:
                                 self.replace = self.line.replace('\n', '')
-                                print("[*]link ...........|", self.replace)
+                                print(f"[*]link ...........| {self.replace}")
                                 print("[*]Form ...........| No Form Discover")
-                                sys.stdout.write('\x1b[1A')
-                                sys.stdout.write('\x1b[2K')  
-                                sys.stdout.write('\x1b[1A')
-                                sys.stdout.write('\x1b[2K')
-                        except Exception :
-                            self.replace = self.line.replace('\n', '')
-                            print("[*]link ...........|", self.replace)
-                            print("[*]Form ...........| No Form Discover")
-                            sys.stdout.write('\x1b[1A')
-                            sys.stdout.write('\x1b[2K')
-                            sys.stdout.write('\x1b[1A')
-                            sys.stdout.write('\x1b[2K')    
-                    if countform == 0 :
-                        print("[*] Status  ...........| No Form Discovered")
+                                sys.stdout.write('\x1b[1A'); sys.stdout.write('\x1b[2K')
+                                sys.stdout.write('\x1b[1A'); sys.stdout.write('\x1b[2K')
+
+                    if countform == 0:
+                        print("[*] Status ...........| No Form Discovered")
             except KeyboardInterrupt:
                 print(self.banner)
                 exit()
         except requests.exceptions.ConnectionError:
-            print("[-]Error  ..........| No status line received - the server h, i need if self.action same value  and all data if same no not print")
+            print("[-]Error ..........| No status line received - the server is down")
             pass
     def sub_domain(self):
         try:
