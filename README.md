@@ -25,7 +25,7 @@ To use the tool, run it with the following options:
 ```bash
 ./webshop_P3.py --URL https://example.com [options]
 ```
-
+----------------------------------------------------------------------------
 ### Command-Line Arguments
 
 - `--URL`: **Required.** Target website URL.
@@ -35,9 +35,8 @@ To use the tool, run it with the following options:
 - `-A`, `--all`: Optional. Discover all available options (links, forms, emails, subdomains, etc.).
 - `-V`, `--APIKEY`: Optional. API key to fetch domain analysis from the Whois API.
 - `-C`, `--callapi`: Optional. Flag to call the API if set.
-
+-----------------------------------------------------------------------------------
 ## Features
-
 ### 1. Domain and WHOIS Info (`APIKEY`)
 The tool can fetch and display WHOIS and domain-related information using the host.io API. The information includes:
 - Domain name
@@ -47,8 +46,9 @@ The tool can fetch and display WHOIS and domain-related information using the ho
 - IP address, city, and country
 - DNS and server details
 - Social media links
-
 The API key is stored locally in `.APIKEY.KEY`. If the API key is provided via the `--APIKEY` option or through a stored file, the tool will fetch the domain analysis.
+- Create account to use apikey [host.io](https://host.io)
+----------------------------------------------------------------------
 
 ### 2. Link Discovery (`extract_links_form`)
 The tool crawls the provided website to discover and extract all available links from the HTML content.
@@ -69,20 +69,39 @@ The tool reads and displays the contents of the `robots.txt` file from the disco
 
 ## Example
 
-To discover all available options for a website, use the following command:
+
+To Store Host.io API key in the local to use in WebShop tool 
+./webshop_P3.py --URL https://example.com -E -K follow by APIKEY 
+```bash
+./webshop_P3.py --URL https://example.com -E -K 223374939933
+```
+To call the API Key use  -C option
 
 ```bash
-./webshop_P3.py --URL https://example.com -A
+./webshop_P3.py --URL https://example.com -E -C 
 ```
-
 To scan for emails on a website:
+
 
 ```bash
 ./webshop_P3.py --URL https://example.com -E
 ```
+To scan for emails on a website with whois domain call api:
 
+```bash
+./webshop_P3.py --URL https://example.com -E -C
+```
 To discover subdomains using a wordlist:
 
 ```bash
 ./webshop_P3.py --URL https://example.com -S -w wordlist.txt
+```
+To discover all available options for a website, use the following command with whois API:
+
+```bash
+./webshop_P3.py --URL https://example.com -A -w wordlist.txt -C 
+```
+To discover all available options for a website, use the following command without API
+```bash
+./webshop_P3.py --URL https://example.com -A -w wordlist.txt 
 ```
