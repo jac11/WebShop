@@ -1,7 +1,7 @@
+# Webshop Security Scanner
 
-# WebShop Tool
-
-`WebShop` is a Python-based tool designed for analyzing websites and gathering critical information such as links, forms, subdomains, emails, and `robots.txt` files. It also uses the Whois API to fetch domain-related data for in-depth analysis.
+## Description
+`Webshop Security Scanner` is a Python-based tool designed for auditing websites. It can extract links, discover forms, scan for email addresses, identify subdomains, and analyze the contents of a website's `robots.txt` file. This tool can be useful for security researchers or website administrators to analyze and gather information from target websites.
 
 ## Requirements
 
