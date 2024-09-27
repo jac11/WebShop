@@ -164,57 +164,70 @@ class Shopping:
                         time.sleep(0.25)
                         try:
                             response = self.session.get(self.line,timeout=(0.2, 5))
+                            header_html = BeautifulSoup(response.content, 'lxml')
                         except Exception :
-                            response = self.session.get(self.line,allow_redirects=False,timeout=(0.2, 5))
-                        header_html = BeautifulSoup(response.content, 'lxml')
-                        if response.ok:
-                            form_list = header_html.findAll('form')
-                            self.list_input = header_html.findAll('input')
-                            for form in form_list:
-                                self.action = form.get('action')
-                                if self.action not in unique_actions:
-                                    unique_actions.add(self.action)
-                                    self.url_path = urllib.parse.urljoin(self.line, self.action)
-                                    self.method = form.get('method')
-                                    output_2 = self.output.write('\n' + "###-Discover Form " + '\n' + '='*25 + '\n')
-                                    output_2 = self.output.writelines("[*]action ...........| " + self.url_path + '\n')
-                                    output_3 = self.output.writelines("[*]method ...........| " + str(self.method) + '\n')
-                                    for input in self.list_input:
-                                        self.input_get = input.get('name')
-                                        self.type = input.get('type')
-                                        self.value = input.get('value')
+                            try:
+                                response = self.session.get(self.line,allow_redirects=False,timeout=(0.2, 5))
+                                header_html = BeautifulSoup(response.content, 'lxml')
+                            except Exception :
+                                    pass
+                        try:            
+                            if response.ok:
+                                form_list = header_html.findAll('form')
+                                self.list_input = header_html.findAll('input')
+                                for form in form_list:
+                                    self.action = form.get('action')
+                                    if self.action not in unique_actions:
+                                        unique_actions.add(self.action)
+                                        self.url_path = urllib.parse.urljoin(self.line, self.action)
+                                        self.method = form.get('method')
+                                        output_2 = self.output.write('\n' + "###-Discover Form " + '\n' + '='*25 + '\n')
+                                        output_2 = self.output.writelines("[*]action ...........| " + self.url_path + '\n')
+                                        output_3 = self.output.writelines("[*]method ...........| " + str(self.method) + '\n')
+                                        for input in self.list_input:
+                                            self.input_get = input.get('name')
+                                            self.type = input.get('type')
+                                            self.value = input.get('value')
+                                            countform +=1
+                                            try:
+                                                print("[+]link   ...........| ", self.link)
+                                                print("[*]action ...........| ", self.url_path)
+                                                print("[*]method ...........| ", self.method)
+                                                print("[*]input  ...........| ", self.input_get)
+                                                print("[*]type   ...........| ", self.type)
+                                                print("[*]value  ...........| ", self.value)
+                                                output_4 = self.output.writelines("[*]input  ...........| " + str(self.input_get) + '\n')
+                                                output_5 = self.output.writelines("[*]type   ...........| " + str(self.type) + '\n')
+                                                output_6 = self.output.writelines("[*]value  ...........| " + str(self.value) + '\n')
+                                                print()
+                                                print('='*25)
+                                            except :
+                                                pass
+                                    else:
                                         countform +=1
-                                        try:
-                                            print("[+]link   ...........| ", self.link)
-                                            print("[*]action ...........| ", self.url_path)
-                                            print("[*]method ...........| ", self.method)
-                                            print("[*]input  ...........| ", self.input_get)
-                                            print("[*]type   ...........| ", self.type)
-                                            print("[*]value  ...........| ", self.value)
-                                            output_4 = self.output.writelines("[*]input  ...........| " + str(self.input_get) + '\n')
-                                            output_5 = self.output.writelines("[*]type   ...........| " + str(self.type) + '\n')
-                                            output_6 = self.output.writelines("[*]value  ...........| " + str(self.value) + '\n')
-                                            print()
-                                            print('='*25)
-                                        except :
-                                            pass
-                                else:
-                                    countform +=1
-                                    self.replace = self.line.replace('\n', '')
-                                    print("[*]link ...........|", self.replace)
-                                    print("[*]Form ...........| No Form Discover")
-                                    sys.stdout.write('\x1b[1A')
-                                    sys.stdout.write('\x1b[2K')
-                                    sys.stdout.write('\x1b[1A')
-                                    sys.stdout.write('\x1b[2K')
-                        else:
+                                        self.replace = self.line.replace('\n', '')
+                                        print("[*]link ...........|", self.replace)
+                                        print("[*]Form ...........| No Form Discover")
+                                        sys.stdout.write('\x1b[1A')
+                                        sys.stdout.write('\x1b[2K')
+                                        sys.stdout.write('\x1b[1A')
+                                        sys.stdout.write('\x1b[2K')
+                            else:
+                                self.replace = self.line.replace('\n', '')
+                                print("[*]link ...........|", self.replace)
+                                print("[*]Form ...........| No Form Discover")
+                                sys.stdout.write('\x1b[1A')
+                                sys.stdout.write('\x1b[2K')  
+                                sys.stdout.write('\x1b[1A')
+                                sys.stdout.write('\x1b[2K')
+                        except Exception :
                             self.replace = self.line.replace('\n', '')
                             print("[*]link ...........|", self.replace)
                             print("[*]Form ...........| No Form Discover")
                             sys.stdout.write('\x1b[1A')
                             sys.stdout.write('\x1b[2K')
                             sys.stdout.write('\x1b[1A')
-                            sys.stdout.write('\x1b[2K')
+                            sys.stdout.write('\x1b[2K')    
                     if countform == 0 :
                         print("[*] Status  ...........| No Form Discovered")
             except KeyboardInterrupt:
@@ -265,8 +278,8 @@ class Shopping:
                         SubIp = socket.gethostbyname(sub_domain_url_join.replace("https://",""))
                     except Exception as a:
                         SubIp = "None" + str(a)
-                    print(f"[+]Sub-Domain ...........| {sub_domain_url_join:<25} {'---------|':>15} {SubIp}")
-                    output_13 = self.output.writelines("[+]Sub-Domain ...........| " + sub_domain_url_join +"......| " +SubIp+ '\n')
+                    print("[+]Sub-Domain ...........| "+f'{sub_domain_url_join:<35}',f'{"---------|":>15}', SubIp)
+                    output_13 = self.output.writelines("[+]Sub-Domain ...........| "+f'{sub_domain_url_join:<35}'+f'{"---------| ":>15}'+SubIp+'\n')
                     list_domain = []
                     if sub_domain_url_join not in list_domain:
                         list_domain.append(sub_domain_url_join)
@@ -313,6 +326,9 @@ class Shopping:
             print(self.banner)
             exit()
     def robotstxt_read(self):
+        print("\n###-Discover Robots.txt")
+        print("="*25)
+        num = 0 
         try:
             with open('.domain', 'r') as read_line_sub:
                 self.line_domain = read_line_sub.readlines()
@@ -321,37 +337,42 @@ class Shopping:
                 self.link_robot = urllib.parse.urljoin(robots, '/robots.txt')
                 self.link_robot_str = str(self.link_robot)
                 response_robots = requests.get(self.link_robot, data=None)
-                Beautiful_robots = str(BeautifulSoup(response_robots.content, 'lxml'))
-                if "Disallow:" in Beautiful_robots:
-                    Beautiful_robots = Beautiful_robots.replace('<html>', '')
-                    Beautiful_robots = Beautiful_robots.replace('<body>', '')
-                    Beautiful_robots = Beautiful_robots.replace('<p>', '')
-                    Beautiful_robots = Beautiful_robots.replace('</p>', '')
-                    Beautiful_robots = Beautiful_robots.replace('</body>', '')
-                    Beautiful_robots1 = Beautiful_robots.replace('</html>', '')
-                    time.sleep(0.25)
-                    print("\n###-Discover Robots.txt")
-                    print("="*25)
-                    output_15 = self.output.write('\n' + "###-Discover Robots.txt" + '\n' + '=' * 25 + '\n')
-                    print()
-                    print("[*]link ..........|", self.link_robot)
-                    print()
-                    print(('*' * 30))
-                    print(Beautiful_robots1)
-                    print(('*' * 30))
-                    output_16 = self.output.write("[*]link ..........| " + self.link_robot + '\n' + '*' * 25 + '\n')
-                    output_17 = self.output.writelines(Beautiful_robots1 + '\n' + '*' * 25 + '\n')
+               # Beautiful_robots = str(BeautifulSoup(response_robots.content, 'lxml'))
+                with open (".2",'w') as code :
+                     code.write(str(response_robots.content))
+                with open(".2",'r') as code:
+                    Beautiful_robots = code.readlines()
+                for Parse in Beautiful_robots:
+                    if "Disallow:" in Parse:
+                        num +=1
+                        Parse = Parse.replace('<html>', '').replace('</body>', '').replace('<body>', '').replace('<p>', '').replace('</p>', '')
+                        Beautiful_robots1 = "\n".join(Parse.replace('</html>', '').replace("b'",'').replace("'",'').split("\\n"))
+                        output_15 = self.output.write('\n' + "###-Discover Robots.txt" + '\n' + '=' * 25 + '\n')
+                        print("[*]link ..........|", self.link_robot)
+                        print(('*' * 30))
+                        print(Beautiful_robots1)
+                        print(('*' * 30))
+                        output_16 = self.output.write("[*]link ..........| " + self.link_robot + '\n' + '*' * 25 + '\n')
+                        output_17 = self.output.writelines(Beautiful_robots1 + '\n' + '*' * 25 + '\n')
+                    else:
+                        print("[+]Check-robots.txt  ...........|",self.link_robot )
+                        sys.stdout.write('\x1b[1A')
+                        sys.stdout.write('\x1b[2K')
+
             else:
-                print("\n[*]Robots.txt ..........| Robots.txt Scan finish ")
+                if num == 0 :
+                     print("\n[*]Robots.txt ..........| No Robots.txt Found ")
                 output_21 = self.output.write('\n' + "[*]Robots.txt ..........| Robots.txt Scan finish  " + '\n')
                 try:
                     if os.path.isfile(".domain"):
                         os.remove(".domain")
                     if os.path.isfile('.data.txt'):
-                        os.remove('.data.txt')
-                        print(self.banner)
-                        output_A = self.output.writelines('\n\n' + self.banner + " [-]SCAN ..........| Webshop finish sacn " + '\n' + "=" * 25)
-                        exit()
+                        os.remove('.data.txt') 
+                    if os.path.isfile(".2"):      
+                        os.remove(".2")    
+                    print(self.banner)
+                    output_A = self.output.writelines('\n\n' + self.banner + " [-]SCAN ..........| Webshop finish sacn " + '\n' + "=" * 25)
+                    exit()
                 except IOError:
                     pass
         except KeyboardInterrupt:
@@ -367,14 +388,13 @@ class Shopping:
             pass
     def control(self):
         parser = argparse.ArgumentParser(description="Usage: [Option] [arguments] [Option] [arguments] Example: ./webshop.py --URL https://www.site.com/ -o output")
-        parser.add_argument("--URL", action=None, help="url target website") 
-        parser.add_argument("-o", "--output", action=None, required=True, help="save the output into file") 
-        parser.add_argument("-w", "--wordlist", action=None, required=False, help="select wordlist of subdomain") 
-        parser.add_argument("-E", "--email", action="store_true", required=False, help="Discover Email address") 
+        parser.add_argument("--URL", action="store", help="Target website URL") 
+        parser.add_argument("-w", "--wordlist", action="store", required=False, help="Select wordlist for subdomain discovery") 
+        parser.add_argument("-E", "--email", action="store_true", required=False, help="Discover email addresses") 
         parser.add_argument("-S", "--subdomain", action="store_true", required=False, help="Discover subdomains")  
-        parser.add_argument("-A", "--all", action="store_true", required=False, help="Discover all Options")
-        parser.add_argument("-V", "--APIKEY", action=None, required=False, help="Discover all Options")
-        parser.add_argument("-C", "--callapi", action='store_true', required=False, help="Discover all Options")
+        parser.add_argument("-A", "--all", action="store_true", required=False, help="Discover all options")
+        parser.add_argument("-V", "--APIKEY", action="store", required=False, help=" Store API key for domain analysis")
+        parser.add_argument("-C", "--callapi", action="store_true", required=False, help="Make API calls if set")
         self.args = parser.parse_args()
         if len(sys.argv) != 1:
             pass
@@ -382,12 +402,15 @@ class Shopping:
             parser.print_help()
             exit()
     def main(self):
+        pattern = r"https?://(?:www\.)?(?:[a-zA-Z0-9-]+\.)?([a-zA-Z0-9-]+)\."
+        resreach = re.search(pattern , self.args.URL)
+        self.output = open(str("Webshop_"+resreach.group(1))+".txt", 'w')
+        if os.path.isfile(".domain"):
+            os.remove(".domain")
+        if os.path.isfile(".2"):      
+           os.remove(".2")
         if self.args.APIKEY or self.args.callapi:
             self.APIKEY()
-        if self.args.output:
-            self.output = open(self.args.output, 'w')
-            if os.path.isfile(".domain"):
-                os.remove(".domain")
         if self.args.all:           
             self.extract_links_form()
             self.discover_link()
@@ -401,5 +424,6 @@ class Shopping:
                 self.Email_Scan()
             elif self.args.subdomain:
                 self.sub_domain()
+                self.robotstxt_read()
 if __name__ == "__main__":
     Shopping()
