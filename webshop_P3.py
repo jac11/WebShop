@@ -53,7 +53,7 @@ class Shopping:
                         header_html = BeautifulSoup(response.content, 'lxml')
                         data = header_html.prettify()
                     time.sleep(.30)        
-               try:        
+                try:        
                     print("\n###-WHOIS INFO\n")
                     print("="*30)
                     print("\nDomain-info")
@@ -118,7 +118,7 @@ class Shopping:
                         self.output.writelines('   [+]Meddia       ............| '+ web+'\n') 
                     print("_"*15+'\n')
                     self.output.writelines("_"*15+'\n')  
-              except Exception :
+                except Exception :
                     pass
             if self.args.APIKEY:         
                 APIKEYCALL(self)
@@ -383,9 +383,11 @@ class Shopping:
                     if os.path.isfile('.data.txt'):
                         os.remove('.data.txt') 
                     if os.path.isfile(".2"):      
-                        os.remove(".2")    
+                        os.remove(".2")  
+                    print("[+]Report-Scan ..........| file://"+os.getcwd()+"/Webshop_"+str(self.resreach.group(1))+".txt")  
                     print(self.banner)
-                    output_A = self.output.writelines('\n\n' + self.banner + " [-]SCAN ..........| Webshop finish sacn " + '\n' + "=" * 25)
+                    output_A = self.output.writelines('\n\n'+ self.banner+"[-]SCAN ..........| Webshop finish sacn " + '\n' + "=" * 25)
+                    
                     exit()
                 except IOError:
                     pass
@@ -417,8 +419,8 @@ class Shopping:
             exit()
     def main(self):
         pattern = r"https?://(?:www\.)?(?:[a-zA-Z0-9-]+\.)?([a-zA-Z0-9-]+)\."
-        resreach = re.search(pattern , self.args.URL)
-        self.output = open(str("Webshop_"+resreach.group(1))+".txt", 'w')
+        self.resreach = re.search(pattern , self.args.URL)
+        self.output = open(str("Webshop_"+self.resreach.group(1))+".txt", 'w')
         self.output.writelines('\n' + self.banner + '\n')
         if os.path.isfile(".domain"):
             os.remove(".domain")
