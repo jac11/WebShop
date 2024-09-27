@@ -1,63 +1,88 @@
-# Webshop Security Scanner
 
-## Description
-`Webshop Security Scanner` is a Python-based tool designed for auditing websites. It can extract links, discover forms, scan for email addresses, identify subdomains, and analyze the contents of a website's `robots.txt` file. This tool can be useful for security researchers or website administrators to analyze and gather information from target websites.
+# WebShop Tool
 
-## Features
-- **Link Discovery**: Extracts and lists all hyperlinks from a given URL.
-- **Form Discovery**: Scans web pages to discover and report HTML forms, along with form actions, methods, and inputs.
-- **Subdomain Discovery**: Finds subdomains using a provided wordlist.
-- **Email Scanning**: Extracts email addresses from web pages.
-- **Robots.txt Scanning**: Fetches and displays the content of the `robots.txt` file from discovered subdomains.
-- **Multi-option Scanning**: Supports multiple operations in a single execution, such as email and subdomain scanning together.
+`WebShop` is a Python-based tool designed for analyzing websites and gathering critical information such as links, forms, subdomains, emails, and `robots.txt` files. It also uses the Whois API to fetch domain-related data for in-depth analysis.
+
+## Requirements
+
+To use `WebShop`, the following dependencies must be installed:
+- `requests`
+- `BeautifulSoup` (from `bs4`)
+- `argparse`
+- `json`
+- `socket`
+
+You can install the necessary dependencies by running:
+
+```bash
+pip install requests beautifulsoup4
+```
 
 ## Usage
 
-### Basic Command Structure
+To use the tool, run it with the following options:
+
 ```bash
-python3 webshop_P3.py --URL <target_website> -o <output_file> [options]
+./webshop_P3.py --URL https://example.com [options]
 ```
 
-### Options
-- `--URL <URL>`: Target website to scan.
-- `-o <output_file>`: File to save the scan output.
-- `-w <wordlist>`: Provide a wordlist for subdomain discovery.
-- `-R`, `--robots`: Scan and retrieve the `robots.txt` file.
-- `-E`, `--email`: Discover email addresses from the target website.
-- `-S`, `--subdomain`: Discover subdomains using a wordlist.
-- `-A`, `--all`: Execute all scanning options.
+### Command-Line Arguments
 
-### Example Commands
+- `--URL`: **Required.** Target website URL.
+- `-w`, `--wordlist`: Optional. Path to the wordlist for subdomain discovery.
+- `-E`, `--email`: Optional. Discover email addresses from the target website.
+- `-S`, `--subdomain`: Optional. Discover subdomains of the target website.
+- `-A`, `--all`: Optional. Discover all available options (links, forms, emails, subdomains, etc.).
+- `-V`, `--APIKEY`: Optional. API key to fetch domain analysis from the Whois API.
+- `-C`, `--callapi`: Optional. Flag to call the API if set.
 
-1. **Basic Scan (Discover links and forms)**
-    ```bash
-    python3 webshop_P3.py --URL https://example.com -o output.txt
-    ```
+## Features
 
-2. **Subdomain Discovery with Wordlist**
-    ```bash
-    python3 webshop_P3.py --URL https://example.com -o subdomains.txt -w wordlist.txt --subdomain
-    ```
+### 1. Domain and WHOIS Info (`APIKEY`)
+The tool can fetch and display WHOIS and domain-related information using the host.io API. The information includes:
+- Domain name
+- URL
+- Rank
+- GTM (Google Tag Manager)
+- IP address, city, and country
+- DNS and server details
+- Social media links
 
-3. **Email Scanning**
-    ```bash
-    python3 webshop_P3.py --URL https://example.com -o emails.txt --email
-    ```
+The API key is stored locally in `.APIKEY.KEY`. If the API key is provided via the `--APIKEY` option or through a stored file, the tool will fetch the domain analysis.
 
-4. **Full Scan (All Options)**
-    ```bash
-    python3 webshop_P3.py --URL https://example.com -o fullscan.txt --all
-    ```
+### 2. Link Discovery (`extract_links_form`)
+The tool crawls the provided website to discover and extract all available links from the HTML content.
 
-### Output
-The output from the scan is saved into a specified file, including the discovered links, forms, subdomains, emails, and content of `robots.txt`.
+### 3. Form Discovery (`form_Check`)
+The tool searches for forms on the website and extracts details such as:
+- Form actions and methods
+- Input fields and their types and values
 
-## Requirements
-- Python 3.x
-- Libraries: `requests`, `BeautifulSoup`, `argparse`, `lxml`, `urllib`, `re`
+### 4. Subdomain Discovery (`sub_domain`)
+The tool discovers subdomains of the provided domain using a wordlist and checks if the subdomain is valid by sending requests.
 
-Install dependencies using:
+### 5. Email Discovery (`Email_Scan`)
+The tool scans the website content and looks for any email addresses mentioned, excluding those ending in image or archive formats (e.g., `.png`, `.jpg`, `.zip`).
+
+### 6. Robots.txt Reader (`robotstxt_read`)
+The tool reads and displays the contents of the `robots.txt` file from the discovered subdomains.
+
+## Example
+
+To discover all available options for a website, use the following command:
+
 ```bash
-pip install requests beautifulsoup4 lxml
+./webshop_P3.py --URL https://example.com -A
 ```
 
+To scan for emails on a website:
+
+```bash
+./webshop_P3.py --URL https://example.com -E
+```
+
+To discover subdomains using a wordlist:
+
+```bash
+./webshop_P3.py --URL https://example.com -S -w wordlist.txt
+```
