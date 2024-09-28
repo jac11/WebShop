@@ -73,7 +73,11 @@ class Shopping:
                     self.output.writelines('   [+]Rank         ............| '+ str(data['web']['rank'])+'\n')
                     time.sleep(0.25)
                     print('   [+]GTM          ............| ', data['web']['gtm']) 
-                    self.output.writelines('   [+]GTM          ............| '+ data['web']['gtm']+'\n')       
+                    self.output.writelines('   [+]GTM          ............| '+ data['web']['gtm']+'\n')   
+                except KeyError:
+                     pass
+                try:
+                             
                     print("\nIp-info") 
                     self.output.writelines("\nIp-info\n")
                     print("_"*15+'\n')  
@@ -96,6 +100,9 @@ class Shopping:
                     time.sleep(0.25)
                     print('   [+]Type         ............| ',data['ipinfo'][data['dns']['a'][0]]['asn']['type'])
                     self.output.writelines('   [+]Type         ............| '+data['ipinfo'][data['dns']['a'][0]]['asn']['type']+'\n')
+                except KeyError:
+                     pass   
+                try:     
                     print("\nDNS-info") 
                     self.output.writelines("\nDNS-info\n")
                     print("_"*15+'\n\n')
@@ -108,6 +115,9 @@ class Shopping:
                         print('   [+]NS           ............| ', dns[0:-1]) 
                         self.output.writelines('   [+]NS           ............| '+ dns[0:-1]+'\n')
                         time.sleep(0.25)   
+                except KeyError:
+                     pass   
+                try :        
                     print("\nSocailMeddia-info")
                     self.output.writelines("\nSocailMeddia-info\n")
                     print("_"*15+'\n') 
@@ -118,8 +128,8 @@ class Shopping:
                         self.output.writelines('   [+]Meddia       ............| '+ web+'\n') 
                     print("_"*15+'\n')
                     self.output.writelines("_"*15+'\n')  
-                except Exception :
-                    pass
+                except KeyError:
+                     pass
             if self.args.APIKEY:         
                 APIKEYCALL(self)
             elif self.args.callapi:
@@ -138,12 +148,14 @@ class Shopping:
                 if response.ok:
                     return re.findall('(?:href=")(.*?)"', str(response.content))                           
                 else:
+                    print("="*25)
                     output_A = self.output.writelines("[-]link ..........| No links Discover " + '\n' + "="*25)
                     output_25 = self.output.writelines("[*]input  ...........| " + self.target_url + '\n')  
                     print('[-]link ..........| No links Discover ')
                     print("[&]web  ..........| This Website login required to grep information ")
                     exit()
             except requests.exceptions.ConnectionError:
+                print("="*25)
                 print("[-]Error  ..........| No status line received - the server has closed the connection")
                 exit()
         except KeyboardInterrupt:
@@ -197,14 +209,16 @@ class Shopping:
                             try:
                                 response = self.session.get(self.line, allow_redirects=False, timeout=(0.2, 5))
                                 header_html = BeautifulSoup(response.content, 'lxml')
-                            except Exception:
-                                pass
-                        if not response.ok:
-                            self.replace = self.line.replace('\n', '')
-                            print(f"[*]link ...........| {self.replace}")
-                            print("[*]Form ...........| No Form Discover")
-                            sys.stdout.write('\x1b[1A'); sys.stdout.write('\x1b[2K')
-                            sys.stdout.write('\x1b[1A'); sys.stdout.write('\x1b[2K')
+                            except Exception as r:
+                                print(r)
+                        try:      
+                            if not response.ok:
+                                self.replace = self.line.replace('\n', '')
+                                print(f"[*]link ...........| {self.replace}")
+                                print("[*]Form ...........| No Form Discover")
+                                sys.stdout.write('\x1b[1A'); sys.stdout.write('\x1b[2K')
+                                sys.stdout.write('\x1b[1A'); sys.stdout.write('\x1b[2K')
+                        except UnboundLocalError :        
                             continue
                         form_list = header_html.findAll('form')
                         self.list_input = header_html.findAll('input')
