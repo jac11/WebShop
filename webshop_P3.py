@@ -209,8 +209,12 @@ class Shopping:
                             try:
                                 response = self.session.get(self.line, allow_redirects=False, timeout=(0.2, 5))
                                 header_html = BeautifulSoup(response.content, 'lxml')
-                            except Exception as r:
-                                print(r)
+                            except Exception :
+                                self.replace = self.line.replace('\n', '')
+                                print(f"[*]link ...........| {self.replace}")
+                                print("[*]Form ...........| No Form Discover")
+                                sys.stdout.write('\x1b[1A'); sys.stdout.write('\x1b[2K')
+                                sys.stdout.write('\x1b[1A'); sys.stdout.write('\x1b[2K')
                         try:      
                             if not response.ok:
                                 self.replace = self.line.replace('\n', '')
