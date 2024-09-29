@@ -366,7 +366,11 @@ class Shopping:
         num = 0 
         try:
             with open('.domain', 'r') as read_line_sub:
-                self.line_domain = read_line_sub.readlines()
+                if self.args.URL not in read_line_sub:
+                   self.line_domain = read_line_sub.readlines()
+                   self.line_domain.append(self.args.URL)
+                else:
+                    self.line_domain = read_line_sub.readlines()
                 output_15 = self.output.write('\n' + "###-Discover Robots.txt" + '\n' + '=' * 25 + '\n')
             for robots in self.line_domain:
                 self.link_robot = urllib.parse.urljoin(robots, '/robots.txt')
