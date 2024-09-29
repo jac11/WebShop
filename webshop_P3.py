@@ -304,16 +304,19 @@ class Shopping:
                     try:
                         socket.setdefaulttimeout(1)
                         SubIp = socket.gethostbyname(sub_domain_url_join.replace("https://",""))
-                    except Exception as a:
-                        SubIp = "None" + str(a)
-                    print("[+]Sub-Domain ...........| "+f'{sub_domain_url_join:<35}',f'{"---------|":>15}', SubIp)
-                    output_13 = self.output.writelines("[+]Sub-Domain ...........| "+f'{sub_domain_url_join:<35}'+f'{"---------| ":>15}'+SubIp+'\n')
-                    list_domain = []
-                    if sub_domain_url_join not in list_domain:
-                        list_domain.append(sub_domain_url_join)
-                        string_list = ''.join(list_domain)
-                    with open('.domain', 'a') as append_list:
-                        append_list.write(string_list + '\n')
+                    except Exception :
+                       print("[+]Sub-Domain ...........|", sub_domain_url_join)
+                       sys.stdout.write('\x1b[1A')
+                       sys.stdout.write('\x1b[2K')
+                    else:   
+                        print("[+]Sub-Domain ...........| "+f'{sub_domain_url_join:<35}',f'{"---------|":>15}', SubIp)
+                        output_13 = self.output.writelines("[+]Sub-Domain ...........| "+f'{sub_domain_url_join:<35}'+f'{"---------| ":>15}'+SubIp+'\n')
+                        list_domain = []
+                        if sub_domain_url_join not in list_domain:
+                            list_domain.append(sub_domain_url_join)
+                            string_list = ''.join(list_domain)
+                        with open('.domain', 'a') as append_list:
+                            append_list.write(string_list + '\n')
         except KeyboardInterrupt:
             print(self.banner)
             pass
@@ -455,9 +458,9 @@ class Shopping:
         else:
             if self.args.email:
                 self.extract_links_form()
+                self.discover_link()
                 self.Email_Scan()
             elif self.args.subdomain:
                 self.sub_domain()
-                self.robotstxt_read()
 if __name__ == "__main__":
     Shopping()
