@@ -29,9 +29,12 @@ class Shopping:
         self.main()  
     def APIKEY(self):
             self.session = requests.Session()
-            if not os.path.exists(".APIKEY.KEY"):
+            if not os.path.exists(".APIKEY.KEY") and not self.args.APIKEY:
+                print('[+]API-File   ............| No APIKEY Found')
+                exit()
+            elif not os.path.exists(".APIKEY.KEY") and self.args.APIKEY:   
                 with open(".APIKEY.KEY", 'w') as key_file:
-                    key_file.write(self.args.APIKEY)
+                    key_file.write(self.args.APIKEY)  
                 print("\n###-API_INFO\n")  
                 print('[+]APIKEY     ............| ',self.args.APIKEY)
                 print('[+]API-File   ............| ',"file///.APIKEY.KEY") 
@@ -74,6 +77,13 @@ class Shopping:
                     time.sleep(0.25)
                     print('   [+]GTM          ............| ', data['web']['gtm']) 
                     self.output.writelines('   [+]GTM          ............| '+ data['web']['gtm']+'\n')   
+                except UnboundLocalError:
+                        print('   [+]MainDomain     ............| ',self.args.URL)
+                        print('   [+]APIKEY-Status   ............| Error Facth The ipinfo')
+                        print("_"*15+'\n')
+                        self.output.writelines('   [+]MainDomain     ............| '+self.args.URL)
+                        self.output.writelines('   [+]APIKEY-Status   ............| Error Facth The ipinfo')
+                        self.output.writelines("_"*15+'\n')
                 except KeyError:
                      pass
                 try:
@@ -101,7 +111,12 @@ class Shopping:
                     print('   [+]Type         ............| ',data['ipinfo'][data['dns']['a'][0]]['asn']['type'])
                     self.output.writelines('   [+]Type         ............| '+data['ipinfo'][data['dns']['a'][0]]['asn']['type']+'\n')
                 except KeyError:
-                     pass   
+                     pass  
+                except UnboundLocalError :
+                    print('   [+]APIKEY-Status   ............| Error Facth The info')
+                    print("_"*15+'\n')
+                    self.output.writelines('   [+]APIKEY-Status   ............| Error Facth The info')
+                    self.output.writelines("_"*15+'\n')     
                 try:     
                     print("\nDNS-info") 
                     self.output.writelines("\nDNS-info\n")
@@ -117,6 +132,11 @@ class Shopping:
                         time.sleep(0.25)   
                 except KeyError:
                      pass   
+                except UnboundLocalError :  
+                    print('   [+]APIKEY-Status   ............| Error Facth The info')
+                    print("_"*15+'\n')
+                    self.output.writelines('   [+]APIKEY-Status   ............| Error Facth The info')
+                    self.output.writelines("_"*15+'\n')   
                 try :        
                     print("\nSocailMeddia-info")
                     self.output.writelines("\nSocailMeddia-info\n")
@@ -130,6 +150,11 @@ class Shopping:
                     self.output.writelines("_"*15+'\n')  
                 except KeyError:
                      pass
+                except UnboundLocalError:
+                    print('   [+]APIKEY-Status   ............| Error Facth The ipinfo')
+                    print("_"*15+'\n')
+                    self.output.writelines('   [+]APIKEY-Status   ............| Error Facth The info')
+                    self.output.writelines("_"*15+'\n')   
             if self.args.APIKEY:         
                 APIKEYCALL(self)
             elif self.args.callapi:
@@ -275,6 +300,9 @@ class Shopping:
         except requests.exceptions.ConnectionError:
             print("[-]Error ..........| No status line received - the server is down")
             pass
+        except KeyboardInterrupt:
+            print(self.banner)
+            exit()
     def sub_domain(self):
         try:
             print("\n###-Discover sub-Domain")
@@ -330,7 +358,7 @@ class Shopping:
                             append_list.write(string_list + '\n')
         except KeyboardInterrupt:
             print(self.banner)
-            pass
+            exit()
         except requests.exceptions.ConnectionError:
             print("[-]Error  ..........| No status line received - the server has closed the connection")
             exit()
@@ -404,7 +432,6 @@ class Shopping:
                         print("[+]Check-robots.txt  ...........|",self.link_robot )
                         sys.stdout.write('\x1b[1A')
                         sys.stdout.write('\x1b[2K')
-
             else:
                 if num == 0 :
                      print("\n[*]Robots.txt ..........| No Robots.txt Found ")
