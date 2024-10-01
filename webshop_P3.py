@@ -224,42 +224,49 @@ class Shopping:
                                 sys.stdout.write('\x1b[1A'); sys.stdout.write('\x1b[2K')
                         except UnboundLocalError :        
                             continue
-                        form_list = header_html.findAll('form')
-                        self.list_input = header_html.findAll('input')
-                        for form in form_list:
-                            self.action = form.get('action')
-                            if self.action and self.action not in unique_actions:
-                                unique_actions.add(self.action)
-                                self.url_path = urllib.parse.urljoin(self.line, self.action)
-                                self.method = form.get('method')
-                                self.output.writelines('\n' + "###-Discover Form " + '\n' + '='*25 + '\n')
-                                self.output.writelines(f"[+]link   ...........| {self.line}")
-                                self.output.writelines(f"[*]action ...........| {self.url_path}\n")
-                                self.output.writelines(f"[*]method ...........| {str(self.method)}\n")
-                                print(f"[+]link   ...........| {self.line}".replace('\n',''))
-                                print(f"[*]action ...........| {self.url_path}")
-                                print(f"[*]method ...........| {self.method}")
-                                print("\nForm_Detalis"+'\n'+'_'*12+'\n')
-                                self.output.writelines("\nForm_Detalis"+'\n'+'_'*12+'\n')
-                                for input in self.list_input:
-                                    self.input_get = input.get('name')
-                                    self.type = input.get('type')
-                                    self.value = input.get('value')
-                                    countform += 1
-                                    self.output.writelines(f"    [*]input  ...........| {str(self.input_get)}\n")
-                                    self.output.writelines(f"    [*]type   ...........| {str(self.type)}\n")
-                                    self.output.writelines(f"    [*]value  ...........| {str(self.value)}\n")
-                                    print(f"    [*]input  ...........| {self.input_get}")
-                                    print(f"    [*]type   ...........| {self.type}")
-                                    print(f"    [*]value  ...........| {self.value}")
-                                print('\n'+'='*25+'\n')    
+                        try:   
+                            form_list = header_html.findAll('form')
+                            self.list_input = header_html.findAll('input')
+                            for form in form_list:
+                                self.action = form.get('action')
+                                if self.action and self.action not in unique_actions:
+                                    unique_actions.add(self.action)
+                                    self.url_path = urllib.parse.urljoin(self.line, self.action)
+                                    self.method = form.get('method')
+                                    self.output.writelines('\n' + "###-Discover Form " + '\n' + '='*25 + '\n')
+                                    self.output.writelines(f"[+]link   ...........| {self.line}")
+                                    self.output.writelines(f"[*]action ...........| {self.url_path}\n")
+                                    self.output.writelines(f"[*]method ...........| {str(self.method)}\n")
+                                    print(f"[+]link   ...........| {self.line}".replace('\n',''))
+                                    print(f"[*]action ...........| {self.url_path}")
+                                    print(f"[*]method ...........| {self.method}")
+                                    print("\nForm_Detalis"+'\n'+'_'*12+'\n')
+                                    self.output.writelines("\nForm_Detalis"+'\n'+'_'*12+'\n')
+                                    for input in self.list_input:
+                                        self.input_get = input.get('name')
+                                        self.type = input.get('type')
+                                        self.value = input.get('value')
+                                        countform += 1
+                                        self.output.writelines(f"    [*]input  ...........| {str(self.input_get)}\n")
+                                        self.output.writelines(f"    [*]type   ...........| {str(self.type)}\n")
+                                        self.output.writelines(f"    [*]value  ...........| {str(self.value)}\n")
+                                        print(f"    [*]input  ...........| {self.input_get}")
+                                        print(f"    [*]type   ...........| {self.type}")
+                                        print(f"    [*]value  ...........| {self.value}")
+                                    print('\n'+'='*25+'\n')    
                             else:
                                 self.replace = self.line.replace('\n', '')
                                 print(f"[*]link ...........| {self.replace}")
                                 print("[*]Form ...........| No Form Discover")
                                 sys.stdout.write('\x1b[1A'); sys.stdout.write('\x1b[2K')
                                 sys.stdout.write('\x1b[1A'); sys.stdout.write('\x1b[2K')
-
+                        except UnboundLocalError :    
+                            self.replace = self.line.replace('\n', '')
+                            print(f"[*]link ...........| {self.replace}")
+                            print("[*]Form ...........| No Form Discover")
+                            sys.stdout.write('\x1b[1A'); sys.stdout.write('\x1b[2K')
+                            sys.stdout.write('\x1b[1A'); sys.stdout.write('\x1b[2K')    
+                        
                     if countform == 0:
                         print("[*] Status ...........| No Form Discovered")
             except KeyboardInterrupt:
