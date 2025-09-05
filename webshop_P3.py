@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import requests
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup , XMLParsedAsHTMLWarning
 import argparse
 import sys
 import os
@@ -12,6 +12,7 @@ import time
 import json
 import random
 import socket
+import warnings
 
 class Shopping:
     def __init__(self):
@@ -39,10 +40,14 @@ class Shopping:
                 print('[+]APIKEY     ............| ',self.args.APIKEY)
                 print('[+]API-File   ............| ',"file///.APIKEY.KEY") 
                 print("="*30)
-                self.output.writelines("\n###-API_INFO\n")  
-                self.output.writelines('[+]APIKEY     ............| '+self.args.APIKEY)
-                self.output.writelines('[+]API-File   ............| '+"file///.APIKEY.KEY") 
-                self.output.writelines("="*30)
+                if not self.args.callapi:
+                    exit()
+                else:
+                    self.output.writelines("\n###-API_INFO\n")  
+                    self.output.writelines('[+]APIKEY     ............| '+self.args.APIKEY)
+                    self.output.writelines('[+]API-File   ............| '+"file///.APIKEY.KEY") 
+                    self.output.writelines("="*30)
+
             def APIKEYCALL(self) :       
                 with open('.APIKEY.KEY', 'r') as key_file:
                     key = key_file.read().strip()
@@ -180,9 +185,9 @@ class Shopping:
                     print("[&]web  ..........| This Website login required to grep information ")
                     exit()
             except requests.exceptions.ConnectionError:
-                print("="*25)
-                print("[-]Error  ..........| No status line received - the server has closed the connection")
-                exit()
+               print("="*25)
+               print("[-]Error  ..........| No status line received - the server has closed the connection")
+               exit()
         except KeyboardInterrupt:
             print(self.banner)
             exit()
@@ -216,6 +221,8 @@ class Shopping:
             pass
     def form_Check(self):
         countform = 0
+
+        warnings.filterwarnings("ignore", category=XMLParsedAsHTMLWarning)
         try:
             self.output.write("\n###-Discover Forms" + '\n' + '='*25 + '\n')
             try:
@@ -250,8 +257,9 @@ class Shopping:
                         except UnboundLocalError :        
                             continue
                         try:   
-                            form_list = header_html.findAll('form')
-                            self.list_input = header_html.findAll('input')
+                  
+                            form_list = header_html.find_all('form')
+                            self.list_input = header_html.find_all('input')
                             for form in form_list:
                                 self.action = form.get('action')
                                 if self.action and self.action not in unique_actions:
@@ -319,7 +327,10 @@ class Shopping:
             print ('[*]MainDomain ...........|', url_replase)
             output_12 = self.output.write('[*]MainDomain ...........| ' + url_replase + '\n')
             try:
-                wordlist = self.args.wordlist
+                if not self.args.wordlist:
+                    wordlist = "./small_list.txt"
+                else:    
+                    wordlist = self.args.wordlist
                 with open(wordlist, 'r') as sub_read:
                     content = sub_read.read()
                     subdomain = content.splitlines()
@@ -477,6 +488,13 @@ class Shopping:
             parser.print_help()
             exit()
     def main(self):
+        if self.args.APIKEY :
+            self.APIKEY()
+            exit()
+        if not  self.args.URL.startswith("http") :
+           self.args.URL =self.args.URL.replace("www.",'')
+           self.args.URL = f"http://{self.args.URL}"
+
         pattern = r"https?://(?:www\.)?(?:[a-zA-Z0-9-]+\.)?([a-zA-Z0-9-]+)\."
         self.resreach = re.search(pattern , self.args.URL)
         self.output = open(str("Webshop_"+self.resreach.group(1))+".txt", 'w')
