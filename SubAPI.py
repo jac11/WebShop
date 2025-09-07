@@ -5,8 +5,11 @@ import time
 
 R  = "\033[91m"
 s  = "\033[0m"
-O  ='\33[37m'  
-
+O  ='\33[37m' 
+ 
+print(f"{R}\n###-Discover sub-Domain_API{s}")
+print('='*25)
+print()
 class API_SubDomains_Scan:
 
     def find_subdomains(self, **kwargs):

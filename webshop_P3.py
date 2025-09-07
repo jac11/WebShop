@@ -522,7 +522,7 @@ class Shopping:
         parser.add_argument("-S", "--subdomain", action="store_true", required=False, help="Discover subdomains use wordlist")  
         parser.add_argument("-a", "--all", action="store_true", required=False, help="Discover all options")
         parser.add_argument("-K", "--APIKEY", action="store", required=False, help=" Store API key for domain analysis")
-       #parser.add_argument("-C", "--callapi", action="store_true", required=False, help="Make API calls if set")
+        parser.add_argument("--api", action="store_true", required=False, help="Make API calls if set")
         parser.add_argument("-s", "--subapi", action="store_true", required=False, help="get subdomain use hackertarget api")
         self.args = parser.parse_args()
         if len(sys.argv) != 1:
@@ -556,7 +556,11 @@ class Shopping:
             self.discover_link()
             self.form_Check()
             self.Email_Scan()
-            self.sub_domain() 
+            if self.args.api :
+                from SubAPI import API_SubDomains_Scan as API
+                API.find_subdomains(self, args=self.control) 
+            else:    
+                self.sub_domain() 
             self.robotstxt_read() 
         else:
             if self.args.email:
@@ -566,9 +570,7 @@ class Shopping:
             elif self.args.subdomain:
                 self.sub_domain()
             elif self.args.subapi:
-                print(f"{R}\n###-Discover sub-Domain_API{s}")
-                print('='*25)
-                print()
+                
                 from SubAPI import API_SubDomains_Scan as API
                 API.find_subdomains(self, args=self.control)
 
