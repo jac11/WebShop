@@ -515,15 +515,34 @@ class Shopping:
             print("[-]Error  ..........| No status line received - the server has closed the connection")
             pass
     def control(self):
-        parser = argparse.ArgumentParser(description="Usage: [Option] [arguments] [Option] [arguments] Example: ./webshop.py --URL https://www.site.com/ -o output")
-        parser.add_argument("--URL", action="store", help="Target website URL") 
-        parser.add_argument("-w", "--wordlist", action="store", required=False, help="Select wordlist for subdomain discovery") 
-        parser.add_argument("-E", "--email", action="store_true", required=False, help="Discover email addresses") 
-        parser.add_argument("-S", "--subdomain", action="store_true", required=False, help="Discover subdomains use wordlist")  
-        parser.add_argument("-a", "--all", action="store_true", required=False, help="Discover all options")
-        parser.add_argument("-K", "--APIKEY", action="store", required=False, help=" Store API key for domain analysis")
-        parser.add_argument("--api", action="store_true", required=False, help="Make API calls if set")
-        parser.add_argument("-s", "--subapi", action="store_true", required=False, help="get subdomain use hackertarget api")
+        parser = argparse.ArgumentParser(
+        description="WebShop: Subdomain and Email Discovery Tool\n"
+                    "Usage: ./webshop.py --URL https://www.site.com/ [Options]\n\n"
+                    "Examples:\n"
+                    "  ./webshop.py --URL https://www.site.com/ -o output\n"
+                    "  ./webshop.py --URL https://example.com/ --subapi\n",
+        formatter_class=argparse.RawTextHelpFormatter
+        )
+        parser.add_argument("--URL", action="store", required=True,
+                            help="Target website URL (e.g., https://www.example.com)")
+        parser.add_argument("-w", "--wordlist", action="store", required=False,
+                            help="Path to wordlist file for subdomain brute-force discovery")
+        parser.add_argument("-E", "--email", action="store_true", required=False,
+                            help="Discover email addresses from the target domain")
+        parser.add_argument("-S", "--subdomain", action="store_true", required=False,
+                            help="Discover subdomains using a wordlist")
+        parser.add_argument("-a", "--all", action="store_true", required=False,
+                            help="Run all discovery modules (subdomains, emails, API lookups)")
+        parser.add_argument("-K", "--APIKEY", action="store", required=False,
+                             help="Store API key for WHOIS/domain analysis.\n"
+                             "Example: Get your key from https://host.io/ and provide it here.\n"
+                             "The key will be saved in the tool for reuse."
+        ) 
+        parser.add_argument("--api", action="store_true", required=False,
+                    help="Use API-based subdomain discovery (crt.sh, RapidDNS, Hackertarget).\n"
+                         "When used with --all, disables wordlist brute-force and only uses APIs.")
+        parser.add_argument("-s", "--subapi", action="store_true", required=False,
+                            help="Fetch subdomains using the Hackertarget crt.sh, RapidDNS API")
         self.args = parser.parse_args()
         if len(sys.argv) != 1:
             pass
