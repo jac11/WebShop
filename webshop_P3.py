@@ -13,157 +13,193 @@ import json
 import random
 import socket
 import warnings
+R  = "\033[91m"
+s  = "\033[0m"
+O  ='\33[37m'  
 
 class Shopping:
     def __init__(self):
-        self.banner = """
-        
-  ██     ██ ███████ ██████  ███████ ██   ██  ██████  ██████  
-  ██     ██ ██      ██   ██ ██      ██   ██ ██    ██ ██   ██ 
-  ██  █  ██ █████   ██████  ███████ ███████ ██    ██ ██████  
-  ██ ███ ██ ██      ██   ██      ██ ██   ██ ██    ██ ██      
-   ███ ███  ███████ ██████  ███████ ██   ██  ██████  ██      
-                                             by:jacstory                                                                                                                   
-        """ 
-        print(self.banner)
+       
+        self.banner= R+f"""
+              ██     ██ ███████ ██████  ███████ ██   ██  ██████  ██████  
+              ██     ██ ██      ██   ██ ██      ██   ██ ██    ██ ██   ██ 
+              ██  █  ██ █████   ██████  ███████ ███████ ██    ██ ██████  
+              ██ ███ ██ ██      ██   ██      ██ ██   ██ ██    ██ ██      
+               ███ ███  ███████ ██████  ███████ ██   ██  ██████  ██      
+                                        """+O+"""@jacstory"""+s  
+        print(self.banner+'\n')
         self.control()
         self.main()  
     def APIKEY(self):
+          
             self.session = requests.Session()
             if not os.path.exists(".APIKEY.KEY") and not self.args.APIKEY:
-                print('[+]API-File   ............| No APIKEY Found')
-                exit()
-            elif not os.path.exists(".APIKEY.KEY") and self.args.APIKEY:   
+                print("###-WHOIS INFO\n")
+                print("[+] API-File   ............| No APIKEY Found\n")
+                print(O+"[+] How to Get a Host.io API Key".upper()+s)
+                lines = [
+                        
+                        "_"*40,
+                        "\n  1. Go to: https://host.io",
+                        "  2. Click: Sign Up (GitHub or Google login works).",
+                        "  3. After login: Open your Dashboard.",
+                        "  4. Copy your API key (token).",
+                        "  5. Use it in your script like this:",
+                        "_"*40,
+                        "\n  <Usage> python webshop_p3.py -K  YOUR_API_KEY <Usage> ",
+                        "_"*40,
+                        "\n⚠️  Notes:",
+                        "_"*40,
+                        "\n   - Free accounts: limited daily requests.",
+                        "   - Paid plans: higher limits & detailed data.\n",
+                        "_"*40
+                    ]
+
+                for line in lines:
+                    print(R+line+s)
+                    time.sleep(0.25) 
+                             
+            elif os.path.exists(".APIKEY.KEY") and self.args.APIKEY:   
                 with open(".APIKEY.KEY", 'w') as key_file:
                     key_file.write(self.args.APIKEY)  
                 print("\n###-API_INFO\n")  
                 print('[+]APIKEY     ............| ',self.args.APIKEY)
                 print('[+]API-File   ............| ',"file///.APIKEY.KEY") 
                 print("="*30)
-                if not self.args.callapi:
-                    exit()
-                else:
-                    self.output.writelines("\n###-API_INFO\n")  
-                    self.output.writelines('[+]APIKEY     ............| '+self.args.APIKEY)
-                    self.output.writelines('[+]API-File   ............| '+"file///.APIKEY.KEY") 
-                    self.output.writelines("="*30)
+               
+                
+            else:
+                with open(".APIKEY.KEY", 'r') as key_file:
+                    self.args.APIKEY = key_file.read()
+                self.output.writelines("\n###-API_INFO\n")  
+                self.output.writelines('[+]APIKEY     ............| '+self.args.APIKEY)
+                self.output.writelines('[+]API-File   ............| '+"file///.APIKEY.KEY") 
+                self.output.writelines("="*30)
 
-            def APIKEYCALL(self) :       
-                with open('.APIKEY.KEY', 'r') as key_file:
-                    key = key_file.read().strip()
-                DominCheck = self.args.URL.split('//')[1]   
-                url = f"https://host.io/api/full/{DominCheck}?token={key}"
-                response = self.session.get(url)
-                if response.status_code == 200:
-                    if 'application/json' in response.headers.get('Content-Type', ''):
-                        data = response.json()  # Parse JSON
-                    else:
-                        header_html = BeautifulSoup(response.content, 'lxml')
-                        data = header_html.prettify()
-                    time.sleep(.30)        
-                try:        
-                    print("\n###-WHOIS INFO\n")
-                    print("="*30)
-                    print("\nDomain-info")
-                    print("_"*15+'\n')
-                    self.output.writelines("\n###-WHOIS INFO")
-                    self.output.writelines("\n"+"="*30+"\n")
-                    self.output.writelines("\nDomain-info"+"\n")
-                    self.output.writelines("_"*15+'\n\n')
-                    time.sleep(0.25)
-                    print('   [+]MainDomain   ............| ',data['domain'])
-                    self.output.writelines('   [+]MainDomain   ............| '+ data['domain']+'\n')
-                    time.sleep(0.25)
-                    print('   [+]URL          ............| ', self.args.URL)
-                    self.output.writelines('   [+]URL          ............| '+  self.args.URL+'\n')
-                    time.sleep(0.25)
-                    print('   [+]Rank         ............| ', data['web']['rank'])
-                    self.output.writelines('   [+]Rank         ............| '+ str(data['web']['rank'])+'\n')
-                    time.sleep(0.25)
-                    print('   [+]GTM          ............| ', data['web']['gtm']) 
-                    self.output.writelines('   [+]GTM          ............| '+ data['web']['gtm']+'\n')   
-                except UnboundLocalError:
-                        print('   [+]MainDomain     ............| ',self.args.URL)
+            def APIKEYCALL(self) :   
+                if self.args.APIKEY :     
+                    with open('.APIKEY.KEY', 'r') as key_file:
+                        key = key_file.read().strip()
+                    DominCheck = self.args.URL.split('//')[1].replace("www.","")  
+                    url = f"https://host.io/api/full/{DominCheck.replace('/','')}?token={key}"
+
+                    headers = {
+                         "User-Agent": "curl/7.68.0"}
+                    
+                    response = self.session.get(url, headers=headers)
+              
+                    if response.status_code == 200:
+                        if 'application/json' in response.headers.get('Content-Type', ''):
+                            data = response.json()
+                             # Parse JSON
+                        else:
+                            header_html = BeautifulSoup(response.content, 'lxml')
+                            data = header_html.prettify()
+                            
+                        time.sleep(.30)        
+                    try:        
+                        print(f"{R}\n###-WHOIS INFO\n{s}")
+                        print("="*30)
+                        print(f"{O}\nDomain-info{s}")
+                        print("_"*15+'\n')
+                        self.output.writelines("\n###-WHOIS INFO")
+                        self.output.writelines("\n"+"="*30+"\n")
+                        self.output.writelines("\nDomain-info"+"\n")
+                        self.output.writelines("_"*15+'\n\n')
+                        time.sleep(0.25)
+                        print('   [+]MainDomain   ............| ',data['domain'])
+                        self.output.writelines('   [+]MainDomain   ............| '+ data['domain']+'\n')
+                        time.sleep(0.25)
+                        print('   [+]URL          ............| ', self.args.URL)
+                        self.output.writelines('   [+]URL          ............| '+  self.args.URL+'\n')
+                        time.sleep(0.25)
+                        print('   [+]Rank         ............| ', data['web']['rank'])
+                        self.output.writelines('   [+]Rank         ............| '+ str(data['web']['rank'])+'\n')
+                        time.sleep(0.25)
+                        print('   [+]GTM          ............| ', data['web']['gtm']) 
+                        self.output.writelines('   [+]GTM          ............| '+ data['web']['gtm']+'\n')   
+                    except UnboundLocalError:
+                            print('   [+]MainDomain     ............| ',self.args.URL)
+                            print('   [+]APIKEY-Status   ............| Error Facth The ipinfo')
+                            print("_"*15+'\n')
+                            self.output.writelines('   [+]MainDomain     ............| '+self.args.URL)
+                            self.output.writelines('   [+]APIKEY-Status   ............| Error Facth The ipinfo')
+                            self.output.writelines("_"*15+'\n')
+                    except KeyError:
+                         pass
+                    try:
+                                 
+                        print(f"{O}\nIp-info{s}") 
+                        self.output.writelines("\nIp-info\n")
+                        print("_"*15+'\n')  
+                        self.output.writelines("_"*15+'\n\n')
+                        time.sleep(0.25)
+                        print('   [+]Ip-address   ............| ',data['dns']['a'][0])
+                        self.output.writelines('   [+]Ip-address   ............| '+data['dns']['a'][0]+'\n')
+                        time.sleep(0.25)
+                        print('   [+]City         ............| ',data['ipinfo'][data['dns']['a'][0]]['city'])
+                        self.output.writelines('   [+]City         ............| '+data['ipinfo'][data['dns']['a'][0]]['city']+'\n')
+                        time.sleep(0.25)
+                        print('   [+]Country      ............| ',data['ipinfo'][data['dns']['a'][0]]['country'])
+                        self.output.writelines('   [+]Country      ............| '+data['ipinfo'][data['dns']['a'][0]]['country']+'\n')
+                        time.sleep(0.25)
+                        print('   [+]Server       ............| ',data['ipinfo'][data['dns']['a'][0]]['asn']['domain'])
+                        self.output.writelines('   [+]Server       ............| '+data['ipinfo'][data['dns']['a'][0]]['asn']['domain']+'\n')
+                        time.sleep(0.25)
+                        print('   [+]Router       ............| ',data['ipinfo'][data['dns']['a'][0]]['asn']['route'])
+                        self.output.writelines('   [+]Router       ............| '+data['ipinfo'][data['dns']['a'][0]]['asn']['route']+'\n')
+                        time.sleep(0.25)
+                        print('   [+]Type         ............| ',data['ipinfo'][data['dns']['a'][0]]['asn']['type'])
+                        self.output.writelines('   [+]Type         ............| '+data['ipinfo'][data['dns']['a'][0]]['asn']['type']+'\n')
+                    except KeyError:
+                         pass  
+                    except UnboundLocalError :
+                        print('   [+]APIKEY-Status   ............| Error Facth The info')
+                        print("_"*15+'\n')
+                        self.output.writelines('   [+]APIKEY-Status   ............| Error Facth The info')
+                        self.output.writelines("_"*15+'\n')     
+                    try:     
+                        print(f"{O}\nDNS-info{s}") 
+                        self.output.writelines("\nDNS-info\n")
+                        print("_"*15+'\n\n')
+                        self.output.writelines("_"*15+'\n\n')
+                        for  dns in data['dns']['mx']:
+                            time.sleep(0.25)
+                            print('   [+]MX           ............| ', dns[0:-1])
+                            self.output.writelines('   [+]MX           ............| '+ dns[0:-1]+'\n')
+                        for  dns in data['dns']['ns']:
+                            print('   [+]NS           ............| ', dns[0:-1]) 
+                            self.output.writelines('   [+]NS           ............| '+ dns[0:-1]+'\n')
+                            time.sleep(0.25)   
+                    except KeyError:
+                         pass   
+                    except UnboundLocalError :  
+                        print('   [+]APIKEY-Status   ............| Error Facth The info')
+                        print("_"*15+'\n')
+                        self.output.writelines('   [+]APIKEY-Status   ............| Error Facth The info')
+                        self.output.writelines("_"*15+'\n')   
+                    try :        
+                        print(f"{O}\nSocailMeddia-info{s}")
+                        self.output.writelines("\nSocailMeddia-info\n")
+                        print("_"*15+'\n') 
+                        self.output.writelines("_"*15+'\n\n')   
+                        for  web in data['web']['links']:
+                            time.sleep(.25)
+                            print('   [+]Meddia       ............| '+ web) 
+                            self.output.writelines('   [+]Meddia       ............| '+ web+'\n') 
+                        print("_"*15+'\n')
+                        self.output.writelines("_"*15+'\n')  
+                    except KeyError:
+                         pass
+                    except UnboundLocalError:
                         print('   [+]APIKEY-Status   ............| Error Facth The ipinfo')
                         print("_"*15+'\n')
-                        self.output.writelines('   [+]MainDomain     ............| '+self.args.URL)
-                        self.output.writelines('   [+]APIKEY-Status   ............| Error Facth The ipinfo')
-                        self.output.writelines("_"*15+'\n')
-                except KeyError:
-                     pass
-                try:
-                             
-                    print("\nIp-info") 
-                    self.output.writelines("\nIp-info\n")
-                    print("_"*15+'\n')  
-                    self.output.writelines("_"*15+'\n\n')
-                    time.sleep(0.25)
-                    print('   [+]Ip-address   ............| ',data['dns']['a'][0])
-                    self.output.writelines('   [+]Ip-address   ............| '+data['dns']['a'][0]+'\n')
-                    time.sleep(0.25)
-                    print('   [+]City         ............| ',data['ipinfo'][data['dns']['a'][0]]['city'])
-                    self.output.writelines('   [+]City         ............| '+data['ipinfo'][data['dns']['a'][0]]['city']+'\n')
-                    time.sleep(0.25)
-                    print('   [+]Country      ............| ',data['ipinfo'][data['dns']['a'][0]]['country'])
-                    self.output.writelines('   [+]Country      ............| '+data['ipinfo'][data['dns']['a'][0]]['country']+'\n')
-                    time.sleep(0.25)
-                    print('   [+]Server       ............| ',data['ipinfo'][data['dns']['a'][0]]['asn']['domain'])
-                    self.output.writelines('   [+]Server       ............| '+data['ipinfo'][data['dns']['a'][0]]['asn']['domain']+'\n')
-                    time.sleep(0.25)
-                    print('   [+]Router       ............| ',data['ipinfo'][data['dns']['a'][0]]['asn']['route'])
-                    self.output.writelines('   [+]Router       ............| '+data['ipinfo'][data['dns']['a'][0]]['asn']['route']+'\n')
-                    time.sleep(0.25)
-                    print('   [+]Type         ............| ',data['ipinfo'][data['dns']['a'][0]]['asn']['type'])
-                    self.output.writelines('   [+]Type         ............| '+data['ipinfo'][data['dns']['a'][0]]['asn']['type']+'\n')
-                except KeyError:
-                     pass  
-                except UnboundLocalError :
-                    print('   [+]APIKEY-Status   ............| Error Facth The info')
-                    print("_"*15+'\n')
-                    self.output.writelines('   [+]APIKEY-Status   ............| Error Facth The info')
-                    self.output.writelines("_"*15+'\n')     
-                try:     
-                    print("\nDNS-info") 
-                    self.output.writelines("\nDNS-info\n")
-                    print("_"*15+'\n\n')
-                    self.output.writelines("_"*15+'\n\n')
-                    for  dns in data['dns']['mx']:
-                        time.sleep(0.25)
-                        print('   [+]MX           ............| ', dns[0:-1])
-                        self.output.writelines('   [+]MX           ............| '+ dns[0:-1]+'\n')
-                    for  dns in data['dns']['ns']:
-                        print('   [+]NS           ............| ', dns[0:-1]) 
-                        self.output.writelines('   [+]NS           ............| '+ dns[0:-1]+'\n')
-                        time.sleep(0.25)   
-                except KeyError:
-                     pass   
-                except UnboundLocalError :  
-                    print('   [+]APIKEY-Status   ............| Error Facth The info')
-                    print("_"*15+'\n')
-                    self.output.writelines('   [+]APIKEY-Status   ............| Error Facth The info')
-                    self.output.writelines("_"*15+'\n')   
-                try :        
-                    print("\nSocailMeddia-info")
-                    self.output.writelines("\nSocailMeddia-info\n")
-                    print("_"*15+'\n') 
-                    self.output.writelines("_"*15+'\n\n')   
-                    for  web in data['web']['links']:
-                        time.sleep(.25)
-                        print('   [+]Meddia       ............| '+ web) 
-                        self.output.writelines('   [+]Meddia       ............| '+ web+'\n') 
-                    print("_"*15+'\n')
-                    self.output.writelines("_"*15+'\n')  
-                except KeyError:
-                     pass
-                except UnboundLocalError:
-                    print('   [+]APIKEY-Status   ............| Error Facth The ipinfo')
-                    print("_"*15+'\n')
-                    self.output.writelines('   [+]APIKEY-Status   ............| Error Facth The info')
-                    self.output.writelines("_"*15+'\n')   
-            if self.args.APIKEY:         
-                APIKEYCALL(self)
-            elif self.args.callapi:
-                APIKEYCALL(self)    
+                        self.output.writelines('   [+]APIKEY-Status   ............| Error Facth The info')
+                        self.output.writelines("_"*15+'\n')  
+                else:
+                    pass               
+            APIKEYCALL(self)
+          
     def extract_links_form(self):
         try:
             self.session = requests.Session()  
@@ -195,7 +231,7 @@ class Shopping:
         try:
             try:
                 output_0 = self.output.writelines('\n' + "###-Discover links" + '\n' + "="*25 + '\n')    
-                print("\n###-Discover links")
+                print(f"{R}\n###-Discover links{s}")
                 print("="*25)
                 print()
                 herf_links = self.extract_links_form()
@@ -228,7 +264,7 @@ class Shopping:
             try:
                 with open('.data.txt', 'r') as read_line:
                     self.line_read = read_line.readlines()
-                    print("\n###-Discover Form ")
+                    print(f"{R}\n###-Discover Form {s}")
                     print('='*25)
                     print()
                     unique_actions = set()
@@ -311,9 +347,10 @@ class Shopping:
         except KeyboardInterrupt:
             print(self.banner)
             exit()
-    def sub_domain(self):
+                      
+    def sub_domain(self):   
         try:
-            print("\n###-Discover sub-Domain")
+            print(f"{R}\n###-Discover sub-Domain{s}")
             print('='*25)
             print()
             self.target_url = self.args.URL
@@ -325,7 +362,7 @@ class Shopping:
             if 'www.' in self.target_url: 
                 url_replase = url_replase.replace('www.', '')
             print ('[*]MainDomain ...........|', url_replase)
-            output_12 = self.output.write('[*]MainDomain ...........| ' + url_replase + '\n')
+            output_12 = self.output.write('[*+]MainDomain ...........| ' + url_replase + '\n')
             try:
                 if not self.args.wordlist:
                     wordlist = "./small_list.txt"
@@ -345,7 +382,12 @@ class Shopping:
                     sub_domain_url = 'http://', sub, '.', url_replase
                     sub_domain_url_join = ''.join(sub_domain_url)
                 try:
-                    requests.get(sub_domain_url_join) 
+                    #requests.get(sub_domain_url_join) 
+                    if "/" in sub_domain_url_join[-1]:
+                        sub_domain_url_join = sub_domain_url_join[0:-1]
+                    else:
+                        sub_domain_url_join = sub_domain_url_join   
+                    requests.get(sub_domain_url_join, timeout=3)
                 except requests.ConnectionError:
                     print("[+]Sub-Domain ...........|", sub_domain_url_join)
                     sys.stdout.write('\x1b[1A')
@@ -377,7 +419,7 @@ class Shopping:
         try:
             with open('.data.txt', 'r') as read_line:
                 self.line_read = read_line.readlines()
-            print("\n###-Discover Emails ")
+            print(f"{R}\n###-Discover Emails{s}")
             print("=" * 25)
             output_14 = self.output.write('\n' + "###-Discover Emails " + '\n' + '=' * 25 + '\n')
             email_list = []
@@ -407,7 +449,7 @@ class Shopping:
             print(self.banner)
             exit()
     def robotstxt_read(self):
-        print("\n###-Discover Robots.txt")
+        print(f"{R}\n###-Discover Robots.txt{s}")
         print("="*25)
         num = 0 
         try:
@@ -465,7 +507,7 @@ class Shopping:
             print(self.banner)
             exit()
         except IOError:
-            print("\n###-Discover Robots.txt")
+            print(f"{R}\n###-Discover Robots.txt{s}")
             print("=" * 25)
             print("[-]Robots.txt ..........| NO Robots.txt Discover")
             exit()
@@ -477,10 +519,11 @@ class Shopping:
         parser.add_argument("--URL", action="store", help="Target website URL") 
         parser.add_argument("-w", "--wordlist", action="store", required=False, help="Select wordlist for subdomain discovery") 
         parser.add_argument("-E", "--email", action="store_true", required=False, help="Discover email addresses") 
-        parser.add_argument("-S", "--subdomain", action="store_true", required=False, help="Discover subdomains")  
-        parser.add_argument("-A", "--all", action="store_true", required=False, help="Discover all options")
-        parser.add_argument("-V", "--APIKEY", action="store", required=False, help=" Store API key for domain analysis")
-        parser.add_argument("-C", "--callapi", action="store_true", required=False, help="Make API calls if set")
+        parser.add_argument("-S", "--subdomain", action="store_true", required=False, help="Discover subdomains use wordlist")  
+        parser.add_argument("-a", "--all", action="store_true", required=False, help="Discover all options")
+        parser.add_argument("-K", "--APIKEY", action="store", required=False, help=" Store API key for domain analysis")
+       #parser.add_argument("-C", "--callapi", action="store_true", required=False, help="Make API calls if set")
+        parser.add_argument("-s", "--subapi", action="store_true", required=False, help="get subdomain use hackertarget api")
         self.args = parser.parse_args()
         if len(sys.argv) != 1:
             pass
@@ -506,8 +549,8 @@ class Shopping:
         with open(".data.txt",'w') as data:
             with open('.domain','w') as domain:
                 pass 
-        if self.args.APIKEY or self.args.callapi:
-            self.APIKEY()
+        
+        self.APIKEY()
         if self.args.all:           
             self.extract_links_form()
             self.discover_link()
@@ -522,5 +565,12 @@ class Shopping:
                 self.Email_Scan()
             elif self.args.subdomain:
                 self.sub_domain()
+            elif self.args.subapi:
+                print(f"{R}\n###-Discover sub-Domain_API{s}")
+                print('='*25)
+                print()
+                from SubAPI import API_SubDomains_Scan as API
+                API.find_subdomains(self, args=self.control)
+
 if __name__ == "__main__":
     Shopping()
