@@ -68,12 +68,15 @@ class API_SubDomains_Scan:
             except Exception:
                 continue
         if results:
+            with open(".Sdomain", "w") as f:
+                pass
             print(f"\n[*]MainDomain ...........| {domain}/")
-            with open(".domain", "w") as f:
+            with open(".Sdomain", "a+") as f:
+                f.write(f"[*]MainDomain ...........| {domain}\n")
                 for sub, ip in results:
                     time.sleep(.20)
                     print(f"[+]Sub-Domain ...........| https://{sub:<50} ---------| {ip}")
-                    f.write(f"{sub},{ip}\n")
+                    f.write(f"[+]Sub-Domain ...........| https://{sub:<50} ---------| {ip}\n")
             return results
         else:
             print("[!] No valid subdomains with IPs found.")

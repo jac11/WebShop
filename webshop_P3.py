@@ -72,9 +72,9 @@ class Shopping:
                 with open(".APIKEY.KEY", 'r') as key_file:
                     self.args.APIKEY = key_file.read()
                 self.output.writelines("\n###-API_INFO\n")  
-                self.output.writelines('[+]APIKEY     ............| '+self.args.APIKEY)
-                self.output.writelines('[+]API-File   ............| '+"file///.APIKEY.KEY") 
-                self.output.writelines("="*30)
+                self.output.writelines('[+]APIKEY     ............| '+self.args.APIKEY+"\n")
+                self.output.writelines('[+]API-File   ............| '+"file///.APIKEY.KEY\n") 
+                self.output.writelines("="*30+"\n")
 
             def APIKEYCALL(self) :   
                 if self.args.APIKEY :     
@@ -498,7 +498,7 @@ class Shopping:
                         os.remove(".2")  
                     print("[+]Report-Scan ..........| file://"+os.getcwd()+"/Webshop_"+str(self.resreach.group(1))+".txt")  
                     print(self.banner)
-                    output_A = self.output.writelines('\n\n'+ self.banner+"[-]SCAN ..........| Webshop finish sacn " + '\n' + "=" * 25)
+                    output_A = self.output.writelines('\n\n'+ self.banner+"\n[-]SCAN ..........| Webshop finish sacn " + '\n' + "=" * 25)
                     
                     exit()
                 except IOError:
@@ -578,6 +578,10 @@ class Shopping:
             if self.args.api :
                 from SubAPI import API_SubDomains_Scan as API
                 API.find_subdomains(self, args=self.control) 
+                with open("./.Sdomain",'r') as readf:
+                    readS = readf.read()
+                output_C = self.output.writelines("\n###-Discover sub-Domain_API"+"\n"+'='*25+"\n"+readS+"\n")   
+                os.remove("./.Sdomain") 
             else:    
                 self.sub_domain() 
             self.robotstxt_read() 
@@ -592,6 +596,10 @@ class Shopping:
                 
                 from SubAPI import API_SubDomains_Scan as API
                 API.find_subdomains(self, args=self.control)
+                with open("./.Sdomain",'r') as readf:
+                    readS = readf.read()
+                output_C = self.output.writelines("\n###-Discover sub-Domain_API"+"\n"+'='*25+"\n"+readS+"\n")  
+                os.remove("./.Sdomain")
 
 if __name__ == "__main__":
     Shopping()
