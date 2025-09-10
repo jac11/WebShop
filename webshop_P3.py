@@ -515,7 +515,7 @@ class Shopping:
                     print("[+]Report-Scan ..........| file://"+os.getcwd()+"/Webshop_"+str(self.resreach.group(1))+".txt")  
                     print(self.banner)
                     output_A = self.output.writelines('\n\n'+ self.banner.replace("\033[91m",'').replace("\033[0m",'').replace('\33[37m','')\
-                    +"\n[-]SCAN ..........| Webshop finish sacn " + '\n' + "=" * 25)
+                    +"\n[-]SCAN ..........| Webshop finish scan " + '\n' + "=" * 25)
                     
                     exit()
                 except IOError:
