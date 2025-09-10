@@ -68,7 +68,6 @@ class Shopping:
                 print("="*30)
                 exit()
                
-                
             else:
                 with open(".APIKEY.KEY", 'r') as key_file:
                     self.args.APIKEY = key_file.read()
@@ -92,7 +91,6 @@ class Shopping:
                     if response.status_code == 200:
                         if 'application/json' in response.headers.get('Content-Type', ''):
                             data = response.json()
-                             # Parse JSON
                         else:
                             header_html = BeautifulSoup(response.content, 'lxml')
                             data = header_html.prettify()
@@ -206,8 +204,6 @@ class Shopping:
         try:
             self.session = requests.Session()
             self.target_url = self.args.URL
-
-            # Ensure trailing slash
             if not self.target_url.endswith("/"):
                 self.target_url += "/"
 
@@ -217,7 +213,6 @@ class Shopping:
                 response = self.session.get(self.target_url, timeout=10)
 
                 if response.ok:
-                    # Extract href links
                     links = re.findall(r'href="(.*?)"', response.text)
                     return links
                 elif response.status_code == 429:
@@ -571,10 +566,15 @@ class Shopping:
                  "When used with --all, disables wordlist brute-force and only uses APIs.")
 
         scan_group.add_argument("-s", "--subapi", action="store_true",
-            help="Fetch subdomains specifically using the Hackertarget API")
+            help="Fetch subdomains specifically using the crt.sh, RapidDNS, Hackertarget API")
 
         self.args = parser.parse_args()
-        scanning_opts = any([self.args.wordlist, self.args.email, self.args.subdomain, self.args.all, self.args.api, self.args.subapi])
+        scanning_opts = any([self.args.wordlist,
+                             self.args.email,
+                             self.args.subdomain,
+                             self.args.all,
+                             self.args.api,
+                             self.args.subapi])
 
         if scanning_opts and not self.args.URL:
             parser.error("--URL is required when running scans")
