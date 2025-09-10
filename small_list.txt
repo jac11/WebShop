@@ -92,10 +92,12 @@ newsletter
 app
 live
 owa
-en
-start
+enns2
+cpanel6
+start0
 sms
 office
 exchange
 ipv4
+
 work
