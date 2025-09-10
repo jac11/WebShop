@@ -59,13 +59,14 @@ class Shopping:
                     print(R+line+s)
                     time.sleep(0.25) 
                              
-            elif os.path.exists(".APIKEY.KEY") and self.args.APIKEY:   
+            elif self.args.APIKEY:   
                 with open(".APIKEY.KEY", 'w') as key_file:
                     key_file.write(self.args.APIKEY)  
                 print("\n###-API_INFO\n")  
                 print('[+]APIKEY     ............| ',self.args.APIKEY)
                 print('[+]API-File   ............| ',"file///.APIKEY.KEY") 
                 print("="*30)
+                exit()
                
                 
             else:
@@ -201,29 +202,45 @@ class Shopping:
             APIKEYCALL(self)
           
     def extract_links_form(self):
+           
         try:
-            self.session = requests.Session()  
+            self.session = requests.Session()
             self.target_url = self.args.URL
-            if '/' not in self.target_url[-1]:
-                self.target_url = self.target_url + '/'           
-            else:
-                pass
+
+            # Ensure trailing slash
+            if not self.target_url.endswith("/"):
+                self.target_url += "/"
+
             self.target_links = []
+
             try:
-                response = self.session.get(self.target_url) 
+                response = self.session.get(self.target_url, timeout=10)
+
                 if response.ok:
-                    return re.findall('(?:href=")(.*?)"', str(response.content))                           
+                    # Extract href links
+                    links = re.findall(r'href="(.*?)"', response.text)
+                    return links
+                elif response.status_code == 429:
+                    print(R+f"[+] response.status..........| {response.status_code} for {self.target_url}"+s)
+                    print("[!] Error 429: Too Many Requests – site is rate limiting")
+                    sys.exit(1)
                 else:
-                    print("="*25)
-                    output_A = self.output.writelines("[-]link ..........| No links Discover " + '\n' + "="*25)
-                    output_25 = self.output.writelines("[*]input  ...........| " + self.target_url + '\n')  
-                    print('[-]link ..........| No links Discover ')
-                    print("[&]web  ..........| This Website login required to grep information ")
-                    exit()
+                    print("=" * 25)
+                    self.output.write("[-] link ..........| No links discovered\n")
+                    self.output.write("=" * 25 + "\n")
+                    self.output.write("[*] input .........| " + self.target_url + "\n")
+                    print("[-] link ..........| No links discovered")
+                    print("[&] web ...........| This Website login required to grep information")
+                    sys.exit(1)
+
             except requests.exceptions.ConnectionError:
-               print("="*25)
-               print("[-]Error  ..........| No status line received - the server has closed the connection")
-               exit()
+                print("=" * 25)
+                print("[-] Error .........| No status line received - the server closed the connection")
+                sys.exit(1)
+
+        except Exception as e:
+            print(f"[!] Unexpected error: {e}")
+            sys.exit(1)
         except KeyboardInterrupt:
             print(self.banner)
             exit()
@@ -316,12 +333,12 @@ class Shopping:
                                         self.type = input.get('type')
                                         self.value = input.get('value')
                                         countform += 1
-                                        self.output.writelines(f"    [*]input  ...........| {str(self.input_get)}\n")
-                                        self.output.writelines(f"    [*]type   ...........| {str(self.type)}\n")
-                                        self.output.writelines(f"    [*]value  ...........| {str(self.value)}\n")
-                                        print(f"    [*]input  ...........| {self.input_get}")
-                                        print(f"    [*]type   ...........| {self.type}")
-                                        print(f"    [*]value  ...........| {self.value}")
+                                        self.output.writelines(f"    [*]input    ...........| {str(self.input_get)}\n")
+                                        self.output.writelines(f"    [*]type     ...........| {str(self.type)}\n")
+                                        self.output.writelines(f"    [*]value    ...........| {str(self.value)}\n")
+                                        print(f"    [*]input     ...........| {self.input_get}")
+                                        print(f"    [*]type      ...........| {self.type}")
+                                        print(f"    [*]value     ...........| {self.value}")
                                     print('\n'+'='*25+'\n')    
                             else:
                                 self.replace = self.line.replace('\n', '')
@@ -382,7 +399,6 @@ class Shopping:
                     sub_domain_url = 'http://', sub, '.', url_replase
                     sub_domain_url_join = ''.join(sub_domain_url)
                 try:
-                    #requests.get(sub_domain_url_join) 
                     if "/" in sub_domain_url_join[-1]:
                         sub_domain_url_join = sub_domain_url_join[0:-1]
                     else:
@@ -498,7 +514,8 @@ class Shopping:
                         os.remove(".2")  
                     print("[+]Report-Scan ..........| file://"+os.getcwd()+"/Webshop_"+str(self.resreach.group(1))+".txt")  
                     print(self.banner)
-                    output_A = self.output.writelines('\n\n'+ self.banner+"\n[-]SCAN ..........| Webshop finish sacn " + '\n' + "=" * 25)
+                    output_A = self.output.writelines('\n\n'+ self.banner.replace("\033[91m",'').replace("\033[0m",'').replace('\33[37m','')\
+                    +"\n[-]SCAN ..........| Webshop finish sacn " + '\n' + "=" * 25)
                     
                     exit()
                 except IOError:
@@ -516,34 +533,52 @@ class Shopping:
             pass
     def control(self):
         parser = argparse.ArgumentParser(
-        description="WebShop: Subdomain and Email Discovery Tool\n"
-                    "Usage: ./webshop.py --URL https://www.site.com/ [Options]\n\n"
-                    "Examples:\n"
-                    "  ./webshop.py --URL https://www.site.com/ -o output\n"
-                    "  ./webshop.py --URL https://example.com/ --subapi\n",
+        description="WebShop: Subdomain and Email Discovery Tool\n\n"
+                    "Modes:\n"
+                    "  1. Scan Mode → requires --URL\n"
+                    "  2. API Key Mode → only -K is needed\n",
         formatter_class=argparse.RawTextHelpFormatter
-        )
-        parser.add_argument("--URL", action="store", required=True,
-                            help="Target website URL (e.g., https://www.example.com)")
-        parser.add_argument("-w", "--wordlist", action="store", required=False,
-                            help="Path to wordlist file for subdomain brute-force discovery")
-        parser.add_argument("-E", "--email", action="store_true", required=False,
-                            help="Discover email addresses from the target domain")
-        parser.add_argument("-S", "--subdomain", action="store_true", required=False,
-                            help="Discover subdomains using a wordlist")
-        parser.add_argument("-a", "--all", action="store_true", required=False,
-                            help="Run all discovery modules (subdomains, emails, API lookups)")
-        parser.add_argument("-K", "--APIKEY", action="store", required=False,
-                             help="Store API key for WHOIS/domain analysis.\n"
-                             "Example: Get your key from https://host.io/ and provide it here.\n"
-                             "The key will be saved in the tool for reuse."
-        ) 
-        parser.add_argument("--api", action="store_true", required=False,
-                    help="Use API-based subdomain discovery (crt.sh, RapidDNS, Hackertarget).\n"
-                         "When used with --all, disables wordlist brute-force and only uses APIs.")
-        parser.add_argument("-s", "--subapi", action="store_true", required=False,
-                            help="Fetch subdomains using the Hackertarget crt.sh, RapidDNS API")
+    )
+
+
+        scan_group = parser.add_argument_group("Scan Options",
+            "Options for scanning a target domain (require --URL).")
+        apikey_group = parser.add_argument_group("API Key Options",
+            "Options for managing/storing API keys.")
+
+        apikey_group.add_argument("-K", "--APIKEY",
+            help="API key for domain analysis (optional in scans, "
+                 "or can be used alone to just store the key)")
+
+        scan_group.add_argument("--URL",
+            help="Target website URL (e.g., https://www.example.com)")
+
+        scan_group.add_argument("-w", "--wordlist",
+            help="Path to wordlist file for subdomain brute-force discovery")
+
+        scan_group.add_argument("-E", "--email", action="store_true",
+            help="Discover email addresses from the target domain")
+
+        scan_group.add_argument("-S", "--subdomain", action="store_true",
+            help="Discover subdomains using a wordlist")
+
+        scan_group.add_argument("-a", "--all", action="store_true",
+            help="Run all discovery modules (subdomains, emails, APIs).\n"
+                 "If combined with --api, wordlist-based subdomain discovery is skipped.")
+
+        scan_group.add_argument("--api", action="store_true",
+            help="Use API-based subdomain discovery (crt.sh, RapidDNS, Hackertarget).\n"
+                 "When used with --all, disables wordlist brute-force and only uses APIs.")
+
+        scan_group.add_argument("-s", "--subapi", action="store_true",
+            help="Fetch subdomains specifically using the Hackertarget API")
+
         self.args = parser.parse_args()
+        scanning_opts = any([self.args.wordlist, self.args.email, self.args.subdomain, self.args.all, self.args.api, self.args.subapi])
+
+        if scanning_opts and not self.args.URL:
+            parser.error("--URL is required when running scans")
+
         if len(sys.argv) != 1:
             pass
         else:
@@ -560,7 +595,8 @@ class Shopping:
         pattern = r"https?://(?:www\.)?(?:[a-zA-Z0-9-]+\.)?([a-zA-Z0-9-]+)\."
         self.resreach = re.search(pattern , self.args.URL)
         self.output = open(str("Webshop_"+self.resreach.group(1))+".txt", 'w')
-        self.output.writelines('\n' + self.banner + '\n')
+        self.output.writelines('\n' + self.banner.replace("\033[91m",'').replace("\033[0m",'').replace('\33[37m','') + '\n')
+
         if os.path.isfile(".domain"):
             os.remove(".domain")
         if os.path.isfile(".2"):     
