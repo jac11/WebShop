@@ -567,6 +567,8 @@ class Shopping:
 
         scan_group.add_argument("-s", "--subapi", action="store_true",
             help="Fetch subdomains specifically using the crt.sh, RapidDNS, Hackertarget API")
+        scan_group.add_argument("--man", action="store_true",
+            help="show man page ")
 
         self.args = parser.parse_args()
         scanning_opts = any([self.args.wordlist,
@@ -585,6 +587,10 @@ class Shopping:
             parser.print_help()
             exit()
     def main(self):
+        if self.args.man:
+           from info import ManPage
+           ManPage() 
+           exit()
         if self.args.APIKEY :
             self.APIKEY()
             exit()
@@ -606,6 +612,7 @@ class Shopping:
                 pass 
         
         self.APIKEY()
+
         if self.args.all:           
             self.extract_links_form()
             self.discover_link()
