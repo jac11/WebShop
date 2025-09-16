@@ -586,14 +586,12 @@ class Shopping:
                         print(('*' * 30))
                         output_16 = self.output.write("[*]link ..........| " + self.link_robot + '\n' + '*' * 25 + '\n')
                         output_17 = self.output.writelines(Beautiful_robots1 + '\n' + '*' * 25 + '\n')
-                        if 'User-agent: *' in Beautiful_robots1:
-                            links = "".join(re.findall('User-agent: *\\D+\\s',Beautiful_robots1)[1:]).replace('Allow:','Disallow:').split('Disallow:')
-                        elif 'user-agent: *' in  Beautiful_robots1:
-                            links = "".join(re.findall('user-agent: *\\D+\\s',Beautiful_robots1)).replace('Allow:','Disallow:').replace('Sitemap:','Disallow:').split('Disallow:')
-                           
+                        #links = set(re.findall(r'(?<=Disallow:\s).*|(?<=Allow:\s).*', Beautiful_robots1) )
+                        links = set(re.findall(r'^(?:Disallow|Allow|Sitemap):\s*(\S+)', Beautiful_robots1 , re.MULTILINE))
+                        
                         print(O+"\nRobots.txt_Detalis"+'\n'+'_'*12+s+'\n')
                         self.output.writelines("\nRobots.txt_Detalis"+'\n'+'_'*12+'\n\n')
-                        for data in links[1:] :
+                        for data in links :
                             if 'User-agent: *' in data  or 'user-agent: *' in data:
                                 pass
                             if self.args.URL in data:
