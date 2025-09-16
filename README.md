@@ -62,6 +62,10 @@ python webshop.py --URL https://example.com [options]
 ---
 
 ## Features
+🔑 Steps to Get API Key from Host.io
+
+Go to Host.io website
+👉 https://host.io
 
 ### 1. WHOIS & Domain Info (`--APIKEY`)
 - Domain name, URL, rank  
