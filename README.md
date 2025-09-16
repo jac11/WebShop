@@ -62,10 +62,35 @@ python webshop.py --URL https://example.com [options]
 ---
 
 ## Features
-🔑 Steps to Get API Key from Host.io
+###  🔑 How to Get API Key from Host.io
 
-Go to Host.io website
-👉 https://host.io
+## Steps
+
+1. **Open the Host.io website**  
+   👉 Go to [https://host.io](https://host.io)
+
+2. **Sign Up / Create an Account**  
+   - Click **Sign Up** (top-right corner).  
+   - Choose to register with **Email & Password**, or sign in with **GitHub** or **Google**.  
+
+3. **Verify Your Email**  
+   - Host.io will send you a confirmation email.  
+   - Open it and click the verification link.  
+
+4. **Log in to Dashboard**  
+   - After verification, log in at [https://host.io](https://host.io).  
+   - Go to your **Dashboard** or **Account Settings**.  
+
+5. **Get Your API Key**  
+   - In the dashboard, look for **API Key** (usually shown as `sk_XXXXXXXXXXXXXXXX`).  
+   - Copy this key.  
+
+6. **Choose Your Plan (Optional)**  
+   - Host.io offers a **Free plan** with limited API calls.  
+   - Paid plans allow more requests per month.  
+   - See: [https://host.io/pricing](https://host.io/pricing).  
+
+---
 
 ### 1. WHOIS & Domain Info (`--APIKEY`)
 - Domain name, URL, rank  
