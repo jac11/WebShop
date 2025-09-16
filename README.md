@@ -1,121 +1,136 @@
 # Webshop Security Scanner
 
 ## Description
-`Webshop Security Scanner` is a Python-based tool designed for auditing websites. It can extract links, discover forms, scan for email addresses, identify subdomains, and analyze the contents of a website's `robots.txt` file. This tool can be useful for security researchers or website administrators to analyze and gather information from target websites.
+`Webshop Security Scanner` is a Python-based reconnaissance tool for auditing websites.  
+It can crawl links, discover forms, scan for email addresses, find subdomains, and analyze `robots.txt`.  
+Useful for **security researchers, penetration testers, and bug bounty hunters** to gather information from target websites.
+
+---
 
 ## Requirements
 
-To use `WebShop`, the following dependencies must be installed:
+Dependencies:
+
 - `requests`
-- `BeautifulSoup` (from `bs4`)
+- `beautifulsoup4`
 - `argparse`
 - `json`
 - `socket`
 
-You can install the necessary dependencies by running:
+Install with:
 
 ```bash
 pip install requests beautifulsoup4
 ```
 
+---
+
+## Why Use Webshop?
+- 🔍 Automates **link and hidden endpoint discovery**  
+- 📨 Finds **email addresses** exposed on the site  
+- 🌐 Discovers **subdomains** (wordlist + API methods)  
+- 🤖 Reads and parses **robots.txt**  
+- 🔑 Supports **API key management** for domain WHOIS/analysis  
+- 📂 Saves results to output files for later analysis  
+
+---
+
 ## Usage
 
-To use the tool, run it with the following options:
+Run with:
 
 ```bash
-./webshop_P3.py --URL https://example.com [options]
+python webshop.py --URL https://example.com [options]
 ```
-----------------------------------------------------------------------------
-### Command-Line Arguments
 
-- `--URL`: **Required.** Target website URL.
-- `-w`, `--wordlist`: Optional. Path to the wordlist for subdomain discovery.
-- `-E`, `--email`: Optional. Discover email addresses from the target website.
-- `-S`, `--subdomain`: Optional. Discover subdomains of the target website.
-- `-A`, `--all`: Optional. Discover all available options (links, forms, emails, subdomains, etc.).
-- `-V`, `--APIKEY`: Optional. API key to fetch domain analysis from the Whois API.
-- `-C`, `--callapi`: Optional. Flag to call the API if set.
------------------------------------------------------------------------------------
+---
+
+## Command-Line Arguments
+
+| Option              | Description                                                           |
+|---------------------|-----------------------------------------------------------------------|
+| `--URL`             | **Required.** Target website URL (e.g., `https://example.com`).       |
+| `-w`, `--wordlist`  | Path to wordlist file for subdomain brute-force discovery.            |
+| `-E`, `--email`     | Discover email addresses from the target domain.                      |
+| `-S`, `--subdomain` | Discover subdomains using a wordlist.                                 |
+| `-a`, `--all`       | Run all modules (subdomains, emails, robots, APIs). <br>If combined with `--api`, brute-force is skipped. |
+| `-R`, `--robots`    | Fetch and display `robots.txt`. <br>If combined with `--api`, brute-force is skipped. |
+| `--api`             | Discover subdomains using APIs (`crt.sh`, `RapidDNS`, `Hackertarget`). <br>When used with `--all`, disables brute-force. |
+| `-s`, `--subapi`    | Fetch subdomains specifically via Hackertarget API.                   |
+| `-K`, `--APIKEY`    | Provide or store an API key for domain analysis. Stored in `.APIKEY.KEY`. |
+
+---
+
 ## Features
-### 1. Domain and WHOIS Info (`APIKEY`)
-The tool can fetch and display WHOIS and domain-related information using the host.io API. The information includes:
-- Domain name
-- URL
-- Rank
-- GTM (Google Tag Manager)
-- IP address, city, and country
-- DNS and server details
-- Social media links
-The API key is stored locally in `.APIKEY.KEY`. If the API key is provided via the `--APIKEY` option or through a stored file, the tool will fetch the domain analysis.
-- Create account to use apikey [host.io](https://host.io)
-----------------------------------------------------------------------
 
-### 2. Link Discovery (`extract_links_form`)
-The tool crawls the provided website to discover and extract all available links from the HTML content.
+### 1. WHOIS & Domain Info (`--APIKEY`)
+- Domain name, URL, rank  
+- IP address, city, and country  
+- DNS and server details  
+- Social media links  
 
-### 3. Form Discovery (`form_Check`)
-The tool searches for forms on the website and extracts details such as:
-- Form actions and methods
-- Input fields and their types and values
+API key is stored in `.APIKEY.KEY` and used when provided with `-K`.
 
-### 4. Subdomain Discovery (`sub_domain`)
-The tool discovers subdomains of the provided domain using a wordlist and checks if the subdomain is valid by sending requests.
+---
 
-### 5. Email Discovery (`Email_Scan`)
-The tool scans the website content and looks for any email addresses mentioned, excluding those ending in image or archive formats (e.g., `.png`, `.jpg`, `.zip`).
+### 2. Link Discovery
+Extracts static and hidden links from HTML.
 
-### 6. Robots.txt Reader (`robotstxt_read`)
-The tool reads and displays the contents of the `robots.txt` file from the discovered subdomains.
+### 3. Form Discovery
+Finds forms, actions, methods, and input fields.
 
-## Example
+### 4. Subdomain Discovery
+- Brute-force using wordlist (`-S -w`)  
+- API discovery (`--api` or `-s`)  
 
+### 5. Email Discovery
+Finds email addresses exposed on the site (ignores media/archive extensions).
 
-To Store Host.io API key in the local to use in WebShop tool 
-./webshop_P3.py --URL https://example.com -E -K follow by APIKEY 
+### 6. Robots.txt Reader
+Fetches and displays entries from `robots.txt`.
+
+---
+
+## Examples
+
+Store API key for later use:
 ```bash
-./webshop_P3.py --URL https://example.com -E -K 223374939933
+python webshop.py -K 223374939933
 ```
-To call the API Key use  -C option
-
+Scan for emails:
 ```bash
-./webshop_P3.py --URL https://example.com -E -C 
+python webshop.py --URL https://example.com -E
 ```
-To scan for emails on a website:
 
-
+Subdomain discovery with wordlist:
 ```bash
-./webshop_P3.py --URL https://example.com -E
+python webshop.py --URL https://example.com -S -w wordlist.txt
 ```
-To scan for emails on a website with whois domain call api:
 
+
+Subdomain discovery with api:
 ```bash
-./webshop_P3.py --URL https://example.com -E -C
+python webshop.py --URL https://example.com -s 
 ```
-To discover subdomains using a wordlist:
 
+
+robote.txt  discovery :
 ```bash
-./webshop_P3.py --URL https://example.com -S -w wordlist.txt
+python webshop.py --URL https://example.com -R
 ```
-To discover all available options for a website, use the following command with whois API:
 
+
+Run all modules with API:
 ```bash
-./webshop_P3.py --URL https://example.com -A -w wordlist.txt -C 
+python webshop.py --URL https://example.com -a --api
 ```
-To discover all available options for a website, use the following command without API
+
+Run all modules without API:
 ```bash
-./webshop_P3.py --URL https://example.com -A -w wordlist.txt 
+python webshop.py --URL https://example.com -a -w wordlist.txt
 ```
---------------------------------------------------------------------------------------
-### Webshop Project video 
 
-Check out this video for more information:
+---
 
-[Watch the video](https://www.youtube.com/watch?v=bnavtLHKWaw)
-
-Or click the image below to watch it:
-
-[![Watch the video](https://img.youtube.com/vi/bnavtLHKWaw/0.jpg)](https://www.youtube.com/watch?v=bnavtLHKWaw)
---------------------------------------------------------------------------------------------------------------------
-## Connect :
-* jac11devel@gmail.com
-
+## Connect
+📧 jac11devel@gmail.com
