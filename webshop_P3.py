@@ -19,6 +19,12 @@ O  ='\33[37m'
 
 class Shopping:
     def __init__(self):
+
+        self.visited = set()
+        self.hidden_links = set()
+        self.wordlist = ["admin", "login", "test", "staging", "backup.zip"]
+        self.depth = 0
+        self.headers = {"User-Agent": "Mozilla/5.0"}
        
         self.banner= R+f"""
               ██     ██ ███████ ██████  ███████ ██   ██  ██████  ██████  
@@ -59,15 +65,15 @@ class Shopping:
                     print(R+line+s)
                     time.sleep(0.25) 
                              
-            elif self.args.APIKEY:   
+            elif os.path.exists(".APIKEY.KEY") and self.args.APIKEY:   
                 with open(".APIKEY.KEY", 'w') as key_file:
                     key_file.write(self.args.APIKEY)  
                 print("\n###-API_INFO\n")  
                 print('[+]APIKEY     ............| ',self.args.APIKEY)
                 print('[+]API-File   ............| ',"file///.APIKEY.KEY") 
                 print("="*30)
-                exit()
                
+                
             else:
                 with open(".APIKEY.KEY", 'r') as key_file:
                     self.args.APIKEY = key_file.read()
@@ -76,7 +82,9 @@ class Shopping:
                 self.output.writelines('[+]API-File   ............| '+"file///.APIKEY.KEY\n") 
                 self.output.writelines("="*30+"\n")
 
-            def APIKEYCALL(self) :   
+            def APIKEYCALL(self) :  
+             #  pass
+                
                 if self.args.APIKEY :     
                     with open('.APIKEY.KEY', 'r') as key_file:
                         key = key_file.read().strip()
@@ -91,6 +99,7 @@ class Shopping:
                     if response.status_code == 200:
                         if 'application/json' in response.headers.get('Content-Type', ''):
                             data = response.json()
+                             # Parse JSON
                         else:
                             header_html = BeautifulSoup(response.content, 'lxml')
                             data = header_html.prettify()
@@ -196,77 +205,160 @@ class Shopping:
                         self.output.writelines('   [+]APIKEY-Status   ............| Error Facth The info')
                         self.output.writelines("_"*15+'\n')  
                 else:
-                    pass               
+                    pass  
+                             
             APIKEYCALL(self)
           
-    def extract_links_form(self):
-           
+    def extract_links_form(self,):
         try:
-            self.session = requests.Session()
+            self.session = requests.Session()  
             self.target_url = self.args.URL
-            if not self.target_url.endswith("/"):
-                self.target_url += "/"
-
+            if '/' not in self.target_url[-1]:
+                self.target_url = self.target_url + '/'           
+            else:
+                pass
             self.target_links = []
-
             try:
-                response = self.session.get(self.target_url, timeout=10)
-
+                response = self.session.get(self.target_url) 
                 if response.ok:
-                    links = re.findall(r'href="(.*?)"', response.text)
-                    return links
-                elif response.status_code == 429:
-                    print(R+f"[+] response.status..........| {response.status_code} for {self.target_url}"+s)
-                    print("[!] Error 429: Too Many Requests – site is rate limiting")
-                    sys.exit(1)
+                    return re.findall('(?:href=")(.*?)"', str(response.content))  
                 else:
-                    print("=" * 25)
-                    self.output.write("[-] link ..........| No links discovered\n")
-                    self.output.write("=" * 25 + "\n")
-                    self.output.write("[*] input .........| " + self.target_url + "\n")
-                    print("[-] link ..........| No links discovered")
-                    print("[&] web ...........| This Website login required to grep information")
-                    sys.exit(1)
-
+                    print("="*25)
+                    self.output.writelines("[-]link ..........| No links Discover " + '\n' + "="*25)
+                    self.output.writelines("[*]input  ...........| " + self.target_url + '\n')  
+                    print('[-]link ..........| No links Discover ')
+                    print("[&]web  ..........| This Website login required to grep information ")
+                    exit()
             except requests.exceptions.ConnectionError:
-                print("=" * 25)
-                print("[-] Error .........| No status line received - the server closed the connection")
-                sys.exit(1)
-
-        except Exception as e:
-            print(f"[!] Unexpected error: {e}")
-            sys.exit(1)
+                print("="*25)
+                print("[-]Error  ..........| No status line received - the server has closed the connection")
+                exit()
         except KeyboardInterrupt:
             print(self.banner)
             exit()
-    def discover_link(self):
+
+    def discover_link(self, url, depth=0):
         try:
             try:
                 output_0 = self.output.writelines('\n' + "###-Discover links" + '\n' + "="*25 + '\n')    
-                print(f"{R}\n###-Discover links{s}")
+                print(f"{R}\n###-Discover links static structure {s}")
                 print("="*25)
                 print()
+
                 herf_links = self.extract_links_form()
+
+                # one global tracker for all links (static + hidden + js)
+                if not hasattr(self, "seen_links"):
+                    self.seen_links = set()
+
+                # --- Static links ---
                 for self.link in herf_links:
-                    self.link = urllib.parse.urljoin(str(self.target_url), str(self.link))         
+                    self.link = urllib.parse.urljoin(str(self.target_url), str(self.link))      
                     if "#" in self.link:
                         self.link = self.link.split('#')[0]
                     if self.target_url in self.link and self.link not in self.target_links:
-                        self.target_links.append(self.link)
-                        time.sleep(0.40)
-                        if self.link[-10:] == ['logout.php']:
-                            pass
-                        else:
-                            print("[+]link ...........| ", self.link)                                       
-                            output_1 = self.output.writelines("[+]link ...........| " + self.link + '\n')  
+                        norm_link = self.link.strip().rstrip("/")
+                        if norm_link not in self.seen_links:
+                            self.seen_links.add(norm_link)
+                            self.target_links.append(norm_link)
+                            time.sleep(0.20)
+                            if not self.link.endswith("logout.php"):
+                                try:
+                                    resp = self.session.get(norm_link, headers=self.headers, timeout=5)
+                                    code = str(resp.status_code)
+                                    if "200" in code:
+                                        code = f"{O}[{code}]{s}"
+                                    else:
+                                        code = f"{R}[{code}]{s}"  
+                                except:
+                                    code = R+"[ERR]"+s
+                                print(f"[+] link {code} ...........| {norm_link}")  
+                                code = code.replace("\033[91m",'').replace("\033[0m",'').replace('\33[37m','')                                     
+                                self.output.writelines(f"[+] link  {code} ...........| {norm_link}\n")  
+
                 with open(".data.txt", "w") as file_links:
                     file_links.writelines("%s\n" % i for i in self.target_links)
-            except KeyboardInterrupt: 
-                print(self.banner)
-                exit() 
+
+                # --- Hidden Links Crawler ---
+                print(f"{R}\n###-Discover Hidden Links {s}")   
+                print("="*25)
+                print()
+                output_0 = self.output.writelines('\n' + "###-Discover Hidden Links" + '\n' + "="*25 + '\n')
+                html_re = self.session.get(url, headers=self.headers, timeout=10)
+                html = html_re.text
+
+                if depth > self.depth or url in self.visited:
+                    return
+                self.visited.add(url)
+                if not html:
+                    return
+                soup = BeautifulSoup(html, "html.parser")
+
+                for link in soup.find_all("a", href=True):
+                    href = link["href"]
+                    if href.startswith("/"):
+                        full = urllib.parse.urljoin(url, href)
+                    elif href.startswith("http"):
+                        full = href
+                    else:
+                        continue
+                    norm_full = full.strip().rstrip("/")
+                    if norm_full not in self.seen_links:
+                        self.seen_links.add(norm_full)
+                        try:
+                            resp = self.session.get(norm_full, headers=self.headers, timeout=5)
+                            code = str(resp.status_code)
+                            if "200" in code:
+                                code = f"{O}[{code}]{s}"
+                            else:
+                                code = f"{R}[{code}]{s}"
+                        except:
+                            code = R+"[ERR]"+s
+                        print(f"link  {code} ...........| {norm_full}")
+                        code = code.replace("\033[91m",'').replace("\033[0m",'').replace('\33[37m','')
+                        self.output.writelines(f"[+] link  {code} ...........| {norm_full}\n")
+                        time.sleep(0.20) 
+
+                # --- JS Discovery ---
+                print(f"{R}\n###-Discover js Scrpit {s}") 
+                print("="*25)
+                print()        
+                output_0 = self.output.writelines('\n' + "###-Discover js Scrpit" + '\n' + "="*25 + '\n')
+                for script in soup.find_all("script", src=True):
+                    src = script["src"]
+                    if src.startswith("/"):
+                        js_url = urllib.parse.urljoin(url, src)
+                    elif src.startswith("http"):
+                        js_url = src
+                    else:
+                        continue
+
+                    norm_js = js_url.strip().rstrip("/")
+                    if norm_js not in self.seen_links:
+                        self.seen_links.add(norm_js)
+                        try:
+                            resp = self.session.get(norm_js, headers=self.headers, timeout=5)
+                            code = str(resp.status_code)
+                            if "200" in code:
+                                code = f"{O}[{code}]{s}"
+                            else:
+                                code = f"{R}[{code}]{s}"  
+                        except:
+                            code = R+"[ERR]"+s
+                        print(f"link  {code} ...........| {norm_js}") 
+                        code = code.replace("\033[91m",'').replace("\033[0m",'').replace('\33[37m','')
+                        self.output.writelines(f"link  {code} ...........| {norm_js}\n")
+                        time.sleep(0.20)
+
+
+            except KeyboardInterrupt:
+                    print(self.banner)
+                    exit()  
+               
         except requests.exceptions.ConnectionError:
             print("[-]Error  ..........| No status line received - the server has closed the connection")
             pass
+
     def form_Check(self):
         countform = 0
 
@@ -328,9 +420,9 @@ class Shopping:
                                         self.type = input.get('type')
                                         self.value = input.get('value')
                                         countform += 1
-                                        self.output.writelines(f"    [*]input    ...........| {str(self.input_get)}\n")
-                                        self.output.writelines(f"    [*]type     ...........| {str(self.type)}\n")
-                                        self.output.writelines(f"    [*]value    ...........| {str(self.value)}\n")
+                                        self.output.writelines(f"    [*]input     ...........| {str(self.input_get)}\n")
+                                        self.output.writelines(f"    [*]type      ...........| {str(self.type)}\n")
+                                        self.output.writelines(f"    [*]value     ...........| {str(self.value)}\n")
                                         print(f"    [*]input     ...........| {self.input_get}")
                                         print(f"    [*]type      ...........| {self.type}")
                                         print(f"    [*]value     ...........| {self.value}")
@@ -394,6 +486,7 @@ class Shopping:
                     sub_domain_url = 'http://', sub, '.', url_replase
                     sub_domain_url_join = ''.join(sub_domain_url)
                 try:
+                    #requests.get(sub_domain_url_join) 
                     if "/" in sub_domain_url_join[-1]:
                         sub_domain_url_join = sub_domain_url_join[0:-1]
                     else:
@@ -478,6 +571,7 @@ class Shopping:
                # Beautiful_robots = str(BeautifulSoup(response_robots.content, 'lxml'))
                 with open (".2",'w') as code :
                      code.write(str(response_robots.content))
+
                 with open(".2",'r') as code:
                     Beautiful_robots = code.readlines()
                 for Parse in Beautiful_robots:
@@ -486,16 +580,37 @@ class Shopping:
                         Parse = Parse.replace('<html>', '').replace('</body>', '').replace('<body>', '').replace('<p>', '').replace('</p>', '')
                         Beautiful_robots1 = "\n".join(Parse.replace('</html>', '').replace("b'",'').replace("'",'').split("\\n"))
                         output_15 = self.output.write('\n' + "###-Discover Robots.txt" + '\n' + '=' * 25 + '\n')
-                        print("[*]link ..........|", self.link_robot)
+                        print("[*]link ..........|", self.link_robot+'\n')
                         print(('*' * 30))
                         print(Beautiful_robots1)
                         print(('*' * 30))
                         output_16 = self.output.write("[*]link ..........| " + self.link_robot + '\n' + '*' * 25 + '\n')
                         output_17 = self.output.writelines(Beautiful_robots1 + '\n' + '*' * 25 + '\n')
+                        if 'User-agent: *' in Beautiful_robots1:
+                            links = "".join(re.findall('User-agent: *\\D+\\s',Beautiful_robots1)[1:]).replace('Allow:','Disallow:').split('Disallow:')
+                        elif 'user-agent: *' in  Beautiful_robots1:
+                            links = "".join(re.findall('user-agent: *\\D+\\s',Beautiful_robots1)).replace('Allow:','Disallow:').replace('Sitemap:','Disallow:').split('Disallow:')
+                           
+                        print(O+"\nRobots.txt_Detalis"+'\n'+'_'*12+s+'\n')
+                        self.output.writelines("\nRobots.txt_Detalis"+'\n'+'_'*12+'\n\n')
+                        for data in links[1:] :
+                            if 'User-agent: *' in data  or 'user-agent: *' in data:
+                                pass
+                            if self.args.URL in data:
+                                time.sleep(.20)
+                                print("   [*]link ..........|", data.strip().replace('\n',''))
+                                output_17 = self.output.writelines(f"    [*]link ..........| {data.strip().replace('\n','')}\n")
+
+                            else:    
+                                time.sleep(.20)
+                                print("   [*]link ..........|", self.args.URL+data.strip().replace('\n',''))
+                                output_17 = self.output.writelines(f"    [*]link ..........| {self.args.URL+data.strip().replace('\n','')}\n")
+                        print(O+'_'*30+s+'\n')
                     else:
                         print("[+]Check-robots.txt  ...........|",self.link_robot )
                         sys.stdout.write('\x1b[1A')
                         sys.stdout.write('\x1b[2K')
+
             else:
                 if num == 0 :
                      print("\n[*]Robots.txt ..........| No Robots.txt Found ")
@@ -509,8 +624,7 @@ class Shopping:
                         os.remove(".2")  
                     print("[+]Report-Scan ..........| file://"+os.getcwd()+"/Webshop_"+str(self.resreach.group(1))+".txt")  
                     print(self.banner)
-                    output_A = self.output.writelines('\n\n'+ self.banner.replace("\033[91m",'').replace("\033[0m",'').replace('\33[37m','')\
-                    +"\n[-]SCAN ..........| Webshop finish scan " + '\n' + "=" * 25)
+                    output_A = self.output.writelines('\n\n'+ self.banner+"\n[-]SCAN ..........| Webshop finish sacn " + '\n' + "=" * 25)
                     
                     exit()
                 except IOError:
@@ -540,44 +654,31 @@ class Shopping:
             "Options for scanning a target domain (require --URL).")
         apikey_group = parser.add_argument_group("API Key Options",
             "Options for managing/storing API keys.")
-
         apikey_group.add_argument("-K", "--APIKEY",
             help="API key for domain analysis (optional in scans, "
                  "or can be used alone to just store the key)")
-
         scan_group.add_argument("--URL",
             help="Target website URL (e.g., https://www.example.com)")
-
         scan_group.add_argument("-w", "--wordlist",
             help="Path to wordlist file for subdomain brute-force discovery")
-
         scan_group.add_argument("-E", "--email", action="store_true",
             help="Discover email addresses from the target domain")
-
         scan_group.add_argument("-S", "--subdomain", action="store_true",
             help="Discover subdomains using a wordlist")
-
         scan_group.add_argument("-a", "--all", action="store_true",
             help="Run all discovery modules (subdomains, emails, APIs).\n"
                  "If combined with --api, wordlist-based subdomain discovery is skipped.")
-
+        scan_group.add_argument("-R", "--robots", action="store_true",
+            help="Discover robots.txt file.\n"
+                 "If combined with --api, wordlist-based subdomain discovery is skipped.")
         scan_group.add_argument("--api", action="store_true",
             help="Use API-based subdomain discovery (crt.sh, RapidDNS, Hackertarget).\n"
                  "When used with --all, disables wordlist brute-force and only uses APIs.")
-
         scan_group.add_argument("-s", "--subapi", action="store_true",
-            help="Fetch subdomains specifically using the crt.sh, RapidDNS, Hackertarget API")
-        scan_group.add_argument("--man", action="store_true",
-            help="show man page ")
-
+            help="Fetch subdomains specifically using the Hackertarget API")
         self.args = parser.parse_args()
-        scanning_opts = any([self.args.wordlist,
-                             self.args.email,
-                             self.args.subdomain,
-                             self.args.all,
-                             self.args.api,
-                             self.args.subapi])
-
+        scanning_opts = any([self.args.wordlist, self.args.email, self.args.subdomain, self.args.all, self.args.api, self.args.subapi,self.args.robots])
+        
         if scanning_opts and not self.args.URL:
             parser.error("--URL is required when running scans")
 
@@ -587,10 +688,6 @@ class Shopping:
             parser.print_help()
             exit()
     def main(self):
-        if self.args.man:
-           from info import ManPage
-           ManPage() 
-           exit()
         if self.args.APIKEY :
             self.APIKEY()
             exit()
@@ -601,8 +698,7 @@ class Shopping:
         pattern = r"https?://(?:www\.)?(?:[a-zA-Z0-9-]+\.)?([a-zA-Z0-9-]+)\."
         self.resreach = re.search(pattern , self.args.URL)
         self.output = open(str("Webshop_"+self.resreach.group(1))+".txt", 'w')
-        self.output.writelines('\n' + self.banner.replace("\033[91m",'').replace("\033[0m",'').replace('\33[37m','') + '\n')
-
+        self.output.writelines('\n' + self.banner + '\n')
         if os.path.isfile(".domain"):
             os.remove(".domain")
         if os.path.isfile(".2"):     
@@ -610,12 +706,13 @@ class Shopping:
         with open(".data.txt",'w') as data:
             with open('.domain','w') as domain:
                 pass 
-        
+        if self.args.robots:
+            self.robotstxt_read() 
+            exit()
         self.APIKEY()
-
         if self.args.all:           
             self.extract_links_form()
-            self.discover_link()
+            self.discover_link(self.args.URL)
             self.form_Check()
             self.Email_Scan()
             if self.args.api :
