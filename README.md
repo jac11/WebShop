@@ -110,7 +110,8 @@ Finds forms, actions, methods, and input fields.
 
 ### 4. Subdomain Discovery
 - Brute-force using wordlist (`-S -w`)  
-- API discovery (`--api` or `-s`)  
+- API discovery (`-s`)
+- discover all option include api subdomain discover -a --api
 
 ### 5. Email Discovery
 Finds email addresses exposed on the site (ignores media/archive extensions).
