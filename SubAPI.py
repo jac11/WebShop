@@ -1,7 +1,7 @@
 import requests
 import re
 import socket
-import time
+import time,timeit
 
 R  = "\033[91m"
 s  = "\033[0m"
@@ -13,11 +13,15 @@ print()
 class API_SubDomains_Scan:
 
     def find_subdomains(self, **kwargs):
+        if self.args.subapi :
+            self.start = timeit.default_timer()
+        else :
+           pass    
   
         pattern = r"https?://(?:www\.)?([^/\s]+)" 
         domain = str("".join(re.findall(pattern, self.args.URL)))
         if not domain:
-            domain = self.args.URL.strip()
+            domain = self.args.URL.strip()    
         subdomains = None
         try:
             url = f"https://api.hackertarget.com/hostsearch/?q={domain}"
@@ -29,7 +33,6 @@ class API_SubDomains_Scan:
                     print(f"{O}[*]API_refrance  ...........|   Using Hackertarget API{s}")
         except Exception:
             pass
-
         if not subdomains:
             try:
                 url = f"https://crt.sh/?q=%25.{domain}&output=json"
@@ -37,13 +40,13 @@ class API_SubDomains_Scan:
                 if resp.status_code == 200:
                     try:
                         data = resp.json()
-                        subdomains = list({entry["name_value"] for entry in data})
+                        subdomains = list({entry["common_name"] for entry in data})
                         print(f"{O}[*]API_refrance  ...........| Using crt.sh API{s}")
                     except Exception:
                         pass
             except Exception:
                 pass
-
+        
         if not subdomains:
             try:
                 url = f"https://rapiddns.io/subdomain/{domain}?full=1"
@@ -74,6 +77,7 @@ class API_SubDomains_Scan:
             with open(".Sdomain", "a+") as f:
                 f.write(f"[*]MainDomain ...........| {domain}\n")
                 for sub, ip in results:
+                    self.count4 +=1
                     time.sleep(.20)
                     print(f"[+]Sub-Domain ...........| https://{sub:<50} ---------| {ip}")
                     f.write(f"[+]Sub-Domain ...........| https://{sub:<50} ---------| {ip}\n")
