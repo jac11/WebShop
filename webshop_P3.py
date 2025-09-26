@@ -28,14 +28,15 @@ class Shopping:
         self.depth = 0
         self.headers = {"User-Agent": "Mozilla/5.0"}
         self.count1 = self.count2 = self.count3 = self.count4 = self.count5 = self.count6 = self.count7 = 0
-        self.banner= R+f"""
-              ██     ██ ███████ ██████  ███████ ██   ██  ██████  ██████  
-              ██     ██ ██      ██   ██ ██      ██   ██ ██    ██ ██   ██ 
-              ██  █  ██ █████   ██████  ███████ ███████ ██    ██ ██████  
-              ██ ███ ██ ██      ██   ██      ██ ██   ██ ██    ██ ██      
-               ███ ███  ███████ ██████  ███████ ██   ██  ██████  ██      
-                                        """+O+"""@jacstory"""+s  
-        print(self.banner+'\n')
+        self.banner = R + f"""
+          ██     ██ ███████ ██████  ███████ ██   ██  ██████  ██████  
+          ██     ██ ██      ██   ██ ██      ██   ██ ██    ██ ██   ██ 
+          ██  █  ██ █████   ██████  ███████ ███████ ██    ██ ██████  
+          ██ ███ ██ ██      ██   ██      ██ ██   ██ ██    ██ ██      
+           ███ ███  ███████ ██████  ███████ ██   ██  ██████  ██      
+                                    """ + O + """@jacstory""" + s
+    # Ensure clean print
+        print(self.banner.strip() + '\n')
         self.control()
         self.main()  
     def APIKEY(self):
@@ -343,9 +344,12 @@ class Shopping:
                 r'https?://[a-zA-Z0-9.-]+[^ "\']*api[^ "\']*',
                 r'https?://[a-zA-Z0-9\.-]+/api/[a-zA-Z0-9/_-]+',
                 r'https?://[a-zA-Z0-9\.-]+/v\d+/[a-zA-Z0-9/_-]+',
-                r'["\'](/[a-zA-Z0-9_-]*/api/[a-zA-Z0-9/_-]+)["\']',
+                r'["\'](/[a-zA-Z0-9_-]*/api/[a-zA-Z0-9/_-]+)["\']', 
                 r'["\'](/[a-zA-Z0-9_-]*/v\d+/[a-zA-Z0-9/_-]+)["\']'
             ]
+            def is_valid_endpoint(url):
+                invalid_indicators = ['`', '${', '};', '?token=', '?key=']
+                return not any(indicator in url for indicator in invalid_indicators)
             seen_apis = set()
 
             try:
@@ -359,6 +363,8 @@ class Shopping:
                     for pattern in api_patterns:
                         matches = re.findall(pattern, html, re.IGNORECASE)
                         for api in matches:
+                            if not is_valid_endpoint(api): 
+                                continue
                             norm_api = api.strip().rstrip("/")
                             if norm_api not in seen_apis:
                                 seen_apis.add(norm_api)
@@ -376,7 +382,7 @@ class Shopping:
                                     tag = "[text]"
                                 except Exception:
                                     code_fmt = R+"[ERR]"+s
-                                    tag = "[Error]"
+                                    tag = "[Err]"
                                 print(f"{O}{tag}{s} link {code_fmt} ...........| {norm_api}")
                                 self.output.writelines(f"{O}{tag}{s} link  {code} ...........| {norm_api}\n")
                                 time.sleep(0.20)
