@@ -15,7 +15,7 @@ import socket
 import warnings
 import datetime
 
-
+p  = "\033[96m"
 R  = "\033[91m"
 s  = "\033[0m"
 O  ='\33[37m'  
@@ -309,6 +309,7 @@ class Shopping:
                     all_Links.add(norm_full)
                     print(f"[+] link {code_fmt} ...........| {norm_full}")
                     self.output.writelines(f"[+] link  {code} ...........| {norm_full}\n")
+
             self.output.writelines("\n###-Discover js Script\n" + "="*25 + "\n")
             print(f"{R}\n###-Discover js Script {s}")
             print("="*25 + "\n")
@@ -336,59 +337,76 @@ class Shopping:
                     all_Links.add(norm_js)
                     print(f"[+] link {code_fmt} ...........| {norm_js}")
                     self.output.writelines(f"[+] link  {code} ...........| {norm_js}\n")
+
             self.output.writelines("\n###-Discover API Endpoints\n" + "="*25 + "\n")
             print(f"{R}\n###-Discover API Endpoints {s}")
             print("="*25 + "\n")
+            self.output.writelines("\n###-Discover API Endpoints\n" + "="*25 + "\n")
 
-            api_patterns = [
-                r'https?://[a-zA-Z0-9.-]+[^ "\']*api[^ "\']*',
-                r'https?://[a-zA-Z0-9\.-]+/api/[a-zA-Z0-9/_-]+',
-                r'https?://[a-zA-Z0-9\.-]+/v\d+/[a-zA-Z0-9/_-]+',
-                r'["\'](/[a-zA-Z0-9_-]*/api/[a-zA-Z0-9/_-]+)["\']', 
-                r'["\'](/[a-zA-Z0-9_-]*/v\d+/[a-zA-Z0-9/_-]+)["\']'
-            ]
-            def is_valid_endpoint(url):
-                invalid_indicators = ['`', '${', '};', '?token=', '?key=']
-                return not any(indicator in url for indicator in invalid_indicators)
+            def is_valid_api(url):
+                  
+                invalid = ['`', '${', '};', '?token=', '?key=', 'example', 'localhost', '127.0.0.1', '</', '<a', 'href=']
+                if any(indicator in url.lower() for indicator in invalid):
+                    return False
+                
+                static_files = ['.js', '.css', '.png', '.jpg', '.jpeg', '.gif', '.svg', '.ico']
+                if any(url.lower().endswith(ext) for ext in static_files):
+                    return False
+                
+                api_keywords = ['/api/', '/v1/', '/v2/', '/v3/', '/rest/', '/graphql/', '-api']
+                return any(keyword in url.lower() for keyword in api_keywords)
+
             seen_apis = set()
 
-            try:
-                for page in all_Links:
-                    try:
-                        resp = self.session.get(page, headers=self.headers, timeout=10)
-                        html = resp.text
-                    except:
-                        continue
-
-                    for pattern in api_patterns:
+            for page in all_Links:
+                try:
+                    resp = self.session.get(page, headers=self.headers, timeout=10)
+                    html = resp.text
+                    base_domain = '/'.join(page.split('/')[:3])
+                    
+                    patterns = [
+                        r'https?://[a-zA-Z0-9.-]+[^"\']*api[^"\']*',
+                        r'https?://[a-zA-Z0-9.-]+/api/[a-zA-Z0-9/_-]+',
+                        r'https?://[a-zA-Z0-9.-]+/v\d+/[a-zA-Z0-9/_-]+',
+                        r'["\'](/[a-zA-Z0-9_-]*/api/[a-zA-Z0-9/_-]+)["\']',
+                        r'["\'](/[a-zA-Z0-9_-]*/v\d+/[a-zA-Z0-9/_-]+)["\']'
+                    ]
+                    
+                    for pattern in patterns:
                         matches = re.findall(pattern, html, re.IGNORECASE)
                         for api in matches:
-                            if not is_valid_endpoint(api): 
-                                continue
-                            norm_api = api.strip().rstrip("/")
-                            if norm_api not in seen_apis:
-                                seen_apis.add(norm_api)
+                            if api.startswith('/'):
+                                full_url = base_domain + api
+                            else:
+                                full_url = api
+                            
+                            if full_url not in seen_apis and is_valid_api(full_url):
+                                seen_apis.add(full_url)
+                                norm_api = full_url.strip().rstrip("/")
+                                
                                 try:
                                     r = requests.get(norm_api, headers=self.headers, timeout=5)
                                     code = str(r.status_code)
                                     content_type = r.headers.get("Content-Type", "").lower()
-                                    if "application/json"  not in content_type:
-                                        code_fmt = f"{O}[{code}]{s}"
-                                        tag = "[json]"
+                                    
+                                    if "application/json" in content_type:
+                                        tag = f"{p}[JSON]{s}"
+                                        self.count6 += 1
+                                    elif any(x in content_type for x in ['xml', 'text/plain']):
+                                        tag = "[Text]"
                                         self.count6 += 1
                                     else:
                                         continue
-                                    code_fmt = f"{R}[{code}]{s}"
-                                    tag = "[text]"
+                                    
+                                    code_fmt = f"{O}[{code}]{s}"
+                                    print(f"{O}{tag}{s} link {code_fmt} ...........| {norm_api}")
+                                    self.output.writelines(f"{O}{tag}{s} link  {code} ...........| {norm_api}\n")
+                                    time.sleep(0.15)
+                                    
                                 except Exception:
-                                    code_fmt = R+"[ERR]"+s
-                                    tag = "[Err]"
-                                print(f"{O}{tag}{s} link {code_fmt} ...........| {norm_api}")
-                                self.output.writelines(f"{O}{tag}{s} link  {code} ...........| {norm_api}\n")
-                                time.sleep(0.20)
-
-            except Exception as e:
-                print("[-] Error fetching page for API scan:", e)
+                                    continue
+                except Exception as e:
+                  continue
         except requests.exceptions.ConnectionError:
            print("[-] Error: No status line received - the server closed the connection")
            return
@@ -527,7 +545,10 @@ class Shopping:
                         sub_domain_url_join = sub_domain_url_join[0:-1]
                     else:
                         sub_domain_url_join = sub_domain_url_join   
-                    requests.get(sub_domain_url_join, timeout=3)
+                    try:    
+                        requests.get(sub_domain_url_join, timeout=3)
+                    except requests.exceptions.InvalidURL:
+                        continue    
                 except requests.ConnectionError:
                     print("[+]Sub-Domain ...........|", sub_domain_url_join)
                     sys.stdout.write('\x1b[1A')
