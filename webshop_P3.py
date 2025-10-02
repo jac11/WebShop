@@ -703,8 +703,9 @@ class Shopping:
                     "  2. API Key Mode → only -K is needed\n",
         formatter_class=argparse.RawTextHelpFormatter
     )
-
-
+        
+        scan_group = parser.add_argument("--man",action="store_true",
+            help="display man page")
         scan_group = parser.add_argument_group("Scan Options",
             "Options for scanning a target domain (require --URL).")
         apikey_group = parser.add_argument_group("API Key Options",
@@ -787,6 +788,10 @@ class Shopping:
         
         
     def main(self):
+        if self.args.man:
+           from info import  ManPage
+           ManPage()
+           exit()
         if self.args.APIKEY :
             self.APIKEY()
             exit()

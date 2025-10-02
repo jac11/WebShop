@@ -16,14 +16,6 @@ class ManPage:
               WEBSHOP - Links - Forms input - Subdomain - robots.txt and Email Discovery Tool
               
 
-              ██     ██ ███████ ██████  ███████ ██   ██  ██████  ██████  
-              ██     ██ ██      ██   ██ ██      ██   ██ ██    ██ ██   ██ 
-              ██  █  ██ █████   ██████  ███████ ███████ ██    ██ ██████  
-              ██ ███ ██ ██      ██   ██      ██ ██   ██ ██    ██ ██      
-               ███ ███  ███████ ██████  ███████ ██   ██  ██████  ██      
-                                        @jacstory
-
-
               usage: webshop_P3.py [-h] [-K APIKEY] [--URL URL] [-w WORDLIST] [-E] [-S] [-a]
                      [-R] [--api] [-s] [--pdf]
 
