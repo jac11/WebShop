@@ -24,7 +24,8 @@ class ManPage:
                                         @jacstory
 
 
-       usage: webshop_P3.py [-h] [-K APIKEY] [--URL URL] [-w WORDLIST] [-E] [-S] [-a] [--api] [-s] [--man]
+              usage: webshop_P3.py [-h] [-K APIKEY] [--URL URL] [-w WORDLIST] [-E] [-S] [-a]
+                     [-R] [--api] [-s] [--pdf]
 
               WebShop: Subdomain and Email Discovery Tool
 
@@ -45,10 +46,12 @@ class ManPage:
                 -S, --subdomain       Discover subdomains using a wordlist
                 -a, --all             Run all discovery modules (subdomains, emails, APIs).
                                       If combined with --api, wordlist-based subdomain discovery is skipped.
+                -R, --robots          Discover robots.txt file.
+                                      If combined with --api, wordlist-based subdomain discovery is skipped.
                 --api                 Use API-based subdomain discovery (crt.sh, RapidDNS, Hackertarget).
                                       When used with --all, disables wordlist brute-force and only uses APIs.
                 -s, --subapi          Fetch subdomains specifically using the crt.sh, RapidDNS, Hackertarget API
-                --man                 show man page 
+                --pdf                 Generate output report in PDF format
 
               API Key Options:
                 Options for managing/storing API keys.
@@ -60,6 +63,7 @@ class ManPage:
                   - Subdomain discovery via APIs (crt.sh, RapidDNS, Hackertarget)
                   - Email harvesting from target domains
                   - API key management and storage (host.io WHOIS info)
+                  - PDF report generation
 
               Two primary modes are available:
 
@@ -68,7 +72,7 @@ class ManPage:
 
        
 
-       SYNOPSI
+       SYNOPSIS
 
               webshop.py --URL https://www.example.com [OPTIONS]
 
@@ -112,6 +116,17 @@ class ManPage:
                      Fetch subdomains specifically via APIs.
                      Does not run email discovery or brute-force.
 
+              --pdf
+                     Generate a professional PDF report of the scan results.
+                     The report will include:
+                        - Scan metadata (date, target, options used)
+                        - Discovered subdomains
+                        - Found email addresses
+                        - Links and forms information
+                        - API results (if used)
+                     
+                     Example: --URL https://example.com -a --pdf
+
               -K, --APIKEY APIKEY
 
                      Provide or store an API key for domain analysis (WHOIS info via host.io).
@@ -146,6 +161,10 @@ class ManPage:
                         webshop_P3.py --URL https://example.com -a 
                      Using custom wordlist:
                         webshop_P3.py --URL https://example.com -a -w medium_list.txt
+
+              Generate PDF report:
+                     webshop_P3.py --URL https://example.com -a --pdf
+                     webshop_P3.py --URL https://example.com -E -S --pdf
 
              
        EXIT STATUS

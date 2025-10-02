@@ -44,24 +44,24 @@ class Shopping:
             self.start = timeit.default_timer()
             self.session = requests.Session()
             if not os.path.exists(".APIKEY.KEY") and not self.args.APIKEY:
-                print("###-WHOIS INFO\n")
-                print("[+] API-File   ............| No APIKEY Found\n")
-                print(O+"[+] How to Get a Host.io API Key".upper()+s)
+                print("WHOIS INFORMATION\n")
+                print("[+] API file   ............| No API key found\n")
+                print(O + "[+] How to obtain a host.io API key".upper() + s)
                 lines = [
                         
                         "_"*40,
-                        "\n  1. Go to: https://host.io",
-                        "  2. Click: Sign Up (GitHub or Google login works).",
-                        "  3. After login: Open your Dashboard.",
+                        "\n  1. Visit: https://host.io",
+                        "  2. Sign up (GitHub or Google login is supported).",
+                        "  3. After signing in, open your dashboard.",
                         "  4. Copy your API key (token).",
-                        "  5. Use it in your script like this:",
+                        "  5. Provide it to the script as follows:",
                         "_"*40,
-                        "\n  <Usage> python webshop_p3.py -K  YOUR_API_KEY <Usage> ",
+                        "\n  Usage: python webshop_p3.py -K YOUR_API_KEY",
                         "_"*40,
-                        "\n⚠️  Notes:",
+                        "\nIMPORTANT NOTES:",
                         "_"*40,
-                        "\n   - Free accounts: limited daily requests.",
-                        "   - Paid plans: higher limits & detailed data.\n",
+                        "\n   - Free accounts have limited daily requests.",
+                        "   - Paid plans offer higher limits and more detailed data.\n",
                         "_"*40
                     ]
 
@@ -72,18 +72,18 @@ class Shopping:
             elif os.path.exists(".APIKEY.KEY") and self.args.APIKEY:   
                 with open(".APIKEY.KEY", 'w') as key_file:
                     key_file.write(self.args.APIKEY)  
-                print("\n###-API_INFO\n")  
-                print('[+]APIKEY     ............| ',self.args.APIKEY)
-                print('[+]API-File   ............| ',"file///.APIKEY.KEY") 
+                print("\nAPI KEY INFORMATION\n")  
+                print('[+] API Key     ............| ',self.args.APIKEY)
+                print('[+] API key file............| ',"file:///.APIKEY.KEY") 
                 print("="*30)
                
                 
             else:
                 with open(".APIKEY.KEY", 'r') as key_file:
                     self.args.APIKEY = key_file.read()
-                self.output.writelines("\n###-API_INFO\n")  
-                self.output.writelines('[+]APIKEY     ............| '+self.args.APIKEY+"\n")
-                self.output.writelines('[+]API-File   ............| '+"file///.APIKEY.KEY\n") 
+                self.output.writelines("\nAPI KEY INFORMATION\n")  
+                self.output.writelines('[+] API Key     ............| '+self.args.APIKEY+"\n")
+                self.output.writelines('[+] API key file............| '+"file:///.APIKEY.KEY\n") 
                 self.output.writelines("="*30+"\n")
 
             def APIKEYCALL(self) :  
@@ -110,103 +110,103 @@ class Shopping:
                             
                         time.sleep(.30)        
                     try:        
-                        print(f"{R}\n###-WHOIS INFO\n{s}")
+                        print(f"{R}\nWHOIS INFORMATION\n{s}")
                         print("="*30)
-                        print(f"{O}\nDomain-info{s}")
+                        print(f"{O}\nDomain information{s}")
                         print("_"*15+'\n')
-                        self.output.writelines("\n###-WHOIS INFO")
+                        self.output.writelines("\nWHOIS INFORMATION")
                         self.output.writelines("\n"+"="*30+"\n")
-                        self.output.writelines("\nDomain-info"+"\n")
+                        self.output.writelines("\nDomain information"+"\n")
                         self.output.writelines("_"*15+'\n\n')
                         time.sleep(0.25)
-                        print('   [+]MainDomain   ............| ',data['domain'])
-                        self.output.writelines('   [+]MainDomain   ............| '+ data['domain']+'\n')
+                        print('   [+] Main domain   ............| ',data['domain'])
+                        self.output.writelines('   [+] Main domain   ............| '+ data['domain']+'\n')
                         time.sleep(0.25)
-                        print('   [+]URL          ............| ', self.args.URL)
-                        self.output.writelines('   [+]URL          ............| '+  self.args.URL+'\n')
+                        print('   [+] URL           ............| ', self.args.URL)
+                        self.output.writelines('   [+] URL           ............| '+  self.args.URL+'\n')
                         time.sleep(0.25)
-                        print('   [+]Rank         ............| ', data['web']['rank'])
-                        self.output.writelines('   [+]Rank         ............| '+ str(data['web']['rank'])+'\n')
+                        print('   [+] Rank          ............| ', data['web']['rank'])
+                        self.output.writelines('   [+] Rank          ............| '+ str(data['web']['rank'])+'\n')
                         time.sleep(0.25)
-                        print('   [+]GTM          ............| ', data['web']['gtm']) 
-                        self.output.writelines('   [+]GTM          ............| '+ data['web']['gtm']+'\n')   
+                        print('   [+] GTM           ............| ', data['web']['gtm']) 
+                        self.output.writelines('   [+] GTM           ............| '+ data['web']['gtm']+'\n')   
                     except UnboundLocalError:
-                            print('   [+]MainDomain     ............| ',self.args.URL)
-                            print('   [+]APIKEY-Status   ............| Error Facth The ipinfo')
+                            print('   [+] Main domain    ............| ',self.args.URL)
+                            print('   [+] API key status...........| Failed to retrieve WHOIS information')
                             print("_"*15+'\n')
-                            self.output.writelines('   [+]MainDomain     ............| '+self.args.URL)
-                            self.output.writelines('   [+]APIKEY-Status   ............| Error Facth The ipinfo')
+                            self.output.writelines('   [+] Main domain    ............| '+self.args.URL)
+                            self.output.writelines('   [+] API key status...........| Failed to retrieve WHOIS information')
                             self.output.writelines("_"*15+'\n')
                     except KeyError:
                          pass
                     try:
                                  
-                        print(f"{O}\nIp-info{s}") 
-                        self.output.writelines("\nIp-info\n")
+                        print(f"{O}\nIP information{s}") 
+                        self.output.writelines("\nIP information\n")
                         print("_"*15+'\n')  
                         self.output.writelines("_"*15+'\n\n')
                         time.sleep(0.25)
-                        print('   [+]Ip-address   ............| ',data['dns']['a'][0])
-                        self.output.writelines('   [+]Ip-address   ............| '+data['dns']['a'][0]+'\n')
+                        print('   [+] IP address    ............| ',data['dns']['a'][0])
+                        self.output.writelines('   [+] IP address    ............| '+data['dns']['a'][0]+'\n')
                         time.sleep(0.25)
-                        print('   [+]City         ............| ',data['ipinfo'][data['dns']['a'][0]]['city'])
-                        self.output.writelines('   [+]City         ............| '+data['ipinfo'][data['dns']['a'][0]]['city']+'\n')
+                        print('   [+] City          ............| ',data['ipinfo'][data['dns']['a'][0]]['city'])
+                        self.output.writelines('   [+] City          ............| '+data['ipinfo'][data['dns']['a'][0]]['city']+'\n')
                         time.sleep(0.25)
-                        print('   [+]Country      ............| ',data['ipinfo'][data['dns']['a'][0]]['country'])
-                        self.output.writelines('   [+]Country      ............| '+data['ipinfo'][data['dns']['a'][0]]['country']+'\n')
+                        print('   [+] Country       ............| ',data['ipinfo'][data['dns']['a'][0]]['country'])
+                        self.output.writelines('   [+] Country       ............| '+data['ipinfo'][data['dns']['a'][0]]['country']+'\n')
                         time.sleep(0.25)
-                        print('   [+]Server       ............| ',data['ipinfo'][data['dns']['a'][0]]['asn']['domain'])
-                        self.output.writelines('   [+]Server       ............| '+data['ipinfo'][data['dns']['a'][0]]['asn']['domain']+'\n')
+                        print('   [+] Hosting       ............| ',data['ipinfo'][data['dns']['a'][0]]['asn']['domain'])
+                        self.output.writelines('   [+] Hosting       ............| '+data['ipinfo'][data['dns']['a'][0]]['asn']['domain']+'\n')
                         time.sleep(0.25)
-                        print('   [+]Router       ............| ',data['ipinfo'][data['dns']['a'][0]]['asn']['route'])
-                        self.output.writelines('   [+]Router       ............| '+data['ipinfo'][data['dns']['a'][0]]['asn']['route']+'\n')
+                        print('   [+] Route         ............| ',data['ipinfo'][data['dns']['a'][0]]['asn']['route'])
+                        self.output.writelines('   [+] Route         ............| '+data['ipinfo'][data['dns']['a'][0]]['asn']['route']+'\n')
                         time.sleep(0.25)
-                        print('   [+]Type         ............| ',data['ipinfo'][data['dns']['a'][0]]['asn']['type'])
-                        self.output.writelines('   [+]Type         ............| '+data['ipinfo'][data['dns']['a'][0]]['asn']['type']+'\n')
+                        print('   [+] ASN type      ............| ',data['ipinfo'][data['dns']['a'][0]]['asn']['type'])
+                        self.output.writelines('   [+] ASN type      ............| '+data['ipinfo'][data['dns']['a'][0]]['asn']['type']+'\n')
                     except KeyError:
                          pass  
                     except UnboundLocalError :
-                        print('   [+]APIKEY-Status   ............| Error Facth The info')
+                        print('   [+] API key status...........| Failed to retrieve IP information')
                         print("_"*15+'\n')
-                        self.output.writelines('   [+]APIKEY-Status   ............| Error Facth The info')
+                        self.output.writelines('   [+] API key status...........| Failed to retrieve IP information')
                         self.output.writelines("_"*15+'\n')     
                     try:     
-                        print(f"{O}\nDNS-info{s}") 
-                        self.output.writelines("\nDNS-info\n")
-                        print("_"*15+'\n\n')
-                        self.output.writelines("_"*15+'\n\n')
+                        print(f"{O}\nDNS information{s}") 
+                        self.output.writelines("\nDNS information\n")
+                        print("_"*15 + '\n\n')
+                        self.output.writelines("_"*15 + '\n\n')
                         for  dns in data['dns']['mx']:
                             time.sleep(0.25)
-                            print('   [+]MX           ............| ', dns[0:-1])
-                            self.output.writelines('   [+]MX           ............| '+ dns[0:-1]+'\n')
+                            print('   [+] MX record    ............| ', dns[0:-1])
+                            self.output.writelines('   [+] MX record    ............| '+ dns[0:-1]+'\n')
                         for  dns in data['dns']['ns']:
-                            print('   [+]NS           ............| ', dns[0:-1]) 
-                            self.output.writelines('   [+]NS           ............| '+ dns[0:-1]+'\n')
+                            print('   [+] NS record    ............| ', dns[0:-1]) 
+                            self.output.writelines('   [+] NS record    ............| '+ dns[0:-1]+'\n')
                             time.sleep(0.25)   
                     except KeyError:
                          pass   
                     except UnboundLocalError :  
-                        print('   [+]APIKEY-Status   ............| Error Facth The info')
+                        print('   [+] API key status...........| Failed to retrieve DNS information')
                         print("_"*15+'\n')
-                        self.output.writelines('   [+]APIKEY-Status   ............| Error Facth The info')
+                        self.output.writelines('   [+] API key status...........| Failed to retrieve DNS information')
                         self.output.writelines("_"*15+'\n')   
                     try :        
-                        print(f"{O}\nSocailMeddia-info{s}")
-                        self.output.writelines("\nSocailMeddia-info\n")
+                        print(f"{O}\nSocial media links{s}")
+                        self.output.writelines("\nSocial media links\n")
                         print("_"*15+'\n') 
                         self.output.writelines("_"*15+'\n\n')   
                         for  web in data['web']['links']:
                             time.sleep(.25)
-                            print('   [+]Meddia       ............| '+ web) 
-                            self.output.writelines('   [+]Meddia       ............| '+ web+'\n') 
+                            print('   [+] Link         ............| '+ web) 
+                            self.output.writelines('   [+] Link         ............| '+ web+'\n') 
                         print("_"*15+'\n')
                         self.output.writelines("_"*15+'\n')  
                     except KeyError:
                          pass
                     except UnboundLocalError:
-                        print('   [+]APIKEY-Status   ............| Error Facth The ipinfo')
+                        print('   [+] API key status...........| Failed to retrieve social media information')
                         print("_"*15+'\n')
-                        self.output.writelines('   [+]APIKEY-Status   ............| Error Facth The info')
+                        self.output.writelines('   [+] API key status...........| Failed to retrieve social media information')
                         self.output.writelines("_"*15+'\n')  
                 else:
                     pass  
@@ -229,14 +229,14 @@ class Shopping:
                     return re.findall('(?:href=")(.*?)"', str(response.content))  
                 else:
                     print("="*25)
-                    self.output.writelines("[-]link ..........| No links Discover " + '\n' + "="*25)
+                    self.output.writelines("[-]link ..........| No links discovered\n" + "="*25)
                     self.output.writelines("[*]input  ...........| " + self.target_url + '\n')  
-                    print('[-]link ..........| No links Discover ')
-                    print("[&]web  ..........| This Website login required to grep information ")
+                    print('[-] No links discovered.')
+                    print("[&] Note: This website may require authentication to extract information.")
                     exit()
             except requests.exceptions.ConnectionError:
                 print("="*25)
-                print("[-]Error  ..........| No status line received - the server has closed the connection")
+                print("[-] Connection error: The server closed the connection unexpectedly.")
                 exit()
         except KeyboardInterrupt:
             print(self.banner)
@@ -247,8 +247,8 @@ class Shopping:
         seen_links = getattr(self, "seen_links", set())
         self.seen_links = seen_links
         try:
-            self.output.writelines("\n###-Discover links\n" + "="*25 + "\n")
-            print(f"{R}\n###-Discover links static structure {s}")
+            self.output.writelines("\nDISCOVERED LINKS\n" + "="*25 + "\n")
+            print(f"{R}\nDISCOVERED LINKS (static structure) {s}")
             print("="*25 + "\n")
             herf_links = self.extract_links_form()
             for link in herf_links:
@@ -270,12 +270,12 @@ class Shopping:
                         code_fmt = f"{R}[{code}]{s}"
                     self.count1 += 1
                     all_Links.add(norm_link)
-                    print(f"[+] link {code_fmt} ...........| {norm_link}")
-                    self.output.writelines(f"[+] link  {code} ...........| {norm_link}\n")
+                    print(f"[+] Link {code_fmt} ...........| {norm_link}")
+                    self.output.writelines(f"[+] Link  {code} ...........| {norm_link}\n")
             with open(".data.txt", "w") as file_links:
                 file_links.writelines("%s\n" % i for i in self.target_links)
-            self.output.writelines("\n###-Discover Hidden Links\n" + "="*25 + "\n")
-            print(f"{R}\n###-Discover Hidden Links {s}")
+            self.output.writelines("\nHIDDEN LINKS\n" + "="*25 + "\n")
+            print(f"{R}\nHIDDEN LINKS {s}")
             print("="*25 + "\n")
             html_re = self.session.get(url, headers=self.headers, timeout=10)
             html = html_re.text
@@ -307,11 +307,11 @@ class Shopping:
                         code_fmt = f"{R}[{code}]{s}"
                     self.count2 += 1
                     all_Links.add(norm_full)
-                    print(f"[+] link {code_fmt} ...........| {norm_full}")
-                    self.output.writelines(f"[+] link  {code} ...........| {norm_full}\n")
+                    print(f"[+] Link {code_fmt} ...........| {norm_full}")
+                    self.output.writelines(f"[+] Link  {code} ...........| {norm_full}\n")
 
-            self.output.writelines("\n###-Discover js Script\n" + "="*25 + "\n")
-            print(f"{R}\n###-Discover js Script {s}")
+            self.output.writelines("\nJAVASCRIPT FILES\n" + "="*25 + "\n")
+            print(f"{R}\nJAVASCRIPT FILES {s}")
             print("="*25 + "\n")
             for script in soup.find_all("script", src=True):
                 src = script["src"]
@@ -335,13 +335,13 @@ class Shopping:
                         code_fmt = f"{R}[{code}]{s}"
                     self.count3 += 1
                     all_Links.add(norm_js)
-                    print(f"[+] link {code_fmt} ...........| {norm_js}")
-                    self.output.writelines(f"[+] link  {code} ...........| {norm_js}\n")
+                    print(f"[+] File {code_fmt} ...........| {norm_js}")
+                    self.output.writelines(f"[+] File  {code} ...........| {norm_js}\n")
 
-            self.output.writelines("\n###-Discover API Endpoints\n" + "="*25 + "\n")
-            print(f"{R}\n###-Discover API Endpoints {s}")
+            self.output.writelines("\nAPI ENDPOINTS\n" + "="*25 + "\n")
+            print(f"{R}\nAPI ENDPOINTS {s}")
             print("="*25 + "\n")
-            self.output.writelines("\n###-Discover API Endpoints\n" + "="*25 + "\n")
+            self.output.writelines("\nAPI ENDPOINTS\n" + "="*25 + "\n")
 
             def is_valid_api(url):
                   
@@ -393,14 +393,16 @@ class Shopping:
                                         tag = f"{p}[JSON]{s}"
                                         self.count6 += 1
                                     elif any(x in content_type for x in ['xml', 'text/plain']):
-                                        tag = "[Text]"
+                                        tag = f"{O}[Text]{s}"
                                         self.count6 += 1
                                     else:
                                         continue
-                                    
-                                    code_fmt = f"{O}[{code}]{s}"
-                                    print(f"{O}{tag}{s} link {code_fmt} ...........| {norm_api}")
-                                    self.output.writelines(f"{O}{tag}{s} link  {code} ...........| {norm_api}\n")
+                                    if "200" in code:
+                                        code_fmt = f"{O}[{code}]{s}"
+                                    else:
+                                        code_fmt = f"{R}[{code}]{s}"    
+                                    print(f"{tag} link {code_fmt} ...........| {norm_api}")
+                                    self.output.writelines(f"{tag} link  {code} ...........| {norm_api}\n")
                                     time.sleep(0.15)
                                     
                                 except Exception:
@@ -408,7 +410,7 @@ class Shopping:
                 except Exception as e:
                   continue
         except requests.exceptions.ConnectionError:
-           print("[-] Error: No status line received - the server closed the connection")
+           print("[-] Error: Connection error — the server closed the connection.")
            return
         except KeyboardInterrupt:
             print(self.banner)
@@ -418,11 +420,11 @@ class Shopping:
 
         warnings.filterwarnings("ignore", category=XMLParsedAsHTMLWarning)
         try:
-            self.output.write("\n###-Discover Forms" + '\n' + '='*25 + '\n')
+            self.output.write("\nFORMS FOUND\n" + '\n' + '='*25 + '\n')
             try:
                 with open('.data.txt', 'r') as read_line:
                     self.line_read = read_line.readlines()
-                    print(f"{R}\n###-Discover Form {s}")
+                    print(f"{R}\nFORM DISCOVERY {s}")
                     print('='*25)
                     print()
                     unique_actions = set()
@@ -437,15 +439,15 @@ class Shopping:
                                 header_html = BeautifulSoup(response.content, 'lxml')
                             except Exception :
                                 self.replace = self.line.replace('\n', '')
-                                print(f"[*]link ...........| {self.replace}")
-                                print("[*]Form ...........| No Form Discover")
+                                print(f"[*] URL ...........| {self.replace}")
+                                print("[*] Form ..........| No form found")
                                 sys.stdout.write('\x1b[1A'); sys.stdout.write('\x1b[2K')
                                 sys.stdout.write('\x1b[1A'); sys.stdout.write('\x1b[2K')
                         try:      
                             if not response.ok:
                                 self.replace = self.line.replace('\n', '')
-                                print(f"[*]link ...........| {self.replace}")
-                                print("[*]Form ...........| No Form Discover")
+                                print(f"[*] URL ...........| {self.replace}")
+                                print("[*] Form ..........| No form found")
                                 sys.stdout.write('\x1b[1A'); sys.stdout.write('\x1b[2K')
                                 sys.stdout.write('\x1b[1A'); sys.stdout.write('\x1b[2K')
                         except UnboundLocalError :        
@@ -460,47 +462,47 @@ class Shopping:
                                     unique_actions.add(self.action)
                                     self.url_path = urllib.parse.urljoin(self.line, self.action)
                                     self.method = form.get('method')
-                                    self.output.writelines('\n' + "###-Discover Form " + '\n' + '='*25 + '\n')
-                                    self.output.writelines(f"[+]link   ...........| {self.line}")
-                                    self.output.writelines(f"[*]action ...........| {self.url_path}\n")
-                                    self.output.writelines(f"[*]method ...........| {str(self.method)}\n")
-                                    print(f"[+]link   ...........| {self.line}".replace('\n',''))
-                                    print(f"[*]action ...........| {self.url_path}")
-                                    print(f"[*]method ...........| {self.method}")
-                                    print(f"{O}\nForm_Detalis"+'\n'+'_'*12+f'\n{s}')
-                                    self.output.writelines("\nForm_Detalis"+'\n'+'_'*12+'\n')
+                                    self.output.writelines('\n' + "FORM DETAILS\n" + '='*25 + '\n')
+                                    self.output.writelines(f"[+] URL   ...........| {self.line}")
+                                    self.output.writelines(f"[*] action ..........| {self.url_path}\n")
+                                    self.output.writelines(f"[*] method ..........| {str(self.method)}\n")
+                                    print(f"[+] URL   ...........| {self.line}".replace('\n',''))
+                                    print(f"[*] Action ..........| {self.url_path}")
+                                    print(f"[*] Method ..........| {self.method}")
+                                    print(f"{O}\nForm details"+'\n'+'_'*12+f'\n{s}')
+                                    self.output.writelines("\nForm details"+'\n'+'_'*12+'\n')
                                     for input in self.list_input:
                                         self.input_get = input.get('name')
                                         self.type = input.get('type')
                                         self.value = input.get('value')
                                         countform += 1
-                                        self.output.writelines(f"    [*]input     ...........| {str(self.input_get)}\n")
-                                        self.output.writelines(f"    [*]type      ...........| {str(self.type)}\n")
-                                        self.output.writelines(f"    [*]value     ...........| {str(self.value)}\n")
-                                        print(f"    [*]input     ...........| {self.input_get}")
-                                        print(f"    [*]type      ...........| {self.type}")
-                                        print(f"    [*]value     ...........| {self.value}")
+                                        self.output.writelines(f"    [*] Input name ...........| {str(self.input_get)}\n")
+                                        self.output.writelines(f"    [*] Type      ...........| {str(self.type)}\n")
+                                        self.output.writelines(f"    [*] Default   ...........| {str(self.value)}\n")
+                                        print(f"    [*] Input name ...........| {self.input_get}")
+                                        print(f"    [*] Type      ...........| {self.type}")
+                                        print(f"    [*] Default   ...........| {self.value}")
                                     print('\n'+'='*25+'\n')    
                             else:
                                 self.replace = self.line.replace('\n', '')
-                                print(f"[*]link ...........| {self.replace}")
-                                print("[*]Form ...........| No Form Discover")
+                                print(f"[*] URL ...........| {self.replace}")
+                                print("[*] Form ..........| No form found")
                                 sys.stdout.write('\x1b[1A'); sys.stdout.write('\x1b[2K')
                                 sys.stdout.write('\x1b[1A'); sys.stdout.write('\x1b[2K')
                         except UnboundLocalError :    
                             self.replace = self.line.replace('\n', '')
-                            print(f"[*]link ...........| {self.replace}")
-                            print("[*]Form ...........| No Form Discover")
+                            print(f"[*] URL ...........| {self.replace}")
+                            print("[*] Form ..........| No form found")
                             sys.stdout.write('\x1b[1A'); sys.stdout.write('\x1b[2K')
                             sys.stdout.write('\x1b[1A'); sys.stdout.write('\x1b[2K')    
                         
                     if countform == 0:
-                        print("[*] Status ...........| No Form Discovered")
+                        print("[*] Status ...........| No forms were discovered")
             except KeyboardInterrupt:
                 print(self.banner)
                 exit()
         except requests.exceptions.ConnectionError:
-            print("[-]Error ..........| No status line received - the server is down")
+            print("[-] Connection error: the target server appears to be down.")
             pass
         except KeyboardInterrupt:
             print(self.banner)
@@ -508,19 +510,19 @@ class Shopping:
                       
     def sub_domain(self):   
         try:
-            print(f"{R}\n###-Discover sub-Domain{s}")
+            print(f"{R}\nSUBDOMAIN DISCOVERY{s}")
             print('='*25)
             print()
             self.target_url = self.args.URL
-            output_11 = self.output.write('\n' + "###-Discover sub-Domain" + '\n' + '='*25 + '\n')
+            output_11 = self.output.write('\n' + "SUBDOMAIN DISCOVERY" + '\n' + '='*25 + '\n')
             if 'http://' in self.target_url:      
                 url_replase = self.target_url.replace('http://', '')
             elif 'https://' in self.target_url: 
                 url_replase = self.target_url.replace('https://', '')
             if 'www.' in self.target_url: 
                 url_replase = url_replase.replace('www.', '')
-            print ('[*]MainDomain ...........|', url_replase)
-            output_12 = self.output.write('[*+]MainDomain ...........| ' + url_replase + '\n')
+            print ('[*] Main domain  ...........|', url_replase)
+            output_12 = self.output.write('[*] Main domain  ...........| ' + url_replase + '\n')
             try:
                 if not self.args.wordlist:
                     wordlist = "./small_list.txt"
@@ -530,7 +532,7 @@ class Shopping:
                     content = sub_read.read()
                     subdomain = content.splitlines()
             except IOError:
-                print("[*]wordlist  ...........| File Not Exist")
+                print("[*] Error: Specified wordlist file does not exist.")
                 exit()
             for sub in subdomain:
                 if "https://" in self.args.URL:
@@ -540,7 +542,6 @@ class Shopping:
                     sub_domain_url = 'http://', sub, '.', url_replase
                     sub_domain_url_join = ''.join(sub_domain_url)
                 try:
-                    #requests.get(sub_domain_url_join) 
                     if "/" in sub_domain_url_join[-1]:
                         sub_domain_url_join = sub_domain_url_join[0:-1]
                     else:
@@ -550,7 +551,7 @@ class Shopping:
                     except requests.exceptions.InvalidURL:
                         continue    
                 except requests.ConnectionError:
-                    print("[+]Sub-Domain ...........|", sub_domain_url_join)
+                    print("[+] Unreachable  ...........|", sub_domain_url_join)
                     sys.stdout.write('\x1b[1A')
                     sys.stdout.write('\x1b[2K')
                 else:
@@ -558,13 +559,13 @@ class Shopping:
                         socket.setdefaulttimeout(1)
                         SubIp = socket.gethostbyname(sub_domain_url_join.replace("https://",""))
                     except Exception :
-                       print("[+]Sub-Domain ...........|", sub_domain_url_join)
+                       print("[+] Subdomain lookup failed ...........|", sub_domain_url_join)
                        sys.stdout.write('\x1b[1A')
                        sys.stdout.write('\x1b[2K')
                     else:  
                         self.count4 +=1 
-                        print("[+]Sub-Domain ...........| "+f'{sub_domain_url_join:<35}',f'{"---------|":>15}', SubIp)
-                        output_13 = self.output.writelines("[+]Sub-Domain ...........| "+f'{sub_domain_url_join:<35}'+f'{"---------| ":>15}'+SubIp+'\n')
+                        print("[+] Subdomain    ...........| "+f'{sub_domain_url_join:<35}',f'{"---------|":>15}', SubIp)
+                        output_13 = self.output.writelines("[+] Subdomain   ...........| "+f'{sub_domain_url_join:<35}'+f'{"---------| ":>15}'+SubIp+'\n')
                         list_domain = []
                         if sub_domain_url_join not in list_domain:
                             list_domain.append(sub_domain_url_join)
@@ -575,15 +576,15 @@ class Shopping:
             print(self.banner)
             exit()
         except requests.exceptions.ConnectionError:
-            print("[-]Error  ..........| No status line received - the server has closed the connection")
+            print("[-] Connection error: the server closed the connection.")
             exit()
     def Email_Scan(self):
         try:
             with open('.data.txt', 'r') as read_line:
                 self.line_read = read_line.readlines()
-            print(f"{R}\n###-Discover Emails{s}")
+            print(f"{R}\nEMAIL DISCOVERY{s}")
             print("=" * 25)
-            output_14 = self.output.write('\n' + "###-Discover Emails " + '\n' + '=' * 25 + '\n')
+            output_14 = self.output.write('\n' + "EMAIL DISCOVERY " + '\n' + '=' * 25 + '\n')
             email_list = []
             for self.line in self.line_read:
                 replace_spaces = self.line.strip()
@@ -594,25 +595,25 @@ class Shopping:
                         if not email.endswith(('.png', '.jpg', '.jpeg', '.gif', '.zip')):
                             if email not in email_list:
                                 email_list.append(email)
-                                print("[+]Email ...........| ", email)
+                                print("[+] Email found ...........| ", email)
                                 self.count5 +=1
-                                output_13 = self.output.writelines("[+]Email ...........| " + email + '\n')
+                                output_13 = self.output.writelines("[+] Email found ...........| " + email + '\n')
                 except requests.exceptions.ConnectionError:
-                    print("[-]Error  ..........| No status line received - the server has closed the connection")
+                    print("[-] Connection error: the server closed the connection.")
                     continue  
                 if not emails:
-                    list_of_messages = ['.....patience.....', '......wait.....', '.....Email-Scan.....']
+                    list_of_messages = ['... please wait ...', '... scanning ...', '... email scan in progress ...']
                     random_message = random.choice(list_of_messages)
-                    print("[+]Email ...........| ", random_message)
+                    print("[+] Email ...........| ", random_message)
                     sys.stdout.write('\x1b[1A')
                     sys.stdout.write('\x1b[2K')
 
-            output_20 = self.output.write("[-]Email ...........| Email Scan finish" + '\n')
+            output_20 = self.output.write("[-] Email scan completed" + '\n')
         except KeyboardInterrupt:
             print(self.banner)
             exit()
     def robotstxt_read(self):
-        print(f"{R}\n###-Discover Robots.txt{s}")
+        print(f"{R}\nROBOTS.TXT DISCOVERY{s}")
         print("="*25)
         num = 0 
         try:
@@ -622,7 +623,7 @@ class Shopping:
                    self.line_domain.append(self.args.URL)
                 else:
                     self.line_domain = read_line_sub.readlines()
-                output_15 = self.output.write('\n' + "###-Discover Robots.txt" + '\n' + '=' * 25 + '\n')
+                output_15 = self.output.write('\n' + "ROBOTS.TXT DISCOVERY" + '\n' + '=' * 25 + '\n')
             for robots in self.line_domain:
                 self.link_robot = urllib.parse.urljoin(robots, '/robots.txt')
                 self.link_robot_str = str(self.link_robot)
@@ -638,41 +639,41 @@ class Shopping:
                         num +=1
                         Parse = Parse.replace('<html>', '').replace('</body>', '').replace('<body>', '').replace('<p>', '').replace('</p>', '')
                         Beautiful_robots1 = "\n".join(Parse.replace('</html>', '').replace("b'",'').replace("'",'').split("\\n"))
-                        output_15 = self.output.write('\n' + "###-Discover Robots.txt" + '\n' + '=' * 25 + '\n')
-                        print("[*]link ..........|", self.link_robot+'\n')
+                        output_15 = self.output.write('\n' + "ROBOTS.TXT DISCOVERY" + '\n' + '=' * 25 + '\n')
+                        print("[*] File URL ..........|", self.link_robot+'\n')
                         print(('*' * 30))
                         print(Beautiful_robots1)
                         print(('*' * 30))
-                        output_16 = self.output.write("[*]link ..........| " + self.link_robot + '\n' + '*' * 25 + '\n')
+                        output_16 = self.output.write("[*] File URL ..........| " + self.link_robot + '\n' + '*' * 25 + '\n')
                         output_17 = self.output.writelines(Beautiful_robots1 + '\n' + '*' * 25 + '\n')
                         #links = set(re.findall(r'(?<=Disallow:\s).*|(?<=Allow:\s).*', Beautiful_robots1) )
                         links = set(re.findall(r'^(?:Disallow|Allow|Sitemap):\s*(\S+)', Beautiful_robots1 , re.MULTILINE))
                         
-                        print(O+"\nRobots.txt_Detalis"+'\n'+'_'*12+s+'\n')
-                        self.output.writelines("\nRobots.txt_Detalis"+'\n'+'_'*12+'\n\n')
+                        print(O+"\nRobots.txt details"+'\n'+'_'*12+s+'\n')
+                        self.output.writelines("\nRobots.txt details"+'\n'+'_'*12+'\n\n')
                         for data in links :
                             if 'User-agent: *' in data  or 'user-agent: *' in data:
                                 pass
                             if self.args.URL in data:
                                 time.sleep(.20)
-                                print("   [*]link ..........|", data.strip().replace('\n',''))
-                                output_17 = self.output.writelines(f"    [*]link ..........| {data.strip().replace('\n','')}\n")
+                                print("   [*] Path ..........|", data.strip().replace('\n',''))
+                                output_17 = self.output.writelines(f"    [*] Path ..........| {data.strip().replace('\n','')}\n")
 
                             else:    
                                 time.sleep(.20)
-                                print("   [*]link ..........|", self.args.URL+data.strip().replace('\n',''))
-                                output_17 = self.output.writelines(f"    [*]link ..........| {self.args.URL+data.strip().replace('\n','')}\n")
+                                print("   [*] Path ..........|", self.args.URL+data.strip().replace('\n',''))
+                                output_17 = self.output.writelines(f"    [*] Path ..........| {self.args.URL+data.strip().replace('\n','')}\n")
                                 self.count7 +=1
                         print(O+'_'*30+s+'\n')
                     else:
-                        print("[+]Check-robots.txt  ...........|",self.link_robot )
+                        print("[+] No robots.txt entries detected at", self.link_robot )
                         sys.stdout.write('\x1b[1A')
                         sys.stdout.write('\x1b[2K')
 
             else:
                 if num == 0 :
-                     print("\n[*]Robots.txt ..........| No Robots.txt Found ")
-                output_21 = self.output.write('\n' + "[*]Robots.txt ..........| Robots.txt Scan finish  " + '\n')
+                     print("\n[*] robots.txt ..........| No robots.txt file found")
+                output_21 = self.output.write('\n' + "[*] robots.txt ..........| robots.txt scan complete  " + '\n')
                 try:
                     if os.path.isfile(".domain"):
                         os.remove(".domain")
@@ -687,12 +688,12 @@ class Shopping:
             print(self.banner)
             exit()
         except IOError:
-            print(f"{R}\n###-Discover Robots.txt{s}")
+            print(f"{R}\nROBOTS.TXT DISCOVERY{s}")
             print("=" * 25)
-            print("[-]Robots.txt ..........| NO Robots.txt Discover")
+            print("[-] robots.txt ..........| No robots.txt discovered")
             exit()
         except requests.exceptions.ConnectionError:
-            print("[-]Error  ..........| No status line received - the server has closed the connection")
+            print("[-] Connection error: the server closed the connection.")
             pass
     def control(self):
         parser = argparse.ArgumentParser(
@@ -729,9 +730,9 @@ class Shopping:
             help="Use API-based subdomain discovery (crt.sh, RapidDNS, Hackertarget).\n"
                  "When used with --all, disables wordlist brute-force and only uses APIs.")
         scan_group.add_argument("-s", "--subapi", action="store_true",
-            help="Fetch subdomains specifically using the Hackertarget API")
+            help="Fetch subdomains specifically using the crt.sh, RapidDNS, Hackertarget API")
         scan_group.add_argument("--pdf", action="store_true",
-            help="make output report file pdf format")
+            help="Generate output report in PDF format")
         self.args = parser.parse_args()
         scanning_opts = any([  self.args.pdf,self.args.wordlist, 
                                self.args.email, self.args.api,
@@ -758,24 +759,27 @@ class Shopping:
         O+"\n" + "="*40 + "\n" +
         R+"📊  Scan Summary Report\n" +
         O+"="*40 + "\n" +
-        f"📅 Today                : {today}\n"+
-        f"🟢 Scan Started         : {start_str}\n"+
-        f"🔴 Scan Finished        : {stop_str}\n"+
-        f"⏱️  Total Duration       : {Tresult}\n"+
+        f"📅 Date                 : {today}\n"+
+        f"🟢 Scan started         : {start_str}\n"+
+        f"🔴 Scan finished        : {stop_str}\n"+
+        f"🕦 Total duration       : {Tresult}\n"+
         O+"_"*30+'\n\n'+
-        f"{R}[+] Static Links Found     : {O} {self.count1}\n" +
-        f"{R}[+] Hidden Links Found     : {O} {self.count2}\n" +
-        f"{R}[+] JS Files Discovered    : {O} {self.count3}\n" +
-        f"{R}[+] Subdomains Found       : {O} {self.count4}\n" +
-        f"{R}[+] Emails Found           : {O} {self.count5}\n" +
-        f"{R}[+] API endPoint Found     : {O} {self.count6}\n" +
-        f"{R}[+] Robots.txt Discovered  : {O} {self.count7}\n" +
+        f"{R}[+] Static links found  : {O} {self.count1}\n" +
+        f"{R}[+] Hidden links found  : {O} {self.count2}\n" +
+        f"{R}[+] JS files discovered : {O} {self.count3}\n" +
+        f"{R}[+] Subdomains found    : {O} {self.count4}\n" +
+        f"{R}[+] Emails found        : {O} {self.count5}\n" +
+        f"{R}[+] API endpoints found : {O} {self.count6}\n" +
+        f"{R}[+] Robots.txt entries  : {O} {self.count7}\n" +
         O+"="*40 + "\n" +
-        R+"✅ Scan Finished Successfully\n" +
+        R+"✅ Scan completed successfully\n" +
         O+"="*40+s + "\n"
         )
         print(self.summary)
-        print("[+]Report-Scan ..........| file://"+os.getcwd()+"/Webshop_"+str(self.resreach.group(1))+".txt")  
+        if self.args.pdf:
+            print("[+] Report saved to........| file://"+os.getcwd()+"/Webshop_"+str(self.resreach.group(1))+".pdf")  
+        else:
+             print("[+] Report saved to........| file://"+os.getcwd()+"/Webshop_"+str(self.resreach.group(1))+".txt")  
         print(self.banner)
         output_A = self.output.writelines('\n\n'+str(self.summary.\
         replace(f"{O}",'').replace(f"{R}",'').replace(f"{s}",''))+ self.banner.replace(f'{R}','')\
@@ -815,7 +819,7 @@ class Shopping:
                 API.find_subdomains(self, args=self.control) 
                 with open("./.Sdomain",'r') as readf:
                     readS = readf.read()
-                output_C = self.output.writelines("\n###-Discover sub-Domain_API"+"\n"+'='*25+"\n"+readS+"\n")   
+                output_C = self.output.writelines("\nSUBDOMAIN (API)\n"+'='*25+"\n"+readS+"\n")   
                 os.remove("./.Sdomain") 
             else:    
                 self.sub_domain() 
@@ -834,7 +838,7 @@ class Shopping:
                 API.find_subdomains(self, args=self.control)
                 with open("./.Sdomain",'r') as readf:
                     readS = readf.read()
-                output_C = self.output.writelines("\n###-Discover sub-Domain_API"+"\n"+'='*25+"\n"+readS+"\n")  
+                output_C = self.output.writelines("\nSUBDOMAIN (API)\n"+'='*25+"\n"+readS+"\n")  
                 os.remove("./.Sdomain")
         
         self.print_summary()
@@ -845,6 +849,7 @@ class Shopping:
             txt_file = "Webshop_" + self.resreach.group(1) + ".txt"
             pdf_file = txt_file.replace(".txt", ".pdf")
             pdf.txt_to_pdf(txt_file, pdf_file)
+            os.remove(txt_file)
 
 
 if __name__ == "__main__":
