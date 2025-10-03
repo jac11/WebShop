@@ -213,7 +213,7 @@ class Shopping:
                              
             APIKEYCALL(self)
           
-    def extract_links_form(self,):
+    def extract_links_form(self):
        
         try:
             self.session = requests.Session()  
@@ -234,10 +234,13 @@ class Shopping:
                     print('[-] No links discovered.')
                     print("[&] Note: This website may require authentication to extract information.")
                     exit()
+
             except requests.exceptions.ConnectionError:
                 print("="*25)
                 print("[-] Connection error: The server closed the connection unexpectedly.")
                 exit()
+            
+
         except KeyboardInterrupt:
             print(self.banner)
             exit()
@@ -247,33 +250,67 @@ class Shopping:
         seen_links = getattr(self, "seen_links", set())
         self.seen_links = seen_links
         try:
-            self.output.writelines("\nDISCOVERED LINKS\n" + "="*25 + "\n")
-            print(f"{R}\nDISCOVERED LINKS (static structure) {s}")
-            print("="*25 + "\n")
+            if self.args.email :
+                print(f"{R}\nEMAIL DISCOVERY{s}")
+                print("=" * 25)
+                output_14 = self.output.write('\n' + "EMAIL DISCOVERY " + '\n' + '=' * 25 + '\n') 
+
+            else:    
+                self.output.writelines("\nDISCOVERED LINKS\n" + "="*25 + "\n")
+                print(f"{R}\nDISCOVERED LINKS (static structure) {s}")
+                print("="*25 + "\n")
             herf_links = self.extract_links_form()
-            for link in herf_links:
-                link = urllib.parse.urljoin(str(self.target_url), str(link))
-                if "#" in link:
-                    link = link.split('#')[0]
-                norm_link = link.strip().rstrip("/")
-                if self.target_url in link and norm_link not in self.target_links and norm_link not in seen_links:
-                    seen_links.add(norm_link)
-                    self.target_links.append(norm_link)
-                    try:
-                        resp = self.session.get(norm_link, headers=self.headers, timeout=5)
-                        code = str(resp.status_code)
-                    except:
-                        code = "ERR"
-                    if code == "200":
-                        code_fmt = f"{O}[{code}]{s}"
-                    else:
-                        code_fmt = f"{R}[{code}]{s}"
-                    self.count1 += 1
-                    all_Links.add(norm_link)
-                    print(f"[+] Link {code_fmt} ...........| {norm_link}")
-                    self.output.writelines(f"[+] Link  {code} ...........| {norm_link}\n")
-            with open(".data.txt", "w") as file_links:
-                file_links.writelines("%s\n" % i for i in self.target_links)
+            if not self.args.email:
+                for link in herf_links:
+                    link = urllib.parse.urljoin(str(self.target_url), str(link))
+                    if "#" in link:
+                        link = link.split('#')[0]
+                    norm_link = link.strip().rstrip("/")
+                    if self.target_url in link and norm_link not in self.target_links and norm_link not in seen_links:
+                        seen_links.add(norm_link)
+                        self.target_links.append(norm_link)
+                        try:
+                            resp = self.session.get(norm_link, headers=self.headers, timeout=5)
+                            code = str(resp.status_code)
+                        except:
+                            code = "ERR"
+                        if code == "200":
+                            code_fmt = f"{O}[{code}]{s}"
+                        else:
+                            code_fmt = f"{R}[{code}]{s}"
+                        self.count1 += 1
+                        all_Links.add(norm_link)
+                        print(f"[+] Link {code_fmt} ...........| {norm_link}")
+                        self.output.writelines(f"[+] Link  {code} ...........| {norm_link}\n")
+                with open(".data.txt", "w") as file_links:
+                    file_links.writelines("%s\n" % i for i in self.target_links)
+            else:
+                for link in herf_links:
+                    link = urllib.parse.urljoin(str(self.target_url), str(link))
+                    if "#" in link:
+                        link = link.split('#')[0]
+                    norm_link = link.strip().rstrip("/")
+                    if self.target_url in link and norm_link not in self.target_links and norm_link not in seen_links:
+                        seen_links.add(norm_link)
+                        self.target_links.append(norm_link)
+                        try:
+                            resp = self.session.get(norm_link, headers=self.headers, timeout=5) 
+                        except:
+                          continue  
+                with open(".data.txt", "w") as file_links:
+                    file_links.writelines("%s\n" % i for i in self.target_links)            
+                self.Email_Scan()
+                self.print_summary()   
+                self.output.close() 
+                if self.args.pdf:
+                    from pdfout import PDF_OUT
+                    pdf = PDF_OUT()
+                    txt_file = "Webshop_" + self.resreach.group(1) + ".txt"
+                    pdf_file = txt_file.replace(".txt", ".pdf")
+                    pdf.txt_to_pdf(txt_file, pdf_file)
+                    os.remove(txt_file)
+                    exit()
+                exit()               
             self.output.writelines("\nHIDDEN LINKS\n" + "="*25 + "\n")
             print(f"{R}\nHIDDEN LINKS {s}")
             print("="*25 + "\n")
@@ -463,10 +500,10 @@ class Shopping:
                                     self.url_path = urllib.parse.urljoin(self.line, self.action)
                                     self.method = form.get('method')
                                     self.output.writelines('\n' + "FORM DETAILS\n" + '='*25 + '\n')
-                                    self.output.writelines(f"[+] URL   ...........| {self.line}")
+                                    self.output.writelines(f"[+] URL    ..........| {self.line}")
                                     self.output.writelines(f"[*] action ..........| {self.url_path}\n")
                                     self.output.writelines(f"[*] method ..........| {str(self.method)}\n")
-                                    print(f"[+] URL   ...........| {self.line}".replace('\n',''))
+                                    print(f"[+] URL    ..........| {self.line}".replace('\n',''))
                                     print(f"[*] Action ..........| {self.url_path}")
                                     print(f"[*] Method ..........| {self.method}")
                                     print(f"{O}\nForm details"+'\n'+'_'*12+f'\n{s}')
@@ -477,11 +514,11 @@ class Shopping:
                                         self.value = input.get('value')
                                         countform += 1
                                         self.output.writelines(f"    [*] Input name ...........| {str(self.input_get)}\n")
-                                        self.output.writelines(f"    [*] Type      ...........| {str(self.type)}\n")
-                                        self.output.writelines(f"    [*] Default   ...........| {str(self.value)}\n")
+                                        self.output.writelines(f"    [*] Type       ...........| {str(self.type)}\n")
+                                        self.output.writelines(f"    [*] Default    ...........| {str(self.value)}\n")
                                         print(f"    [*] Input name ...........| {self.input_get}")
-                                        print(f"    [*] Type      ...........| {self.type}")
-                                        print(f"    [*] Default   ...........| {self.value}")
+                                        print(f"    [*] Type       ...........| {self.type}")
+                                        print(f"    [*] Default    ...........| {self.value}")
                                     print('\n'+'='*25+'\n')    
                             else:
                                 self.replace = self.line.replace('\n', '')
@@ -582,9 +619,12 @@ class Shopping:
         try:
             with open('.data.txt', 'r') as read_line:
                 self.line_read = read_line.readlines()
-            print(f"{R}\nEMAIL DISCOVERY{s}")
-            print("=" * 25)
-            output_14 = self.output.write('\n' + "EMAIL DISCOVERY " + '\n' + '=' * 25 + '\n')
+            if self.args.email:
+               pass 
+            else:        
+                print(f"{R}\nEMAIL DISCOVERY{s}")
+                print("=" * 25)
+                output_14 = self.output.write('\n' + "EMAIL DISCOVERY " + '\n' + '=' * 25 + '\n')
             email_list = []
             for self.line in self.line_read:
                 replace_spaces = self.line.strip()
@@ -595,7 +635,7 @@ class Shopping:
                         if not email.endswith(('.png', '.jpg', '.jpeg', '.gif', '.zip')):
                             if email not in email_list:
                                 email_list.append(email)
-                                print("[+] Email found ...........| ", email)
+                                print("[+] Email found    ...........| ", email)
                                 self.count5 +=1
                                 output_13 = self.output.writelines("[+] Email found ...........| " + email + '\n')
                 except requests.exceptions.ConnectionError:
@@ -604,7 +644,7 @@ class Shopping:
                 if not emails:
                     list_of_messages = ['... please wait ...', '... scanning ...', '... email scan in progress ...']
                     random_message = random.choice(list_of_messages)
-                    print("[+] Email ...........| ", random_message)
+                    print("[+] Email Scaning  ...........| ", random_message)
                     sys.stdout.write('\x1b[1A')
                     sys.stdout.write('\x1b[2K')
 
@@ -833,7 +873,7 @@ class Shopping:
         else:
             if self.args.email:
                 self.extract_links_form()
-                self.discover_link()
+                self.discover_link(self.args.URL)
                 self.Email_Scan()
             elif self.args.subdomain:
                 self.sub_domain()
