@@ -223,8 +223,13 @@ class Shopping:
             else:
                 pass
             self.target_links = []
+            headers = {
+                            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+                            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                        }
             try:
-                response = self.session.get(self.target_url) 
+                response = self.session.get(self.target_url,headers=headers) 
+
                 if response.ok:
                     return re.findall('(?:href=")(.*?)"', str(response.content))  
                 else:
@@ -585,7 +590,7 @@ class Shopping:
                         sub_domain_url_join = sub_domain_url_join   
                     try:    
                         requests.get(sub_domain_url_join, timeout=3)
-                    except requests.exceptions.InvalidURL:
+                    except Exception:
                         continue    
                 except requests.ConnectionError:
                     print("[+] Unreachable  ...........|", sub_domain_url_join)
