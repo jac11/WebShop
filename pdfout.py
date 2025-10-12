@@ -8,8 +8,7 @@ from reportlab.lib.units import inch
 
 class PDF_OUT:
     def __init__(self):
-        pass  # no auto-run
-
+        pass  
     def txt_to_pdf(self, input_file, output_file):
         if not os.path.isfile(input_file):
             print(f"[-] Input file not found: {input_file}")
@@ -32,7 +31,6 @@ class PDF_OUT:
             clean_content = re.sub(r'\x1b\[[0-9;]*[A-Za-z]', '', content)
             lines = clean_content.splitlines()
             total_lines = len(lines)
-            print(f"[+] Processing {total_lines} lines with font: {current_font}")
 
             for line in lines:
                 if y_position < inch:
@@ -62,7 +60,6 @@ class PDF_OUT:
                     y_position -= line_height
 
             c.save()
-            print(f"[+] PDF successfully saved as {output_file}")
             return True
 
         except Exception as e:
