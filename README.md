@@ -56,7 +56,7 @@ python webshop.py --URL https://example.com [options]
 | `-R`, `--robots`    | Fetch and display `robots.txt`. <br>If combined with `--api`, brute-force is skipped. |
 | `--api`             | Discover subdomains using public APIs (`crt.sh`, `RapidDNS`, `Hackertarget`). <br>When used with `--all`, disables brute-force. |
 | `-s`, `--subapi`    | Fetch subdomains specifically via public APIs only (crt.sh, RapidDNS, Hackertarget). |
-| `--pdf`             | Generate a PDF report of the scan results (metadata, discovered subdomains, found emails, links/forms, API results). Optionally accepts an output filename if you implement `--pdf /path/to/report.pdf`. |
+| `--pdf`             | Generate a PDF report of the scan results (metadata, discovered subdomains, found emails, links/forms, API results). Optionally accepts an output filename if you implement . |
 | `-K`, `--APIKEY`    | Provide or store an API key for domain analysis (if a future API requires one). Stored in `.APIKEY.KEY`. |
 
 ---
