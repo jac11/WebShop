@@ -27,7 +27,6 @@ class Shopping:
         self.depth = 0
         self.headers = {"User-Agent": "Mozilla/5.0"}
         self.count1 = self.count2 = self.count3 = self.count4 = self.count5 = self.count6 = self.count7 = 0
-        self.path = str(os.path.expanduser('~'))+"/.APIKEY.KEY"
         self.banner = R + f"""
           ██     ██ ███████ ██████  ███████ ██   ██  ██████  ██████  
           ██     ██ ██      ██   ██ ██      ██   ██ ██    ██ ██   ██ 
@@ -41,7 +40,7 @@ class Shopping:
     def APIKEY(self):
             self.start = timeit.default_timer()
             self.session = requests.Session()
-            if not os.path.exists(self.path) and not self.args.APIKEY:
+            if not os.path.exists(".APIKEY.KEY") and not self.args.APIKEY:
                 print("WHOIS INFORMATION\n")
                 print("[+] API file   ............| No API key found\n")
                 print(O + "[+] How to obtain a host.io API key".upper() + s)
@@ -64,25 +63,23 @@ class Shopping:
                 for line in lines:
                     print(R+line+s)
                     time.sleep(0.25)              
-            elif not os.path.exists(self.path) and self.args.APIKEY:   
-                with open(self.path, 'w') as key_file:
+            elif os.path.exists(".APIKEY.KEY") and self.args.APIKEY:   
+                with open(".APIKEY.KEY", 'w') as key_file:
                     key_file.write(self.args.APIKEY)  
                 print("\nAPI KEY INFORMATION\n")  
                 print('[+] API Key     ............| ',self.args.APIKEY)
-                print('[+] API key file............| ',"file://"+self.path)
+                print('[+] API key file............| ',"file:///.APIKEY.KEY") 
                 print("="*30)
-                exit()
             else:
-                with open(self.path, 'r') as key_file:
+                with open(".APIKEY.KEY", 'r') as key_file:
                     self.args.APIKEY = key_file.read()
                 self.output.writelines("\nAPI KEY INFORMATION\n")  
                 self.output.writelines('[+] API Key     ............| '+self.args.APIKEY+"\n")
-                self.output.writelines('[+] API key file............| '"file://"+self.path+"\n") 
+                self.output.writelines('[+] API key file............| '+"file:///.APIKEY.KEY\n") 
                 self.output.writelines("="*30+"\n")
-                
             def APIKEYCALL(self) :  
                 if self.args.APIKEY :     
-                    with open(self.path,'r') as key_file:
+                    with open('.APIKEY.KEY', 'r') as key_file:
                         key = key_file.read().strip()
                     DominCheck = self.args.URL.split('//')[1].replace("www.","")  
                     url = f"https://host.io/api/full/{DominCheck.replace('/','')}?token={key}"
@@ -731,7 +728,15 @@ class Shopping:
         scan_group.add_argument("--URL",
             help="Target website URL (e.g., https://www.example.com)")
         scan_group.add_argument("-w", "--wordlist",
-            help="Path to wordlist file for subdomain brute-force discovery")
+            help='Path to wordlist file for subdomain brute-force discovery\n'
+                    'By default the tool uses the small built-in list (small_list.txt) — ~100 words\n'
+                    'The tool also includes three additional built-in lists and accepts either a\n'
+                    'list number (1-3) or a full file path:\n'
+                    '-w 1    Use the medium list (medium_list.txt) — ~1,000 words\n'
+                    '-w 2    Use the large list (large_list.txt)  — ~5,000 words\n'
+                    '-w 3    Use the very large list (big_large.txt) — ~10,000 words\n'
+                    'Alternatively, provide a custom path to a wordlist file:\n'
+                    '-w /path/to/wordlist.txt\n')
         scan_group.add_argument("-E", "--email", action="store_true",
             help="Discover email addresses from the target domain")
         scan_group.add_argument("-S", "--subdomain", action="store_true",
