@@ -46,18 +46,18 @@ python webshop.py --URL https://example.com [options]
 ---
 
 ## Command-Line Arguments
-
 | Option              | Description                                                           |
 |---------------------|-----------------------------------------------------------------------|
 | `--URL`             | **Required.** Target website URL (e.g., `https://example.com`).       |
-| `-w`, `--wordlist`  | Path to wordlist file for subdomain brute-force discovery.            |
+| `-w`, `--wordlist`  | Path or shortcut for wordlist used in brute-force subdomain discovery. By default the tool uses the small built-in list (`small_list.txt`) — ~100 words. Built-in shortcuts: `-w 1` → `medium_list.txt` (~1,000), `-w 2` → `large_list.txt` (~5,000), `-w 3` → `big_large.txt` (~10,000). Or pass a full path: `-w /path/to/wordlist.txt`. |
 | `-E`, `--email`     | Discover email addresses from the target domain.                      |
 | `-S`, `--subdomain` | Discover subdomains using a wordlist.                                 |
 | `-a`, `--all`       | Run all modules (subdomains, emails, robots, APIs). <br>If combined with `--api`, brute-force is skipped. |
 | `-R`, `--robots`    | Fetch and display `robots.txt`. <br>If combined with `--api`, brute-force is skipped. |
-| `--api`             | Discover subdomains using APIs (`crt.sh`, `RapidDNS`, `Hackertarget`). <br>When used with `--all`, disables brute-force. |
-| `-s`, `--subapi`    | Fetch subdomains specifically via Hackertarget API.                   |
-| `-K`, `--APIKEY`    | Provide or store an API key for domain analysis. Stored in `.APIKEY.KEY`. |
+| `--api`             | Discover subdomains using public APIs (`crt.sh`, `RapidDNS`, `Hackertarget`). <br>When used with `--all`, disables brute-force. |
+| `-s`, `--subapi`    | Fetch subdomains specifically via public APIs only (crt.sh, RapidDNS, Hackertarget). |
+| `--pdf`             | Generate a PDF report of the scan results (metadata, discovered subdomains, found emails, links/forms, API results). Optionally accepts an output filename if you implement `--pdf /path/to/report.pdf`. |
+| `-K`, `--APIKEY`    | Provide or store an API key for domain analysis (if a future API requires one). Stored in `.APIKEY.KEY`. |
 
 ---
 
