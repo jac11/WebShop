@@ -10,15 +10,14 @@ class ManPage:
     def man_info(self, **kwargs):
         try:
             INFO = """
-            
-                        ██     ██ ███████ ██████  ███████ ██   ██  ██████  ██████  
+                                  ██     ██ ███████ ██████  ███████ ██   ██  ██████  ██████  
                         ██     ██ ██      ██   ██ ██      ██   ██ ██    ██ ██   ██ 
                         ██  █  ██ █████   ██████  ███████ ███████ ██    ██ ██████  
                         ██ ███ ██ ██      ██   ██      ██ ██   ██ ██    ██ ██      
                          ███ ███  ███████ ██████  ███████ ██   ██  ██████  ██      
                                                   @jacstory
 
-              webshop \\- Links - Forms input - Subdomain - robots.txt and Email Discovery Tool
+              webshop \- Links - Forms input - Subdomain - robots.txt and Email Discovery Tool
               NAME
               WebShop: Subdomain and Email Discovery Tool
 
@@ -93,12 +92,37 @@ class ManPage:
 
               -w, --wordlist FILE
                      Path to wordlist file for brute-force subdomain discovery.
-                     The tool includes 4 lists:
-                        small_list.txt, medium_list.txt, large_list.txt, big_large.txt
-                     If not specified, the default is small_list.txt (100 subdomains).
 
-                     Example: -w medium_list.txt or -w /path/to/wordlist.txt
+                     By default the tool uses the small built-in list (small_list.txt) — ~100 words.
 
+                     The tool also includes three additional built-in lists and accepts either a
+                     list number (1-3) or a full file path:
+
+                       -w 1            Use the medium list (medium_list.txt) — ~1,000 words
+                       -w 2            Use the large list (large_list.txt)  — ~5,000 words
+                       -w 3            Use the very large list (big_large.txt) — ~10,000 words
+
+                     Alternatively, provide a custom path to a wordlist file:
+                       -w /path/to/wordlist.txt
+
+                     If -w is omitted the tool defaults to the small list (equivalent to no -w, or
+                     you may also explicitly pass -w small_list.txt).
+
+                     Examples:
+                       webshop --URL https://example.com -S
+                           (runs default small wordlist ~100 words)
+
+                       webshop --URL https://example.com -S -w 1
+                           (runs medium_list.txt ~1,000 words)
+
+                       webshop --URL https://example.com -S -w 2
+                           (runs large_list.txt ~5,000 words)
+
+                       webshop --URL https://example.com -S -w 3
+                           (runs big_large.txt ~10,000 words)
+
+                       webshop --URL https://example.com -S -w /home/user/lists/subs.txt
+                           (runs a custom user-provided wordlist)
               -S, --subdomain
                      Discover subdomains using a wordlist.  
                      Example: -S -w medium_list.txt     
@@ -221,6 +245,7 @@ class ManPage:
               Author: jac11
               Project: Webshop Tool
               GitHub: https://github.com/jac11
+
 
             """
             subprocess.run(['echo', INFO], text=True, check=True, stdout=subprocess.PIPE)
