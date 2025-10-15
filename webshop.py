@@ -539,7 +539,6 @@ class Shopping:
                     wordlist = "./small_list.txt"
                 elif "1" in self.args.wordlist:
                     wordlist = f"{self.path_wordlist}medium_list.txt"
-                    print(wordlist)
                 elif "2" in self.args.wordlist:
                     wordlist = f"{self.path_wordlist}large_list.txt" 
                 elif "3" in self.args.wordlist:
@@ -567,9 +566,11 @@ class Shopping:
                     try:    
                         requests.get(sub_domain_url_join, timeout=3)
                     except Exception:
-                        continue    
+                        print(f"{O}[+] Unreachable  ...........|{R} {sub_domain_url_join}{s}")
+                        sys.stdout.write('\x1b[1A')
+                        sys.stdout.write('\x1b[2K')   
                 except requests.ConnectionError:
-                    print("[+] Unreachable  ...........|", sub_domain_url_join)
+                    print(f"{O}[+] Unreachable  ...........|{R} {sub_domain_url_join}{s}")
                     sys.stdout.write('\x1b[1A')
                     sys.stdout.write('\x1b[2K')
                 else:
@@ -577,9 +578,9 @@ class Shopping:
                         socket.setdefaulttimeout(1)
                         SubIp = socket.gethostbyname(sub_domain_url_join.replace("https://",""))
                     except Exception :
-                       print("[+] Subdomain lookup failed ...........|", sub_domain_url_join)
-                       sys.stdout.write('\x1b[1A')
-                       sys.stdout.write('\x1b[2K')
+                        print(f"{O}[+] Unreachable  ...........|{R} {sub_domain_url_join}{s}")
+                        sys.stdout.write('\x1b[1A')
+                        sys.stdout.write('\x1b[2K')
                     else:  
                         self.count4 +=1 
                         print("[+] Subdomain    ...........| "+f'{sub_domain_url_join:<35}',f'{"---------|":>15}', SubIp)
