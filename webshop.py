@@ -27,6 +27,9 @@ class Shopping:
         self.depth = 0
         self.headers = {"User-Agent": "Mozilla/5.0"}
         self.count1 = self.count2 = self.count3 = self.count4 = self.count5 = self.count6 = self.count7 = 0
+        self.path = str(os.path.expanduser('~'))+"/.APIKEY.KEY"
+        self.path_wordlist = f"{os.path.dirname(os.path.abspath(__file__))}/"
+        print(self.path_wordlist)
         self.banner = R + f"""
           ██     ██ ███████ ██████  ███████ ██   ██  ██████  ██████  
           ██     ██ ██      ██   ██ ██      ██   ██ ██    ██ ██   ██ 
@@ -40,7 +43,7 @@ class Shopping:
     def APIKEY(self):
             self.start = timeit.default_timer()
             self.session = requests.Session()
-            if not os.path.exists(".APIKEY.KEY") and not self.args.APIKEY:
+            if not os.path.exists(self.path) and not self.args.APIKEY:
                 print("WHOIS INFORMATION\n")
                 print("[+] API file   ............| No API key found\n")
                 print(O + "[+] How to obtain a host.io API key".upper() + s)
@@ -63,23 +66,22 @@ class Shopping:
                 for line in lines:
                     print(R+line+s)
                     time.sleep(0.25)              
-            elif os.path.exists(".APIKEY.KEY") and self.args.APIKEY:   
-                with open(".APIKEY.KEY", 'w') as key_file:
+            elif not os.path.exists(self.path) or os.path.exists(self.path) and self.args.APIKEY:   
+                with open(self.path, 'w') as key_file:
                     key_file.write(self.args.APIKEY)  
                 print("\nAPI KEY INFORMATION\n")  
                 print('[+] API Key     ............| ',self.args.APIKEY)
-                print('[+] API key file............| ',"file:///.APIKEY.KEY") 
+                print('[+] API key file............| ',"file://"+self.path)
                 print("="*30)
+                exit()
+           
             else:
-                with open(".APIKEY.KEY", 'r') as key_file:
+                with open(self.path, 'r') as key_file:
                     self.args.APIKEY = key_file.read()
-                self.output.writelines("\nAPI KEY INFORMATION\n")  
-                self.output.writelines('[+] API Key     ............| '+self.args.APIKEY+"\n")
-                self.output.writelines('[+] API key file............| '+"file:///.APIKEY.KEY\n") 
-                self.output.writelines("="*30+"\n")
+                    
             def APIKEYCALL(self) :  
                 if self.args.APIKEY :     
-                    with open('.APIKEY.KEY', 'r') as key_file:
+                    with open(self.path,'r') as key_file:
                         key = key_file.read().strip()
                     DominCheck = self.args.URL.split('//')[1].replace("www.","")  
                     url = f"https://host.io/api/full/{DominCheck.replace('/','')}?token={key}"
@@ -536,8 +538,15 @@ class Shopping:
             try:
                 if not self.args.wordlist:
                     wordlist = "./small_list.txt"
-                else:    
-                    wordlist = self.args.wordlist
+                elif "1" in self.args.wordlist:
+                    wordlist = f"{self.path_wordlist}medium_list.txt"
+                    print(wordlist)
+                elif "2" in self.args.wordlist:
+                    wordlist = f"{self.path_wordlist}large_list.txt" 
+                elif "3" in self.args.wordlist:
+                    wordlist = f"{self.path_wordlist}big_large.txt"   
+                else:
+                    wordlist = self.args.wordlist        
                 with open(wordlist, 'r') as sub_read:
                     content = sub_read.read()
                     subdomain = content.splitlines()
