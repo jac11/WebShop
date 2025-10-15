@@ -10,14 +10,15 @@ class ManPage:
     def man_info(self, **kwargs):
         try:
             INFO = """
-                                  ██     ██ ███████ ██████  ███████ ██   ██  ██████  ██████  
+
+                        ██     ██ ███████ ██████  ███████ ██   ██  ██████  ██████  
                         ██     ██ ██      ██   ██ ██      ██   ██ ██    ██ ██   ██ 
                         ██  █  ██ █████   ██████  ███████ ███████ ██    ██ ██████  
                         ██ ███ ██ ██      ██   ██      ██ ██   ██ ██    ██ ██      
                          ███ ███  ███████ ██████  ███████ ██   ██  ██████  ██      
                                                   @jacstory
 
-              webshop \- Links - Forms input - Subdomain - robots.txt and Email Discovery Tool
+              webshop \\- Links - Forms input - Subdomain - robots.txt and Email Discovery Tool
               NAME
               WebShop: Subdomain and Email Discovery Tool
 
