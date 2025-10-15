@@ -29,7 +29,6 @@ class Shopping:
         self.count1 = self.count2 = self.count3 = self.count4 = self.count5 = self.count6 = self.count7 = 0
         self.path = str(os.path.expanduser('~'))+"/.APIKEY.KEY"
         self.path_wordlist = f"{os.path.dirname(os.path.abspath(__file__))}/"
-        print(self.path_wordlist)
         self.banner = R + f"""
           ██     ██ ███████ ██████  ███████ ██   ██  ██████  ██████  
           ██     ██ ██      ██   ██ ██      ██   ██ ██    ██ ██   ██ 
