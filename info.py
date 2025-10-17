@@ -213,14 +213,7 @@ class ManPage:
               https://github.com/jac11
 
        LICENSE
-              Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-              Upstream-Name: webshop
-              Source: https://github.com/jac11/Webshop
-
-              Files: *
-              Copyright: 2025 jac11
-              MIT-NoMod License
-    
+                 MIT-NoMod License
                 Copyright (c) 2025 jac11
                 
                 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -236,18 +229,18 @@ class ManPage:
                 
                 3. The Software may not be sold or distributed under a different name
                    or with altered functionality without written approval from jac11.
-
-              THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-              INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-              PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-              HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-              OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-              SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-              Author: jac11
-              Project: Webshop Tool
-              GitHub: https://github.com/jac11
-
+                
+                THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+                IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+                FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+                AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+                LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+                OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+                SOFTWARE.
+                
+                Author: jac11  
+                Project: WebShop Tool  
+                GitHub: https://github.com/jac11
 
             """
             subprocess.run(['echo', INFO], text=True, check=True, stdout=subprocess.PIPE)
