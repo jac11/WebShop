@@ -219,22 +219,23 @@ class ManPage:
 
               Files: *
               Copyright: 2025 jac11
-              License: MIT
-
-
-              Permission is hereby granted, free of charge, to any person obtaining a copy
-              of this software and associated documentation files (the “Software”), to use,
-              copy, and distribute the Software for personal, educational, or research purposes,
-              subject to the following conditions:
-
-              1. **No Modification Clause:**  
-                 Modification, alteration, reverse engineering, or redistribution of modified
-                 versions of this Software is strictly prohibited without explicit written
-                 permission from the author.
-
-              2. **Attribution Clause:**  
-                 All copies or redistributions must retain the above copyright notice,
-                 this list of conditions, and the following disclaimer.
+              MIT-NoMod License
+    
+                Copyright (c) 2025 jac11
+                
+                Permission is hereby granted, free of charge, to any person obtaining a copy
+                of this software and associated documentation files (the “Software”), to use,
+                copy, and distribute the Software, including for commercial purposes,
+                subject to the following conditions:
+                
+                1. Modification of the source code is NOT permitted without the express
+                   written permission of the copyright holder (jac11).
+                
+                2. Redistribution of the Software, whether modified or unmodified, must
+                   include this license and the above copyright notice.
+                
+                3. The Software may not be sold or distributed under a different name
+                   or with altered functionality without written approval from jac11.
 
               THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
               INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
