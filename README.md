@@ -36,14 +36,38 @@ pip install requests beautifulsoup4
 ---
 
 ## Usage
-
-Run with:
-
-```bash
-python webshop.py --URL https://example.com [options]
-```
-
----
+### as Debian Pacakge:
+  * WebShop installation guide for Debian-based systems (Kali, Ubuntu, Debian)
+  *  Step 1: Install dependencies
+    * pip install requests --break-system-packages
+    * pip install beautifulsoup4 --break-system-packages
+  * Step 2: Download Debian package
+    *  https://github.com/jac11/WebShop/releases/download/webshop/webshop_1.0-1_all.deb
+  * Step 3: Install package
+    * sudo dpkg -i webshop_1.0-1_all.deb
+  *  Step 4: Run the tool
+      * webshop -help
+      * webshop --man
+      * man webshop
+      * webshop --URL https://example.com [options]     
+  * provides full information on usage through the help or man commands.
+-----------------------------------------------------------------------------------------
+### as python tool:
+ * Step 1: Clone the repo :
+     * git clone  https://github.com/jac11/webshop
+     * cd webshop
+     * chmod +x webshop.py
+ *  Step 2: Install dependencies
+    * pip install -r requirements.txt
+       * or 
+    * pip install requests --break-system-packages
+    * pip install beautifulsoup4 --break-system-packages
+       
+ * step 3 run the code :
+      * webshop.py -help
+      * webshop.py --man
+      * ./webshop.py --URL https://example.com [options]
+------------------------------------------------------------------------------------------------
 
 ## Command-Line Arguments
 | Option              | Description                                                           |
