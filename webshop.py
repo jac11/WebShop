@@ -14,6 +14,7 @@ import random
 import socket
 import warnings
 import datetime
+import getpass
 
 p  = "\033[96m"
 R  = "\033[91m"
@@ -27,8 +28,13 @@ class Shopping:
         self.depth = 0
         self.headers = {"User-Agent": "Mozilla/5.0"}
         self.count1 = self.count2 = self.count3 = self.count4 = self.count5 = self.count6 = self.count7 = 0
-        self.path = str(os.path.expanduser('~'))+"/.APIKEY.KEY"
         self.path_wordlist = f"{os.path.dirname(os.path.abspath(__file__))}/"
+        self.dir_data_path = f"/home/{getpass.getuser()}/.local/share/WebShop/"
+        self.path = f"{self.dir_data_path}.APIKEY.KEY"
+        if not os.path.exists(self.dir_data_path):
+            os.makedirs(self.dir_data_path)
+
+
         self.banner = R + f"""
           ██     ██ ███████ ██████  ███████ ██   ██  ██████  ██████  
           ██     ██ ██      ██   ██ ██      ██   ██ ██    ██ ██   ██ 
@@ -69,8 +75,8 @@ class Shopping:
                 with open(self.path, 'w') as key_file:
                     key_file.write(self.args.APIKEY)  
                 print("\nAPI KEY INFORMATION\n")  
-                print('[+] API Key     ............| ',self.args.APIKEY)
-                print('[+] API key file............| ',"file://"+self.path)
+                print('[+] API Key      ............| ',self.args.APIKEY)
+                print('[+] API key file ............| ',"file://"+self.path)
                 print("="*30)
                 exit()
            
@@ -266,7 +272,7 @@ class Shopping:
                         all_Links.add(norm_link)
                         print(f"[+] Link {code_fmt} ...........| {norm_link}")
                         self.output.writelines(f"[+] Link  {code} ...........| {norm_link}\n")
-                with open(".data.txt", "w") as file_links:
+                with open(f"{self.dir_data_path}.data", "w") as file_links:
                     file_links.writelines("%s\n" % i for i in self.target_links)
             else:
                 for link in herf_links:
@@ -281,7 +287,7 @@ class Shopping:
                             resp = self.session.get(norm_link, headers=self.headers, timeout=5) 
                         except:
                           continue  
-                with open(".data.txt", "w") as file_links:
+                with open(f"{self.dir_data_path}.data", "w") as file_links:
                     file_links.writelines("%s\n" % i for i in self.target_links)            
                 self.Email_Scan()
                 self.print_summary()   
@@ -434,7 +440,7 @@ class Shopping:
         try:
             self.output.write("\nFORMS FOUND\n" + '\n' + '='*25 + '\n')
             try:
-                with open('.data.txt', 'r') as read_line:
+                with open(f"{self.dir_data_path}.data", 'r') as read_line:
                     self.line_read = read_line.readlines()
                     print(f"{R}\nFORM DISCOVERY {s}")
                     print('='*25)
@@ -536,7 +542,7 @@ class Shopping:
             output_12 = self.output.write('[*] Main domain  ...........| ' + url_replase + '\n')
             try:
                 if not self.args.wordlist:
-                    wordlist = "./small_list.txt"
+                    wordlist = f"{self.path_wordlist}small_list.txt"
                 elif "1" in self.args.wordlist:
                     wordlist = f"{self.path_wordlist}medium_list.txt"
                 elif "2" in self.args.wordlist:
@@ -589,7 +595,7 @@ class Shopping:
                         if sub_domain_url_join not in list_domain:
                             list_domain.append(sub_domain_url_join)
                             string_list = ''.join(list_domain)
-                        with open('.domain', 'a') as append_list:
+                        with open(f"{self.dir_data_path}.domain", 'a') as append_list:
                             append_list.write(string_list + '\n')
         except KeyboardInterrupt:
             print(self.banner)
@@ -599,7 +605,7 @@ class Shopping:
             exit()
     def Email_Scan(self):
         try:
-            with open('.data.txt', 'r') as read_line:
+            with open(f"{self.dir_data_path}.data", 'r') as read_line:
                 self.line_read = read_line.readlines()
             if self.args.email:
                pass 
@@ -640,7 +646,7 @@ class Shopping:
         print("="*25)
         num = 0 
         try:
-            with open('.domain', 'r') as read_line_sub:
+            with open(f"{self.dir_data_path}.domain", 'r') as read_line_sub:
                 if self.args.URL not in read_line_sub:
                    self.line_domain = read_line_sub.readlines()
                    self.line_domain.append(self.args.URL)
@@ -652,10 +658,10 @@ class Shopping:
                 self.link_robot_str = str(self.link_robot)
                 response_robots = requests.get(self.link_robot, data=None)
                # Beautiful_robots = str(BeautifulSoup(response_robots.content, 'lxml'))
-                with open (".2",'w') as code :
+                with open (f"{self.dir_data_path}.2",'w') as code :
                      code.write(str(response_robots.content))
 
-                with open(".2",'r') as code:
+                with open(f"{self.dir_data_path}.2",'r') as code:
                     Beautiful_robots = code.readlines()
                 for Parse in Beautiful_robots:
                     if "Disallow:" in Parse:
@@ -697,12 +703,12 @@ class Shopping:
                      print("\n[*] robots.txt ..........| No robots.txt file found")
                 output_21 = self.output.write('\n' + "[*] robots.txt ..........| robots.txt scan complete  " + '\n')
                 try:
-                    if os.path.isfile(".domain"):
-                        os.remove(".domain")
-                    if os.path.isfile('.data.txt'):
-                        os.remove('.data.txt') 
-                    if os.path.isfile(".2"):      
-                        os.remove(".2")  
+                    if os.path.isfile(f"{self.dir_data_path}.domain"):
+                        os.remove(f"{self.dir_data_path}.domain")
+                    if os.path.isfile(f"{self.dir_data_path}.data"):
+                        os.remove(f"{self.dir_data_path}.data") 
+                    if os.path.isfile(f"{self.dir_data_path}.2"):      
+                        os.remove(f"{self.dir_data_path}.2")  
                    
                 except IOError:
                     pass
@@ -829,12 +835,12 @@ class Shopping:
         self.resreach = re.search(pattern , self.args.URL)
         self.output = open(str("Webshop_"+self.resreach.group(1))+".txt", 'w')
         self.output.writelines('\n' + self.banner + '\n')
-        if os.path.isfile(".domain"):
-            os.remove(".domain")
-        if os.path.isfile(".2"):     
-           os.remove(".2")
-        with open(".data.txt",'w') as data:
-            with open('.domain','w') as domain:
+        if os.path.isfile(f"{self.dir_data_path}.domain"):
+            os.remove(f"{self.dir_data_path}.domain")
+        if os.path.isfile(f"{self.dir_data_path}.2"):     
+           os.remove(f"{self.dir_data_path}.2")
+        with open(f"{self.dir_data_path}.data",'w') as data:
+            with open(f"{self.dir_data_path}.domain",'w') as domain:
                 pass 
         if self.args.robots:
             self.robotstxt_read() 
@@ -848,10 +854,10 @@ class Shopping:
             if self.args.api :
                 from SubAPI import API_SubDomains_Scan as API
                 API.find_subdomains(self, args=self.control) 
-                with open("./.Sdomain",'r') as readf:
+                with open(f"{self.dir_data_path}.Sdomain",'r') as readf:
                     readS = readf.read()
                 output_C = self.output.writelines("\nSUBDOMAIN (API)\n"+'='*25+"\n"+readS+"\n")   
-                os.remove("./.Sdomain") 
+                os.remove(f"{self.dir_data_path}.Sdomain") 
             else:    
                 self.sub_domain() 
             self.robotstxt_read() 
@@ -866,10 +872,10 @@ class Shopping:
                 
                 from SubAPI import API_SubDomains_Scan as API
                 API.find_subdomains(self, args=self.control)
-                with open("./.Sdomain",'r') as readf:
+                with open(f"{self.dir_data_path}.Sdomain",'r') as readf:
                     readS = readf.read()
                 output_C = self.output.writelines("\nSUBDOMAIN (API)\n"+'='*25+"\n"+readS+"\n")  
-                os.remove("./.Sdomain")
+                os.remove(f"{self.dir_data_path}.Sdomain")
         self.print_summary()
         self.output.close() 
         if self.args.pdf:
