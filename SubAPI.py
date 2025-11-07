@@ -74,10 +74,11 @@ class API_SubDomains_Scan:
                 continue
 
         if results:
-            with open(".Sdomain", "w") as f:
+
+            with open(f"{self.dir_data_path}.Sdomain", "w") as f:
                 pass
             print(f"\n[*] Main Domain  ...........| {domain}/")
-            with open(".Sdomain", "a+") as f:
+            with open(f"{self.dir_data_path}.Sdomain", "a+") as f:
                 f.write(f"[*] Main Domain  ...........| {domain}\n")
                 for sub, ip in results:
                     self.count4 += 1
