@@ -363,6 +363,8 @@ class Shopping:
                     all_Links.add(norm_js)
                     print(f"[+] File {code_fmt} ...........| {norm_js}")
                     self.output.writelines(f"[+] File  {code} ...........| {norm_js}\n")
+            if self.count3 == 0:
+                print("[+] Js Files  ...........|  No JS Files Found ") 
             self.output.writelines("\nAPI ENDPOINTS\n" + "="*25 + "\n")
             print(f"{R}\nAPI ENDPOINTS {s}")
             print("="*25 + "\n")

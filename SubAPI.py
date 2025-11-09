@@ -15,6 +15,8 @@ print()
 class API_SubDomains_Scan:
 
     def find_subdomains(self, **kwargs):
+        with open(f"{self.dir_data_path}.Sdomain", "w") as f:
+            pass
         if self.args.subapi:
             self.start = timeit.default_timer()
         else:
@@ -74,9 +76,6 @@ class API_SubDomains_Scan:
                 continue
 
         if results:
-
-            with open(f"{self.dir_data_path}.Sdomain", "w") as f:
-                pass
             print(f"\n[*] Main Domain  ...........| {domain}/")
             with open(f"{self.dir_data_path}.Sdomain", "a+") as f:
                 f.write(f"[*] Main Domain  ...........| {domain}\n")
