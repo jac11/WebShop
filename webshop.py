@@ -27,7 +27,7 @@ class Shopping:
         self.hidden_links = set()   
         self.depth = 0
         self.headers = {"User-Agent": "Mozilla/5.0"}
-        self.count1 = self.count2 = self.count3 = self.count4 = self.count5 = self.count6 = self.count7 = 0
+        self.count1 = self.count2 = self.count3 = self.count4 = self.count5 = self.count6 = self.count7 = self.count9 =0
         self.path_wordlist = f"{os.path.dirname(os.path.abspath(__file__))}/"
         self.dir_data_path = f"/home/{getpass.getuser()}/.local/share/WebShop/"
         self.path = f"{self.dir_data_path}.APIKEY.KEY"
@@ -771,6 +771,10 @@ class Shopping:
             help="Fetch subdomains specifically using the crt.sh, RapidDNS, Hackertarget API")
         scan_group.add_argument("--pdf", action="store_true",
             help="Generate output report in PDF format")
+        scan_group.add_argument("-D", "--DIRLIST", action="store_true",
+            help="Discover the web dir (enabled by default)")
+        scan_group.add_argument("-d","--dirpath", action=None,
+            help="Disable directory discovery")
         self.args = parser.parse_args()
         scanning_opts = any([  self.args.pdf,self.args.wordlist, 
                                self.args.email, self.args.api,
@@ -808,6 +812,7 @@ class Shopping:
         f"{R}[+] Subdomains found    : {O} {self.count4}\n" +
         f"{R}[+] Emails found        : {O} {self.count5}\n" +
         f"{R}[+] API endpoints found : {O} {self.count6}\n" +
+        f"{R}[+] directory Found     : {O} {self.count9}\n" +
         f"{R}[+] Robots.txt entries  : {O} {self.count7}\n" +
         O+"="*40 + "\n" +
         R+"✅ Scan completed successfully\n" +
@@ -862,6 +867,8 @@ class Shopping:
                 os.remove(f"{self.dir_data_path}.Sdomain") 
             else:    
                 self.sub_domain() 
+            from dirdiscover import DirDiscover as Dir 
+            Dir.readwordlist(self,args=self.control)      
             self.robotstxt_read() 
         else:
             if self.args.email:
@@ -878,8 +885,13 @@ class Shopping:
                     readS = readf.read()
                 output_C = self.output.writelines("\nSUBDOMAIN (API)\n"+'='*25+"\n"+readS+"\n")  
                 os.remove(f"{self.dir_data_path}.Sdomain")
+        if self.args.DIRLIST or self.args.dirpath:
+            from dirdiscover import DirDiscover as Dir 
+            Dir.readwordlist(self,args=self.control)  
+
         self.print_summary()
         self.output.close() 
+
         if self.args.pdf:
             from pdfout import PDF_OUT
             pdf = PDF_OUT()
