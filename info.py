@@ -11,79 +11,51 @@ class ManPage:
         try:
             INFO = """
 
-              webshop \\- Links - Forms input - Subdomain - robots.txt and Email Discovery Tool
-              NAME
-              WebShop: Subdomain and Email Discovery Tool
+            usage: webshop.py [-h] [--man] [-K APIKEY] [--URL URL] [-w WORDLIST] [-E] [-S] [-a] [-R] [--api] [-s] [--pdf] [-D] [-d DIRPATH]
 
-              Modes:
-                1. Scan Mode → requires --URL
-                2. API Key Mode → only -K is needed
+            WebShop: Subdomain and Email Discovery Tool
 
-              options:
-                -h, --help            show this help message and exit
-                --man                 display man page
+            Modes:
+              1. Scan Mode → requires --URL
+              2. API Key Mode → only -K is needed
 
-              Scan Options:
-                Options for scanning a target domain (require --URL).
+            options:
+              -h, --help            show this help message and exit
+              --man                 display man page
 
-                --URL URL             Target website URL (e.g., https://www.example.com)
-                -w, --wordlist WORDLIST
-                                      Path to wordlist file for subdomain brute-force discovery
-                                      By default the tool uses the small built-in list (small_list.txt) — ~100 words
-                                      The tool also includes three additional built-in lists and accepts either a
-                                      list number (1-3) or a full file path:
-                                      -w 1    Use the medium list (medium_list.txt) — ~1,000 words
-                                      -w 2    Use the large list (large_list.txt)  — ~5,000 words
-                                      -w 3    Use the very large list (big_large.txt) — ~10,000 words
-                                      Alternatively, provide a custom path to a wordlist file:
-                                      -w /path/to/wordlist.txt
-                -E, --email           Discover email addresses from the target domain
-                -S, --subdomain       Discover subdomains using a wordlist
-                -D, --DIRLIST
-                                      Discover directories using the built-in WebShop directory
-                                      wordlist.
-                                      Directory discovery runs automatically when using --all,
-                                      or manually when this option is provided.
+            Scan Options:
+              Options for scanning a target domain (require --URL).
 
-                -d DIRPATH, --dirpath DIRPATH
-                                      Use a custom directory wordlist for directory discovery.
-                                      This option also triggers directory discovery, even
-                                      without --all.
-                                      Example:
-                                             webshop --URL https://example.com -d /path/to/dirs.txt
+              --URL URL             Target website URL (e.g., https://www.example.com)
+              -w, --wordlist WORDLIST
+                                    Path to wordlist file for subdomain brute-force discovery
+                                    By default the tool uses the small built-in list (small_list.txt) — ~100 words
+                                    The tool also includes three additional built-in lists and accepts either a
+                                    list number (1-3) or a full file path:
+                                    -w 1    Use the medium list (medium_list.txt) — ~1,000 words
+                                    -w 2    Use the large list (large_list.txt)  — ~5,000 words
+                                    -w 3    Use the very large list (big_large.txt) — ~10,000 words
+                                    Alternatively, provide a custom path to a wordlist file:
+                                    -w /path/to/wordlist.txt
+              -E, --email           Discover email addresses from the target domain
+              -S, --subdomain       Discover subdomains using a wordlist
+              -a, --all             Run all discovery modules (subdomains, emails, APIs).
+                                    If combined with --api, wordlist-based subdomain discovery is skipped.
+              -R, --robots          Discover robots.txt file.
+                                    If combined with --api, wordlist-based subdomain discovery is skipped.
+              --api                 Use API-based subdomain discovery (crt.sh, RapidDNS, Hackertarget).
+                                    When used with --all, disables wordlist brute-force and only uses APIs.
+              -s, --subapi          Fetch subdomains specifically using the crt.sh, RapidDNS, Hackertarget API
+              --pdf                 Generate output report in PDF format
+              -D, --DIRLIST         Discover the web directories using the built-in dir wordlist
+              -d, --dirpath DIRPATH
+                                    Custom directory wordlist file for directory discovery
 
-                -a, --all             Run all discovery modules (subdomains, emails, APIs).
-                                      If combined with --api, wordlist-based subdomain discovery is skipped.
-                -R, --robots          Discover robots.txt file.
-                                      If combined with --api, wordlist-based subdomain discovery is skipped.
-                --api                 Use API-based subdomain discovery (crt.sh, RapidDNS, Hackertarget).
-                                      When used with --all, disables wordlist brute-force and only uses APIs.
-                -s, --subapi          Fetch subdomains specifically using the crt.sh, RapidDNS, Hackertarget API
-                --pdf                 Generate output report in PDF format
+            API Key Options:
+              Options for managing/storing API keys.
 
-              API Key Options:
-                Options for managing/storing API keys.
+              -K, --APIKEY APIKEY   API key for domain analysis (optional in scans, or can be used alone to just store the key)
 
-                -K, --APIKEY APIKEY   API key for domain analysis (optional in scans, or can be used alone to just store the key)
-
-
-              It supports:
-                  - Subdomain brute-force discovery with wordlists
-                  - Subdomain discovery via APIs (crt.sh, RapidDNS, Hackertarget)
-                  - Email harvesting from target domains
-                  - API key management and storage (host.io WHOIS info)
-                  - PDF report generation
-
-              Two primary modes are available:
-
-                  1. Scan Mode → requires --URL
-                  2. API Key Mode → only -K is needed to analyze WHOIS info via host.io API
-
-       
-
-       SYNOPSIS
-
-              webshop.py --URL https://www.example.com [OPTIONS]
 
        DESCRIPTION
               WebShop is a Links Forms input subdomain and email discovery tool designed for
@@ -145,6 +117,18 @@ class ManPage:
               --api
                      Use API-based subdomain discovery (crt.sh, RapidDNS, Hackertarget).
                      When used with --all, disables brute-force.
+              -D, --DIRLIST
+                     Discover directories using the built-in WebShop directory
+                     wordlist.
+                     Directory discovery runs automatically when using --all,
+                     or manually when this option is provided.
+
+              -d DIRPATH, --dirpath DIRPATH
+                     Use a custom directory wordlist for directory discovery.
+                     This option also triggers directory discovery, even
+                     without --all.
+                     Example:
+                         webshop --URL https://example.com -d /path/to/dirs.txt      
 
               -s, --subapi
                      Fetch subdomains specifically via APIs.
