@@ -772,9 +772,9 @@ class Shopping:
         scan_group.add_argument("--pdf", action="store_true",
             help="Generate output report in PDF format")
         scan_group.add_argument("-D", "--DIRLIST", action="store_true",
-            help="Discover the web dir (enabled by default)")
+            help="Discover the web directories using the built-in dir wordlist")
         scan_group.add_argument("-d","--dirpath", action=None,
-            help="Disable directory discovery")
+            help="Custom directory wordlist file for directory discovery")
         self.args = parser.parse_args()
         scanning_opts = any([  self.args.pdf,self.args.wordlist, 
                                self.args.email, self.args.api,

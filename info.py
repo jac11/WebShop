@@ -11,13 +11,6 @@ class ManPage:
         try:
             INFO = """
 
-                        ██     ██ ███████ ██████  ███████ ██   ██  ██████  ██████  
-                        ██     ██ ██      ██   ██ ██      ██   ██ ██    ██ ██   ██ 
-                        ██  █  ██ █████   ██████  ███████ ███████ ██    ██ ██████  
-                        ██ ███ ██ ██      ██   ██      ██ ██   ██ ██    ██ ██      
-                         ███ ███  ███████ ██████  ███████ ██   ██  ██████  ██      
-                                                  @jacstory
-
               webshop \\- Links - Forms input - Subdomain - robots.txt and Email Discovery Tool
               NAME
               WebShop: Subdomain and Email Discovery Tool
@@ -46,6 +39,19 @@ class ManPage:
                                       -w /path/to/wordlist.txt
                 -E, --email           Discover email addresses from the target domain
                 -S, --subdomain       Discover subdomains using a wordlist
+                -D, --DIRLIST
+                                      Discover directories using the built-in WebShop directory
+                                      wordlist.
+                                      Directory discovery runs automatically when using --all,
+                                      or manually when this option is provided.
+
+                -d DIRPATH, --dirpath DIRPATH
+                                      Use a custom directory wordlist for directory discovery.
+                                      This option also triggers directory discovery, even
+                                      without --all.
+                                      Example:
+                                             webshop --URL https://example.com -d /path/to/dirs.txt
+
                 -a, --all             Run all discovery modules (subdomains, emails, APIs).
                                       If combined with --api, wordlist-based subdomain discovery is skipped.
                 -R, --robots          Discover robots.txt file.
