@@ -81,6 +81,8 @@ pip install requests beautifulsoup4
 | `--api`             | Discover subdomains using public APIs (`crt.sh`, `RapidDNS`, `Hackertarget`). <br>When used with `--all`, disables brute-force. |
 | `-s`, `--subapi`    | Fetch subdomains specifically via public APIs only (crt.sh, RapidDNS, Hackertarget). |
 | `--pdf`             | Generate a PDF report of the scan results (metadata, discovered subdomains, found emails, links/forms, API results). Optionally accepts an output filename if you implement . |
+| `-D`, `--DIRLIST`   | Discover directories using the built-in WebShop directory wordlist. Auto-enabled when using `--all`, or can be run manually with `-D`. |
+| `-d`, `--dirpath`   | Use a custom directory wordlist for directory discovery. Providing this option also triggers directory discovery even without `--all`. |
 | `-K`, `--APIKEY`    | Provide or store an API key for domain analysis (if a future API requires one). Stored in `.APIKEY.KEY`. |
 
 ---
