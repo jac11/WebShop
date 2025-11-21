@@ -24,7 +24,8 @@ O  ='\33[37m'
 class Shopping:
     def __init__(self):
         self.visited = set()
-        self.hidden_links = set()   
+        self.hidden_links = set()  
+        self.skip = ['dir','form','subdomain','robots','email'] 
         self.depth = 0
         self.headers = {"User-Agent": "Mozilla/5.0"}
         self.count1 = self.count2 = self.count3 = self.count4 = self.count5 = self.count6 = self.count7 = self.count9 =0
@@ -44,6 +45,12 @@ class Shopping:
                                     """ + O + """@jacstory""" + s
         print(self.banner.strip() + '\n')
         self.control()
+        if not self.args.skip:
+            pass
+        else:
+            if self.args.skip not in self.skip:
+                print(f"{O}[-] skip Options ..........| {R}{str(' - '.join(self.skip))}")
+                exit()          
         self.main()
     def APIKEY(self):
             self.start = timeit.default_timer()
@@ -775,6 +782,8 @@ class Shopping:
             help="Discover the web directories using the built-in dir wordlist")
         scan_group.add_argument("-d","--dirpath", action=None,
             help="Custom directory wordlist file for directory discovery")
+        scan_group.add_argument("--skip", action=None,
+            help="Run the full discovery scan but skip selected modules, such as subdomain scan, email harvester, directory scan, or robots.txt.")
         self.args = parser.parse_args()
         scanning_opts = any([  self.args.pdf,self.args.wordlist, 
                                self.args.email, self.args.api,
@@ -853,23 +862,50 @@ class Shopping:
             self.robotstxt_read() 
             exit()
         self.APIKEY()
-        if self.args.all:           
+        if self.args.all:  
             self.extract_links_form()
             self.discover_link(self.args.URL)
-            self.form_Check()
-            self.Email_Scan()
-            if self.args.api :
-                from SubAPI import API_SubDomains_Scan as API
-                API.find_subdomains(self, args=self.control) 
-                with open(f"{self.dir_data_path}.Sdomain",'r') as readf:
-                    readS = readf.read()
-                output_C = self.output.writelines("\nSUBDOMAIN (API)\n"+'='*25+"\n"+readS+"\n")   
-                os.remove(f"{self.dir_data_path}.Sdomain") 
+            if self.args.skip and self.args.skip in self.skip\
+            and self.args.skip=='form':
+                pass
+            else:
+                self.form_Check()
+            if self.args.skip and self.args.skip in self.skip\
+            and self.args.skip=='email':
+                pass
             else:    
-                self.sub_domain() 
-            from dirdiscover import DirDiscover as Dir 
-            Dir.readwordlist(self,args=self.control)      
-            self.robotstxt_read() 
+                self.Email_Scan()
+            if self.args.api and not self.args.subdomain:
+                if self.args.skip and self.args.skip in self.skip\
+                and self.args.skip=='subdomain'and self.args.subdomain:
+                    pass
+                else:
+                    from SubAPI import API_SubDomains_Scan as API
+                    API.find_subdomains(self, args=self.control) 
+                    with open(f"{self.dir_data_path}.Sdomain",'r') as readf:
+                        readS = readf.read()
+                    output_C = self.output.writelines("\nSUBDOMAIN (API)\n"+'='*25+"\n"+readS+"\n")   
+                    os.remove(f"{self.dir_data_path}.Sdomain")     
+     
+            else: 
+                if self.args.skip and self.args.skip in self.skip\
+                and self.args.skip=='subdomain'and self.args.subdomain and not self.args.api:
+                    pass    
+                else:    
+                    self.sub_domain()
+                   
+            if self.args.skip and self.args.skip in self.skip\
+            and self.args.skip=='dir':
+                pass
+            else:        
+                from dirdiscover import DirDiscover as Dir 
+                Dir.readwordlist(self,args=self.control)
+            if self.args.skip and self.args.skip in self.skip\
+            and self.args.skip=='robots':
+                pass
+            else:         
+                self.robotstxt_read() 
+
         else:
             if self.args.email:
                 self.extract_links_form()
